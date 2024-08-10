@@ -1,0 +1,51 @@
+@import '../../styles/variables';
+
+.wrpDsbrd {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .desContWrp {
+        width: 40%;
+
+        h2 {
+            font-size: 3.2rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: $text-color-1;
+            line-height: 1.6;
+        }
+    }
+
+    .mainBearGifWrp {
+        width: 60%;
+        height: calc(100vh - 215px);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    .otherAnyz {
+        padding: 20px;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        background-color: $main-background-color;
+        position: absolute;
+        right: 0;
+        height: calc(100vh - 215px);
+        box-shadow: 0px -1px 2px 2px #bbbbbb;
+
+        .cardItem {
+            border-radius: 8px;
+            background-color: #bbbbbb;
+            display: flex;
+            align-items: center;
+            padding: 8px;
+        }
+    }
+}

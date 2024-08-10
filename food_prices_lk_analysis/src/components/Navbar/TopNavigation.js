@@ -1,30 +1,65 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import style from "./TopNavigation.module.scss";
+import careAILogo from "../../img/logo/care bear.png";
 
 const TopNavigation = () => {
+  const location = useLocation();
+
   return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/data-exploration">Data Exploration</Link>
-        </li>
-        <li>
-          <Link to="/model-selection">Model Selection</Link>
-        </li>
-        <li>
-          <Link to="/predictions">Predictions</Link>
-        </li>
-        <li>
-          <Link to="/performance-analysis">Performance Analysis</Link>
-        </li>
-        <li>
-          <Link to="/reports">Reports</Link>
-        </li>
-      </ul>
-    </nav>
+    <div className={style.navWrap}>
+      <div className={style.leftLogoWrp}>
+        <div className={style.leftLogo}>
+          <img src={careAILogo} alt="care bear" />
+        </div>
+        <h1>CARE BEAR AI</h1>
+      </div>
+      <nav>
+        <ul>
+          <li className={location.pathname === "/" ? style.activeLink : ""}>
+            <NavLink to="/" exact>
+              Home
+            </NavLink>
+          </li>
+          <li
+            className={
+              location.pathname === "/data-exploration" ? style.activeLink : ""
+            }
+          >
+            <NavLink to="/data-exploration">Data Exploration</NavLink>
+          </li>
+          <li
+            className={
+              location.pathname === "/model-selection" ? style.activeLink : ""
+            }
+          >
+            <NavLink to="/model-selection">Model Selection</NavLink>
+          </li>
+          <li
+            className={
+              location.pathname === "/predictions" ? style.activeLink : ""
+            }
+          >
+            <NavLink to="/predictions">Predictions</NavLink>
+          </li>
+          <li
+            className={
+              location.pathname === "/performance-analysis"
+                ? style.activeLink
+                : ""
+            }
+          >
+            <NavLink to="/performance-analysis">Performance Analysis</NavLink>
+          </li>
+          <li
+            className={location.pathname === "/reports" ? style.activeLink : ""}
+          >
+            <NavLink to="/reports">Reports</NavLink>
+          </li>
+        </ul>
+      </nav>
+      <div className={style.rightExt}></div>
+    </div>
   );
 };
 

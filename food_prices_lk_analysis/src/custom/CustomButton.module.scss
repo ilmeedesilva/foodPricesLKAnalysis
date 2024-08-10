@@ -1,0 +1,24 @@
+@import '../../src/styles/variables';
+
+button {
+    background-color: transparent;
+    border: none;
+    border-radius: 50px;
+    padding: 12px;
+    min-width: 140px;
+    box-shadow: 1px 1px 3px 1px rgb(172, 165, 165);
+    cursor: pointer;
+    transition: all 500ms;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.primaryButton {
+    background-color: $primary-color;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $white;
+
+}
