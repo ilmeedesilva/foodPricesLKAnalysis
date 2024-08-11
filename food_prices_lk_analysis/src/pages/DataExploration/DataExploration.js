@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import style from "./DataExploration.module.scss";
+import style from "../page.module.scss";
+import style2 from "./DataExploration.module.scss";
 import CustomTable from "../../custom/table/CustomTable";
 import CustomButton from "../../custom/CustomButton";
 import ExportIcon from "../../img/svg/Export.icon";
@@ -42,8 +43,14 @@ const DataExploration = () => {
 
   return (
     <div className="content-wrap">
+      <h1>Data Exploration</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
+      </p>
       <div className={style.wrpRow}>
-        <h1>Data Exploration</h1>
         <div className={style.wrapOptions}>
           <CustomButton
             buttonClass={"LEFT_ICON_BTN"}
@@ -57,14 +64,14 @@ const DataExploration = () => {
             text={"Export"}
             icon={<ExportIcon size={20} />}
           />
-          <CustomButton />
+          {/* <CustomButton /> */}
         </div>
       </div>
       <div className={`content-100 ${style.wrpRow}`}>
-        <div className={style.tblWrp}>
+        <div className={`${style.tblWrp}`}>
           <CustomTable Data={sampleData} />
         </div>
-        <div className={style.mainChrWrp}>
+        <div className={`chrtwrp ${style.mainChrWrp}`}>
           <CustomChart
             chartType={"bar"}
             chartData={chartData}
@@ -73,15 +80,15 @@ const DataExploration = () => {
         </div>
       </div>
       <div>
-        <div className={style.wrpRow}>
-          <div className={style.rowMltiChrt50}>
+        <div className={[style.wrpRow, style.doubleChrts].join(" ")}>
+          <div className={`chrtwrp ${style.rowMltiChrtFiftyFity}`}>
             <CustomChart
               chartType={"line"}
               chartData={chartData}
               options={chartOptions}
             />
           </div>
-          <div className={style.rowMltiChrt50}>
+          <div className={`chrtwrp ${style.rowMltiChrtFiftyFity}`}>
             <CustomChart
               chartType={"doughnut"}
               chartData={chartData}

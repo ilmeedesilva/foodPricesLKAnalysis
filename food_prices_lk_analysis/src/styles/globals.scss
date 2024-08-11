@@ -1,6 +1,12 @@
+@import '../styles/variables';
+
 body {
     box-sizing: border-box;
     width: 100%;
+}
+
+h1 {
+    margin: 0;
 }
 
 .content-wrap {
@@ -13,4 +19,12 @@ body {
 
 .mt-5 {
     margin-top: 60px;
+}
+
+
+.chrtwrp {
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 9px 0px rgb(227 227 227);
+    background-color: $white;
 }
