@@ -15,6 +15,17 @@ button:hover {
     opacity: 0.8;
 }
 
+.leftIconBtn {
+    min-width: 100px !important;
+    padding: 4px !important;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: $white;
+    font-weight: 600;
+}
+
 .primaryButton {
     background-color: $primary-color;
     font-size: 1rem;

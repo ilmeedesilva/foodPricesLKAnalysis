@@ -1,0 +1,34 @@
+@import '../../styles/variables';
+
+.wrpRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+
+    .tblWrp {
+        width: 70%;
+        margin-right: 12px;
+    }
+
+    .mainChrWrp {
+        width: 30%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 12px;
+    }
+
+    .rowMltiChrt50 {
+        width: 50%;
+    }
+}
+
+.wrapOptions {
+    display: flex;
+    align-items: center;
+
+    button {
+        margin-right: 12px;
+    }
+}

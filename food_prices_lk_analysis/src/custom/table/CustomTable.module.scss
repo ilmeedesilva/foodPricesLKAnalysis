@@ -1,0 +1,44 @@
+@import '../../styles/variables';
+
+.tableStyle {
+    width: 100%;
+    background-color: $white;
+    border-radius: 20px;
+    border-collapse: collapse;
+    border: none;
+    box-shadow: 1px 1px 2px 1px rgb(197, 195, 195);
+
+    th,
+    td {
+        border: none;
+        padding: 12px 20px;
+    }
+
+    thead th {
+        font-size: 0.8rem;
+        border-bottom: 3px solid $main-background-color;
+        text-align: left;
+        color: #808080;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    tbody tr {
+        border-bottom: 3px solid $main-background-color;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    tbody tr:last-child {
+        border: none !important;
+    }
+
+    tbody td {
+        border-left: none;
+        border-right: none;
+    }
+
+    .checkBoxWrp {
+        width: 20px;
+    }
+}
