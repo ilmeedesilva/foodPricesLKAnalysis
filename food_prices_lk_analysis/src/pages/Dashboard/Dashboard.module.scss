@@ -20,7 +20,7 @@
     }
 
     .mainBearGifWrp {
-        width: 60%;
+        width: 50%;
         height: calc(100vh - 215px);
 
         img {
@@ -31,6 +31,8 @@
     }
 
     .otherAnyz {
+        display: none;
+        max-width: 10%;
         padding: 20px;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
@@ -40,12 +42,25 @@
         height: calc(100vh - 215px);
         box-shadow: 0px -1px 2px 2px #bbbbbb;
 
+
         .cardItem {
             border-radius: 8px;
-            background-color: #bbbbbb;
+            background-color: $white;
             display: flex;
             align-items: center;
             padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+
+            h5 {
+                font-size: 0.6rem;
+                margin: 0;
+            }
+
+            p {
+                font-size: 0.6rem;
+            }
         }
     }
 }

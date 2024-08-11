@@ -1,7 +1,7 @@
 import React from "react";
 
 const Reports = () => {
-  return <div>Reports</div>;
+  return <div className="content-wrap">Reports</div>;
 };
 
 export default Reports;
