@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import Chart from "chart.js/auto";
+import style from "./CustomChart.module.scss";
 
 // chart types
 //line
@@ -29,7 +30,11 @@ const CustomChart = ({ chartType, chartData, options }) => {
     };
   }, [chartType, chartData, options]);
 
-  return <canvas ref={chartRef} />;
+  return (
+    <div className={style.chrtwrp}>
+      <canvas ref={chartRef} />
+    </div>
+  );
 };
 
 export default CustomChart;
