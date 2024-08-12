@@ -1,0 +1,3 @@
+export const SERVICETYPE = {
+  CARE_BEAR_SERVICE: "CARE_BEAR_SERVICE",
+};
