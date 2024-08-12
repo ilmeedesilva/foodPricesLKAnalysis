@@ -19,16 +19,24 @@
         margin-left: 12px;
     }
 
-    .rowMltiChrtFiftyFity {
-        width: 48%;
+    .rowTripleChrtFiftyFity {
+        width: 40%;
         margin-top: 12px;
     }
 }
 
-.doubleChrts {
+.wrpRowCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tripleChart {
     display: flex;
     align-items: flex-start;
 }
+
+
 
 .wrapOptions {
     display: flex;

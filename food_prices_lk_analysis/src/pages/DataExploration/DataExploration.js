@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "../page.module.scss";
 import style2 from "./DataExploration.module.scss";
 import CustomTable from "../../custom/table/CustomTable";
@@ -6,6 +6,8 @@ import CustomButton from "../../custom/CustomButton";
 import ExportIcon from "../../img/svg/Export.icon";
 import FilterIcon from "../../img/svg/Filter.icon";
 import CustomChart from "../../custom/charts/CustomChart";
+import CareBearFoods from "../../api/services/CareBearFoods";
+import ContentLoader from "react-content-loader";
 
 const sampleData = {
   headers: ["Name", "Age", "Gender", "Country"],
@@ -40,6 +42,41 @@ const chartOptions = {
 
 const DataExploration = () => {
   const [chartType, setChartType] = useState("line");
+  const [isLoading, setIsLoading] = useState(false);
+  const [tableData, setTableData] = useState([]);
+
+  const getCsvData = async () => {
+    setIsLoading(true);
+    try {
+      let respond = await CareBearFoods.getAllCSVData();
+      const respondHeader = await CareBearFoods.getAllCSVHeader();
+
+      // Replace `NaN` with `null` in the JSON string
+      respond = respond.replace(/NaN/g, "null");
+
+      // Parse the `rows` string into an array of objects
+      const parsedRows = JSON.parse(respond);
+
+      console.log("headers: ", respondHeader);
+      console.log("parsed rows: ", parsedRows);
+
+      // Set table data with parsed rows and headers
+      setTableData({
+        headers: respondHeader,
+        rows: parsedRows,
+      });
+
+      console.log("tableData - ", tableData);
+    } catch (e) {
+      console.log("error - ", e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getCsvData();
+  }, []);
 
   return (
     <div className="content-wrap">
@@ -68,29 +105,41 @@ const DataExploration = () => {
         </div>
       </div>
       <div className={`content-100 ${style.wrpRow}`}>
-        <div className={`${style.tblWrp}`}>
-          <CustomTable Data={sampleData} />
-        </div>
-        <div className={`chrtwrp ${style.mainChrWrp}`}>
-          <CustomChart
-            chartType={"bar"}
-            chartData={chartData}
-            options={chartOptions}
-          />
-        </div>
+        {isLoading ? (
+          <div className={`content-100 ${style.wrpRowCenter}`}>
+            <ContentLoader viewBox="0 0 600 120">
+              <rect x="67" y="0" rx="2" ry="2" width="600" height="15" />
+              <rect x="67" y="18" rx="2" ry="2" width="600" height="15" />
+              <rect x="67" y="36" rx="2" ry="2" width="600" height="15" />
+              <rect x="67" y="54" rx="2" ry="2" width="600" height="15" />
+            </ContentLoader>
+          </div>
+        ) : (
+          <div>
+            <CustomTable Data={tableData} />
+          </div>
+        )}
       </div>
+
       <div>
-        <div className={[style.wrpRow, style.doubleChrts].join(" ")}>
-          <div className={`chrtwrp ${style.rowMltiChrtFiftyFity}`}>
+        <div className={[style.wrpRow, style.tripleChart].join(" ")}>
+          <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
             <CustomChart
               chartType={"line"}
               chartData={chartData}
               options={chartOptions}
             />
           </div>
-          <div className={`chrtwrp ${style.rowMltiChrtFiftyFity}`}>
+          <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
             <CustomChart
               chartType={"doughnut"}
+              chartData={chartData}
+              options={chartOptions}
+            />
+          </div>
+          <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
+            <CustomChart
+              chartType={"bar"}
               chartData={chartData}
               options={chartOptions}
             />
