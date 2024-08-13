@@ -106,16 +106,17 @@ const DataExploration = () => {
       </div>
       <div className={`content-100 ${style.wrpRow}`}>
         {isLoading ? (
-          <div className={`content-100 ${style.wrpRowCenter}`}>
-            <ContentLoader viewBox="0 0 600 120">
-              <rect x="67" y="0" rx="2" ry="2" width="600" height="15" />
-              <rect x="67" y="18" rx="2" ry="2" width="600" height="15" />
-              <rect x="67" y="36" rx="2" ry="2" width="600" height="15" />
-              <rect x="67" y="54" rx="2" ry="2" width="600" height="15" />
+          <div className={`content-100 ${style2.wrpRowCenter}`}>
+            <ContentLoader viewBox="0 0 800 120">
+              <rect x="67" y="0" rx="2" ry="2" width="600" height="18" />
+              <rect x="67" y="22" rx="2" ry="2" width="600" height="18" />
+              <rect x="67" y="44" rx="2" ry="2" width="600" height="18" />
+              <rect x="67" y="66" rx="2" ry="2" width="600" height="18" />
+              <rect x="67" y="88" rx="2" ry="2" width="600" height="18" />
             </ContentLoader>
           </div>
         ) : (
-          <div>
+          <div className={style2.tableWrp}>
             <CustomTable Data={tableData} />
           </div>
         )}
