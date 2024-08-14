@@ -6,6 +6,7 @@ const CustomButton = ({
   buttonClass = "PRIMARY",
   type = "button",
   icon = "",
+  rightIcon = "",
   onClick,
 }) => {
   const getButtonClass = () => {
@@ -18,6 +19,8 @@ const CustomButton = ({
         return style.leftIconBtn;
       case "CLOSE":
         return style.closeIconBtn;
+      case "NEXT_BUTTON":
+        return style.nextBtn;
       default:
         return style.primaryButton;
     }
@@ -31,6 +34,7 @@ const CustomButton = ({
     >
       {icon ? <div>{icon}</div> : ""}
       {buttonClass !== "CLOSE" ? <div> {text}</div> : ""}
+      {rightIcon ? <div>{rightIcon}</div> : ""}
     </button>
   );
 };

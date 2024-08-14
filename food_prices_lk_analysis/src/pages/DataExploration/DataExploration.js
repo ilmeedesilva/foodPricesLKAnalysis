@@ -18,6 +18,11 @@ import DatePicker from "react-datepicker";
 import ResetIcon from "../../img/svg/Reset.icon";
 import PriceRangeSlider from "../../custom/customPriceRangeSlider/PriceRangeSlider";
 import StepIcon from "../../img/svg/Step.icon";
+import NextIcon from "../../img/svg/Next.icon";
+import KmeanIcon from "../../img/svg/Kmean.icon";
+import RandomForestIcon from "../../img/svg/RandomForest.icon";
+import SVMIcon from "../../img/svg/SVM.icon";
+import LinearIcon from "../../img/svg/Linear.icon";
 
 const sampleData = {
   headers: ["Name", "Age", "Gender", "Country"],
@@ -75,6 +80,11 @@ const DataExploration = () => {
   const [selectedUSDPriceRange, setSelectedUSDPriceRange] = useState([]);
   const [selectedUSDRate, setSelectedUSDRate] = useState([]);
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLinearSelected, setIsLinearSelected] = useState(false);
+  const [isRFSelected, setIsRFSelected] = useState(false);
+  const [isSVMSelected, setIsSVMSelected] = useState(false);
+  const [isKMSelected, setIsKMSelected] = useState(false);
+  const [error, setError] = useState("");
 
   const ScrollToTopButton = () => {
     window.scrollTo({
@@ -296,7 +306,6 @@ const DataExploration = () => {
               ? [style2.stepPoint, style2.stepPointActive].join(" ")
               : style2.stepPoint
           }
-          onClick={() => setCurrentStep(1)}
         >
           <span className={style2.stepperTitle}>Data Filtering</span>
           <StepIcon
@@ -311,7 +320,6 @@ const DataExploration = () => {
               ? [style2.stepPoint, style2.stepPointActive].join(" ")
               : style2.stepPoint
           }
-          onClick={() => setCurrentStep(2)}
         >
           <span className={style2.stepperTitle}>Model Selection</span>
           <StepIcon
@@ -326,7 +334,6 @@ const DataExploration = () => {
               ? [style2.stepPoint, style2.stepPointActive].join(" ")
               : style2.stepPoint
           }
-          onClick={() => setCurrentStep(3)}
         >
           <span className={style2.stepperTitle}>
             data analysis & Predictions
@@ -345,7 +352,6 @@ const DataExploration = () => {
                 )
               : [style2.stepPoint, style2.endStep].join(" ")
           }
-          onClick={() => setCurrentStep(4)}
         >
           <span className={style2.stepperTitle}>Report</span>
           <StepIcon
@@ -354,348 +360,496 @@ const DataExploration = () => {
           />
         </div>
       </div>
-      <h1>Data Exploration</h1>
-      <p>
-        This dataset contains Food Prices data for Sri Lanka. Food prices data
-        comes from the World Food Programme and covers foods such as maize,
-        rice, beans, fish, and sugar for 76 countries and some 1,500 markets. It
-        is updated weekly but contains to a large extent monthly data. The data
-        goes back as far as 1992 for a few countries, although many countries
-        started reporting from 2003 or thereafter.
-      </p>
-      <div className="d-flex flex-column mb-4">
-        <p className="mt-0 mb-0">License -</p>
-        <span>
-          Creative Commons Attribution for Intergovernmental Organisations
-        </span>
-      </div>
-      <div className={style.wrpRow}>
-        <div className={style.wrapOptions}>
-          <CustomButton
-            buttonClass={"LEFT_ICON_BTN"}
-            type={"button"}
-            text={"Filter"}
-            onClick={() => setFilterModalOpen(true)}
-            icon={<FilterIcon size={20} />}
-          />
-          <CustomButton
-            buttonClass={"LEFT_ICON_BTN"}
-            type={"button"}
-            text={"Export"}
-            icon={<ExportIcon size={20} />}
-            onClick={() => exportCsv()}
-          />
+      <div className={style2.sectionHeader}>
+        <h1>
+          {currentStep === 1
+            ? "Data Filtering"
+            : currentStep === 2
+            ? "Modal Selection"
+            : currentStep === 3
+            ? "Data Analysis"
+            : currentStep === 4
+            ? "Report"
+            : "Finshed"}
+        </h1>
 
-          <CustomButton
-            buttonClass={"LEFT_ICON_BTN"}
-            type={"button"}
-            text={"Reset"}
-            icon={<ResetIcon size={20} />}
-            onClick={() => getCsvData()}
-          />
-          {/* <CustomButton /> */}
-        </div>
+        <CustomButton
+          text={"Next"}
+          buttonClass={"NEXT_BUTTON"}
+          rightIcon={<NextIcon color={"#ffffff"} size={20} />}
+          onClick={() => {
+            currentStep === 2 &&
+            !isLinearSelected &&
+            !isSVMSelected &&
+            !isRFSelected &&
+            !isKMSelected
+              ? setError("Select Atleass 1 Modal")
+              : setCurrentStep((pre) => (pre < 4 ? pre + 1 : pre));
+          }}
+        />
       </div>
-      <div className={`content-100 ${style.wrpRow}`}>
-        {isLoading ? (
-          <div className={`content-100 ${style2.wrpRowCenter}`}>
-            <ContentLoader viewBox="0 0 800 120">
-              <rect x="67" y="0" rx="2" ry="2" width="600" height="18" />
-              <rect x="67" y="22" rx="2" ry="2" width="600" height="18" />
-              <rect x="67" y="44" rx="2" ry="2" width="600" height="18" />
-              <rect x="67" y="66" rx="2" ry="2" width="600" height="18" />
-              <rect x="67" y="88" rx="2" ry="2" width="600" height="18" />
-            </ContentLoader>
+      {currentStep === 1 ? (
+        <div className={style.dataExploration}>
+          <p>
+            This dataset contains Food Prices data for Sri Lanka. Food prices
+            data comes from the World Food Programme and covers foods such as
+            maize, rice, beans, fish, and sugar for 76 countries and some 1,500
+            markets. It is updated weekly but contains to a large extent monthly
+            data. The data goes back as far as 1992 for a few countries,
+            although many countries started reporting from 2003 or thereafter.
+          </p>
+          <div className="d-flex flex-column mb-4">
+            <p className="mt-0 mb-0">License -</p>
+            <span>
+              Creative Commons Attribution for Intergovernmental Organisations
+            </span>
           </div>
-        ) : (
-          <div className={style2.tableWrp}>
-            <CustomTable Data={tableData} tableWidth={tableHeadersWidth} />
-          </div>
-        )}
-      </div>
+          <div className={style.wrpRow}>
+            <div className={style.wrapOptions}>
+              <CustomButton
+                buttonClass={"LEFT_ICON_BTN"}
+                type={"button"}
+                text={"Filter"}
+                onClick={() => setFilterModalOpen(true)}
+                icon={<FilterIcon size={20} />}
+              />
+              <CustomButton
+                buttonClass={"LEFT_ICON_BTN"}
+                type={"button"}
+                text={"Export"}
+                icon={<ExportIcon size={20} />}
+                onClick={() => exportCsv()}
+              />
 
-      <div>
-        <div className={[style.wrpRow, style.tripleChart].join(" ")}>
-          <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
-            <CustomChart
-              chartType={"line"}
-              chartData={chartData}
-              options={chartOptions}
-            />
+              <CustomButton
+                buttonClass={"LEFT_ICON_BTN"}
+                type={"button"}
+                text={"Reset"}
+                icon={<ResetIcon size={20} />}
+                onClick={() => getCsvData()}
+              />
+              {/* <CustomButton /> */}
+            </div>
           </div>
-          <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
-            <CustomChart
-              chartType={"doughnut"}
-              chartData={chartData}
-              options={chartOptions}
-            />
-          </div>
-          <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
-            <CustomChart
-              chartType={"bar"}
-              chartData={chartData}
-              options={chartOptions}
-            />
-          </div>
-        </div>
-      </div>
-      {filterModalOpen ? (
-        <CustomModal title={"Filter"} open={setFilterModalOpen}>
-          <div
-            className={
-              advanceFilterVisible
-                ? [style3.wrapFilters, style3.advanceFilterApply].join(" ")
-                : style3.wrapFilters
-            }
-          >
-            <div className={style3.filterHeaders}>
-              <h6 className="mb-0">Filter Headers</h6>
-              <span className="text-sm mb-2">
-                Selected Headers {filterHeader.length} /{" "}
-                {tableData.headers.length}
-              </span>
-              <div className={style3.headersWrp}>
-                {filterHeader.map((header) => (
-                  <button
-                    className={style3.headerItem}
-                    onClick={() => filterHeaders(header)}
-                  >
-                    <p>{header}</p>
-                    <CloseIcon size={12} />
-                  </button>
-                ))}
+          <div className={`content-100 ${style.wrpRow}`}>
+            {isLoading ? (
+              <div className={`content-100 ${style2.wrpRowCenter}`}>
+                <ContentLoader viewBox="0 0 800 120">
+                  <rect x="67" y="0" rx="2" ry="2" width="600" height="18" />
+                  <rect x="67" y="22" rx="2" ry="2" width="600" height="18" />
+                  <rect x="67" y="44" rx="2" ry="2" width="600" height="18" />
+                  <rect x="67" y="66" rx="2" ry="2" width="600" height="18" />
+                  <rect x="67" y="88" rx="2" ry="2" width="600" height="18" />
+                </ContentLoader>
               </div>
-              {advanceFilterVisible ? (
-                <div className={style3.advFilterWrp}>
-                  {filterHeader.find((item) => item === "admin1") ? (
-                    <div className={style3.filterItemSection}>
-                      <h6 className="mb-0">Filter Admin 1</h6>
-                      <div className={style3.headersWrp}>
-                        {filteredAdmin1.map((header) => (
-                          <button
-                            className={style3.headerItem}
-                            onClick={() =>
-                              setFilteredAdmin1((pre) =>
-                                pre.filter((item) => item !== header)
-                              )
-                            }
-                          >
-                            <p>{header}</p>
-                            <CloseIcon size={12} />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
+            ) : (
+              <div className={style2.tableWrp}>
+                <CustomTable Data={tableData} tableWidth={tableHeadersWidth} />
+              </div>
+            )}
+          </div>
 
-                  {filterHeader.find((item) => item === "admin2") ? (
-                    <div className={style3.filterItemSection}>
-                      <h6 className="mb-0">Filter Admin 2</h6>
-                      <div className={style3.headersWrp}>
-                        {filteredAdmin2.map((header) => (
-                          <button
-                            className={style3.headerItem}
-                            onClick={() =>
-                              setFilteredAdmin2((pre) =>
-                                pre.filter((item) => item !== header)
-                              )
-                            }
-                          >
-                            <p>{header}</p>
-                            <CloseIcon size={12} />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  {filterHeader.find((item) => item === "market") ? (
-                    <div className={style3.filterItemSection}>
-                      <h6 className="mb-0">Filter Market</h6>
-                      <div className={style3.headersWrp}>
-                        {filteredMarket.map((header) => (
-                          <button
-                            className={style3.headerItem}
-                            onClick={() =>
-                              setFilteredMarket((pre) =>
-                                pre.filter((item) => item !== header)
-                              )
-                            }
-                          >
-                            <p>{header}</p>
-                            <CloseIcon size={12} />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  {filterHeader.find((item) => item === "commodity") ? (
-                    <div className={style3.filterItemSection}>
-                      <h6 className="mb-0">Filter Commodity</h6>
-                      <div className={style3.headersWrp}>
-                        {filteredCommodity.map((header) => (
-                          <button
-                            className={style3.headerItem}
-                            onClick={() =>
-                              setFilteredCommodity((pre) =>
-                                pre.filter((item) => item !== header)
-                              )
-                            }
-                          >
-                            <p>{header}</p>
-                            <CloseIcon size={12} />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  {filterHeader.find((item) => item === "pricetype") ? (
-                    <div className={style3.filterItemSection}>
-                      <h6 className="mb-0">Filter Price Type</h6>
-                      <div className={style3.headersWrp}>
-                        {filteredPriceType.map((header) => (
-                          <button
-                            className={style3.headerItem}
-                            onClick={() =>
-                              setFilteredPriceType((pre) =>
-                                pre.filter((item) => item !== header)
-                              )
-                            }
-                          >
-                            <p>{header}</p>
-                            <CloseIcon size={12} />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  {filterHeader.find((item) => item === "price") ? (
-                    <div className={style3.filterItemSection}>
-                      <h6 className={`mb-0 ${style3.filterItemsSmWid}`}>
-                        Filter Price
-                      </h6>
-                      <div className={style3.rangeSelectionWrp}>
-                        <PriceRangeSlider
-                          min={filteredPrice.min}
-                          max={filteredPrice.max}
-                          onChange={(range) =>
-                            setSelectedPriceRange(range, "price")
-                          }
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  {filterHeader.find((item) => item === "usdprice") ? (
-                    <div className={style3.filterItemSection}>
-                      <h6 className="mb-0">Filter USD Price</h6>
-                      <div className={style3.rangeSelectionWrp}>
-                        <PriceRangeSlider
-                          min={filteredUsdPrice.min}
-                          max={filteredUsdPrice.max}
-                          onChange={(range) =>
-                            setSelectedUSDPriceRange(range, "usePrice")
-                          }
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  {filterHeader.find((item) => item === "USD RATE") ? (
-                    <div className={style3.filterItemSection}>
-                      <h6 className="mb-0">Filter USD Rate</h6>
-                      <div className={style3.rangeSelectionWrp}>
-                        <PriceRangeSlider
-                          min={filteredUsdRate.min}
-                          max={filteredUsdRate.max}
-                          onChange={(range) =>
-                            setSelectedUSDRate(range, "usdRate")
-                          }
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              ) : (
-                ""
-              )}
+          <div>
+            <div className={[style.wrpRow, style.tripleChart].join(" ")}>
+              <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
+                <CustomChart
+                  chartType={"line"}
+                  chartData={chartData}
+                  options={chartOptions}
+                />
+              </div>
+              <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
+                <CustomChart
+                  chartType={"doughnut"}
+                  chartData={chartData}
+                  options={chartOptions}
+                />
+              </div>
+              <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
+                <CustomChart
+                  chartType={"bar"}
+                  chartData={chartData}
+                  options={chartOptions}
+                />
+              </div>
+            </div>
+          </div>
+          {filterModalOpen ? (
+            <CustomModal title={"Filter"} open={setFilterModalOpen}>
               <div
-                className={`d-flex  flex-column align-flex-start${style3.dateRangeSelector}`}
+                className={
+                  advanceFilterVisible
+                    ? [style3.wrapFilters, style3.advanceFilterApply].join(" ")
+                    : style3.wrapFilters
+                }
               >
-                <h6 className="mb-4 mt-4">Filter Date Range</h6>
-
-                <div className={style3.dateWrp}>
-                  <div>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      selectsStart
-                      startDate={startDate}
-                      endDate={endDate}
-                      className="form-control"
-                      placeholderText="Select start date"
-                    />
+                <div className={style3.filterHeaders}>
+                  <h6 className="mb-0">Filter Headers</h6>
+                  <span className="text-sm mb-2">
+                    Selected Headers {filterHeader.length} /{" "}
+                    {tableData.headers.length}
+                  </span>
+                  <div className={style3.headersWrp}>
+                    {filterHeader.map((header) => (
+                      <button
+                        className={style3.headerItem}
+                        onClick={() => filterHeaders(header)}
+                      >
+                        <p>{header}</p>
+                        <CloseIcon size={12} />
+                      </button>
+                    ))}
                   </div>
-                  <div>
-                    <DatePicker
-                      selected={endDate}
-                      onChange={(date) => setEndDate(date)}
-                      selectsEnd
-                      startDate={startDate}
-                      endDate={endDate}
-                      minDate={startDate}
-                      className="form-control"
-                      placeholderText="Select end date"
-                    />
+                  {advanceFilterVisible ? (
+                    <div className={style3.advFilterWrp}>
+                      {filterHeader.find((item) => item === "admin1") ? (
+                        <div className={style3.filterItemSection}>
+                          <h6 className="mb-0">Filter Admin 1</h6>
+                          <div className={style3.headersWrp}>
+                            {filteredAdmin1.map((header) => (
+                              <button
+                                className={style3.headerItem}
+                                onClick={() =>
+                                  setFilteredAdmin1((pre) =>
+                                    pre.filter((item) => item !== header)
+                                  )
+                                }
+                              >
+                                <p>{header}</p>
+                                <CloseIcon size={12} />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {filterHeader.find((item) => item === "admin2") ? (
+                        <div className={style3.filterItemSection}>
+                          <h6 className="mb-0">Filter Admin 2</h6>
+                          <div className={style3.headersWrp}>
+                            {filteredAdmin2.map((header) => (
+                              <button
+                                className={style3.headerItem}
+                                onClick={() =>
+                                  setFilteredAdmin2((pre) =>
+                                    pre.filter((item) => item !== header)
+                                  )
+                                }
+                              >
+                                <p>{header}</p>
+                                <CloseIcon size={12} />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {filterHeader.find((item) => item === "market") ? (
+                        <div className={style3.filterItemSection}>
+                          <h6 className="mb-0">Filter Market</h6>
+                          <div className={style3.headersWrp}>
+                            {filteredMarket.map((header) => (
+                              <button
+                                className={style3.headerItem}
+                                onClick={() =>
+                                  setFilteredMarket((pre) =>
+                                    pre.filter((item) => item !== header)
+                                  )
+                                }
+                              >
+                                <p>{header}</p>
+                                <CloseIcon size={12} />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {filterHeader.find((item) => item === "commodity") ? (
+                        <div className={style3.filterItemSection}>
+                          <h6 className="mb-0">Filter Commodity</h6>
+                          <div className={style3.headersWrp}>
+                            {filteredCommodity.map((header) => (
+                              <button
+                                className={style3.headerItem}
+                                onClick={() =>
+                                  setFilteredCommodity((pre) =>
+                                    pre.filter((item) => item !== header)
+                                  )
+                                }
+                              >
+                                <p>{header}</p>
+                                <CloseIcon size={12} />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {filterHeader.find((item) => item === "pricetype") ? (
+                        <div className={style3.filterItemSection}>
+                          <h6 className="mb-0">Filter Price Type</h6>
+                          <div className={style3.headersWrp}>
+                            {filteredPriceType.map((header) => (
+                              <button
+                                className={style3.headerItem}
+                                onClick={() =>
+                                  setFilteredPriceType((pre) =>
+                                    pre.filter((item) => item !== header)
+                                  )
+                                }
+                              >
+                                <p>{header}</p>
+                                <CloseIcon size={12} />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {filterHeader.find((item) => item === "price") ? (
+                        <div className={style3.filterItemSection}>
+                          <h6 className={`mb-0 ${style3.filterItemsSmWid}`}>
+                            Filter Price
+                          </h6>
+                          <div className={style3.rangeSelectionWrp}>
+                            <PriceRangeSlider
+                              min={filteredPrice.min}
+                              max={filteredPrice.max}
+                              onChange={(range) =>
+                                setSelectedPriceRange(range, "price")
+                              }
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {filterHeader.find((item) => item === "usdprice") ? (
+                        <div className={style3.filterItemSection}>
+                          <h6 className="mb-0">Filter USD Price</h6>
+                          <div className={style3.rangeSelectionWrp}>
+                            <PriceRangeSlider
+                              min={filteredUsdPrice.min}
+                              max={filteredUsdPrice.max}
+                              onChange={(range) =>
+                                setSelectedUSDPriceRange(range, "usePrice")
+                              }
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {filterHeader.find((item) => item === "USD RATE") ? (
+                        <div className={style3.filterItemSection}>
+                          <h6 className="mb-0">Filter USD Rate</h6>
+                          <div className={style3.rangeSelectionWrp}>
+                            <PriceRangeSlider
+                              min={filteredUsdRate.min}
+                              max={filteredUsdRate.max}
+                              onChange={(range) =>
+                                setSelectedUSDRate(range, "usdRate")
+                              }
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <div
+                    className={`d-flex  flex-column align-flex-start${style3.dateRangeSelector}`}
+                  >
+                    <h6 className="mb-4 mt-4">Filter Date Range</h6>
+
+                    <div className={style3.dateWrp}>
+                      <div>
+                        <DatePicker
+                          selected={startDate}
+                          onChange={(date) => setStartDate(date)}
+                          selectsStart
+                          startDate={startDate}
+                          endDate={endDate}
+                          className="form-control"
+                          placeholderText="Select start date"
+                        />
+                      </div>
+                      <div>
+                        <DatePicker
+                          selected={endDate}
+                          onChange={(date) => setEndDate(date)}
+                          selectsEnd
+                          startDate={startDate}
+                          endDate={endDate}
+                          minDate={startDate}
+                          className="form-control"
+                          placeholderText="Select end date"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <div className={style3.advanceOptions}>
+                  <button
+                    className={style3.LinkBtn}
+                    onClick={() =>
+                      setAdvanceFilterVisible(!advanceFilterVisible)
+                    }
+                  >
+                    {advanceFilterVisible
+                      ? "Hide Advance Filters"
+                      : "Advance Filters"}
+                  </button>
+                </div>
+                <div className={style3.advanceFilterVisible}></div>
+                <div className={style3.footerFilter}>
+                  <button
+                    className={style3.cancel}
+                    onClick={() => setFilterModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button className={style3.primary} onClick={handleFiltering}>
+                    Apply
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className={style3.advanceOptions}>
-              <button
-                className={style3.LinkBtn}
-                onClick={() => setAdvanceFilterVisible(!advanceFilterVisible)}
+            </CustomModal>
+          ) : (
+            ""
+          )}
+        </div>
+      ) : currentStep === 2 ? (
+        <div className={style.dataExploration}>
+          <p>
+            This dataset contains Food Prices data for Sri Lanka. Food prices
+            data comes from the World Food Programme and covers foods such as
+            maize, rice, beans, fish, and sugar for 76 countries and some 1,500
+            markets. It is updated weekly but contains to a large extent monthly
+            data. The data goes back as far as 1992 for a few countries,
+            although many countries started reporting from 2003 or thereafter.
+          </p>
+
+          <div>
+            <div class={style2.modalContainer}>
+              <label
+                className={
+                  isLinearSelected
+                    ? [style2.modalItem, style2.modalItemActive].join(" ")
+                    : style2.modalItem
+                }
               >
-                {advanceFilterVisible
-                  ? "Hide Advance Filters"
-                  : "Advance Filters"}
-              </button>
-            </div>
-            <div className={style3.advanceFilterVisible}></div>
-            <div className={style3.footerFilter}>
-              <button
-                className={style3.cancel}
-                onClick={() => setFilterModalOpen(false)}
+                <input
+                  type="checkbox"
+                  class="card-checkbox"
+                  id="card1"
+                  onChange={(e) => setIsLinearSelected(e.target.checked)}
+                />
+                <div className={style2.modalCenter}>
+                  <div className={style2.modalIcon}>
+                    <LinearIcon
+                      size={40}
+                      color={isLinearSelected ? "#105CD1" : "#000000"}
+                    />
+                  </div>
+                  <p>LINEAR</p>
+                </div>
+              </label>
+
+              <label
+                className={
+                  isRFSelected
+                    ? [style2.modalItem, style2.modalItemActive].join(" ")
+                    : style2.modalItem
+                }
               >
-                Cancel
-              </button>
-              <button className={style3.primary} onClick={handleFiltering}>
-                Apply
-              </button>
+                <input
+                  type="checkbox"
+                  class="card-checkbox"
+                  id="card2"
+                  onChange={(e) => setIsRFSelected(e.target.checked)}
+                />
+                <div className={style2.modalCenter}>
+                  <div className={style2.modalIcon}>
+                    <RandomForestIcon
+                      size={40}
+                      color={isRFSelected ? "#105CD1" : "#000000"}
+                    />
+                  </div>
+                  <p>RANDOM FOREST</p>
+                </div>
+              </label>
+
+              <label
+                className={
+                  isSVMSelected
+                    ? [style2.modalItem, style2.modalItemActive].join(" ")
+                    : style2.modalItem
+                }
+              >
+                <input
+                  type="checkbox"
+                  class="card-checkbox"
+                  id="card3"
+                  onChange={(e) => setIsSVMSelected(e.target.checked)}
+                />
+                <div className={style2.modalCenter}>
+                  <div className={style2.modalIcon}>
+                    <SVMIcon
+                      size={40}
+                      color={isSVMSelected ? "#105CD1" : "#000000"}
+                    />
+                  </div>
+                  <p>SVM</p>
+                </div>
+              </label>
+
+              <label
+                className={
+                  isKMSelected
+                    ? [style2.modalItem, style2.modalItemActive].join(" ")
+                    : style2.modalItem
+                }
+              >
+                <input
+                  type="checkbox"
+                  class="card-checkbox"
+                  id="card4"
+                  onChange={(e) => setIsKMSelected(e.target.checked)}
+                />
+                <div className={style2.modalCenter}>
+                  <div className={style2.modalIcon}>
+                    <KmeanIcon
+                      size={40}
+                      color={isKMSelected ? "#105CD1" : "#000000"}
+                    />
+                  </div>
+                  <p>K-MEANS</p>
+                </div>
+              </label>
             </div>
           </div>
-        </CustomModal>
+        </div>
+      ) : currentStep === 3 ? (
+        <>step 3</>
       ) : (
-        ""
+        <>Step 4</>
       )}
     </div>
   );

@@ -52,3 +52,21 @@ button:hover {
         justify-content: center;
     }
 }
+
+.nextBtn {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    min-width: 120px;
+    background-color: $primary-color !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: $white !important;
+    border-radius: 8px !important;
+
+    svg {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
