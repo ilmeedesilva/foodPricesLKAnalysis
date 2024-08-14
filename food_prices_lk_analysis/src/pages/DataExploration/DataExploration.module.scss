@@ -50,3 +50,48 @@
 .tableWrp {
     width: 100%;
 }
+
+.stepperWrp {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin: 30px auto;
+    transition: all 500ms;
+
+    .stepPoint {
+        width: 35%;
+        display: flex;
+        align-items: center;
+        position: relative;
+        transition: all 500ms;
+
+        .stepperTitle {
+            position: absolute;
+            bottom: 30px;
+            left: 6px;
+            font-weight: 600;
+            color: #EEEFF2;
+        }
+    }
+
+    .endStep {
+        width: 25px;
+    }
+
+    .stepperLine {
+        width: 100%;
+        height: 5px;
+        background-color: #EEEFF2;
+    }
+
+    .stepPointActive {
+        .stepperTitle {
+            color: $black;
+        }
+
+        .stepperLine {
+            background-color: #7050F9;
+        }
+    }
+}

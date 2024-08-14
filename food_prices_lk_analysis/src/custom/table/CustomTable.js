@@ -3,7 +3,7 @@ import style from "./CustomTable.module.scss";
 import NextIcon from "../../img/svg/Next.icon";
 import PreviousIcon from "../../img/svg/Previous.icon";
 
-const CustomTable = ({ Data }) => {
+const CustomTable = ({ Data, tableWidth }) => {
   const [tableData, setTableData] = useState(Data.rows || []);
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,8 +56,6 @@ const CustomTable = ({ Data }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
-  console.log("Data - ", Data);
-
   return (
     <div>
       {Data.headers && Data.headers.length ? (
@@ -69,12 +67,34 @@ const CustomTable = ({ Data }) => {
         >
           <thead>
             <tr>
-              <th>Select</th>
+              <th
+                style={{
+                  width:
+                    tableWidth && tableWidth.select
+                      ? tableWidth.select
+                      : "50px",
+                  maxWidth:
+                    tableWidth && tableWidth.select
+                      ? tableWidth.select
+                      : "50px",
+                }}
+              >
+                Select
+              </th>
               {Data.headers.map((header) => (
                 <th
                   key={header}
                   onClick={() => handleSort(header)}
-                  style={{ width: "50px" }}
+                  style={{
+                    width:
+                      tableWidth && tableWidth.hasOwnProperty(header)
+                        ? tableWidth[header]
+                        : "50px",
+                    maxWidth:
+                      tableWidth && tableWidth.hasOwnProperty(header)
+                        ? tableWidth[header]
+                        : "50px",
+                  }}
                 >
                   {header}{" "}
                   {sortConfig.key === header

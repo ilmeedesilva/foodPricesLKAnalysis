@@ -6,6 +6,7 @@ const CustomButton = ({
   buttonClass = "PRIMARY",
   type = "button",
   icon = "",
+  onClick,
 }) => {
   const getButtonClass = () => {
     switch (buttonClass) {
@@ -15,15 +16,21 @@ const CustomButton = ({
         return style.secondaryButton;
       case "LEFT_ICON_BTN":
         return style.leftIconBtn;
+      case "CLOSE":
+        return style.closeIconBtn;
       default:
         return style.primaryButton;
     }
   };
 
   return (
-    <button className={getButtonClass()} type={type}>
+    <button
+      className={getButtonClass()}
+      type={type}
+      onClick={(event) => onClick(event)}
+    >
       {icon ? <div>{icon}</div> : ""}
-      <div> {text}</div>
+      {buttonClass !== "CLOSE" ? <div> {text}</div> : ""}
     </button>
   );
 };

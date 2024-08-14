@@ -27,9 +27,28 @@ button:hover {
 }
 
 .primaryButton {
-    background-color: $primary-color;
-    font-size: 1rem;
-    font-weight: 600;
-    color: $white;
+    background-color: $primary-color !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: $white !important;
+    border-radius: 50px !important;
 
+}
+
+.closeIconBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 0;
+    box-shadow: none;
+
+    svg {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
