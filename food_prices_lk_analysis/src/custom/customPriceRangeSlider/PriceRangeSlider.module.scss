@@ -1,0 +1,12 @@
+@import '../../styles//variables';
+
+.wrapSlide {
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .rangeTxts {
+        font-size: 12px;
+    }
+}
