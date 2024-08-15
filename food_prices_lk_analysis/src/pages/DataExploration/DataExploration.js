@@ -344,6 +344,7 @@ const DataExploration = () => {
               ? [style2.stepPoint, style2.stepPointActive].join(" ")
               : style2.stepPoint
           }
+          onClick={() => setCurrentStep(1)}
         >
           <span className={style2.stepperTitle}>Data Filtering</span>
           <StepIcon
@@ -358,6 +359,7 @@ const DataExploration = () => {
               ? [style2.stepPoint, style2.stepPointActive].join(" ")
               : style2.stepPoint
           }
+          onClick={() => (currentStep > 2 ? setCurrentStep(2) : "")}
         >
           <span className={style2.stepperTitle}>Model Selection</span>
           <StepIcon
@@ -372,6 +374,7 @@ const DataExploration = () => {
               ? [style2.stepPoint, style2.stepPointActive].join(" ")
               : style2.stepPoint
           }
+          onClick={() => (currentStep > 3 ? setCurrentStep(3) : "")}
         >
           <span className={style2.stepperTitle}>
             data analysis & Predictions
@@ -399,7 +402,7 @@ const DataExploration = () => {
         </div>
       </div>
       <div className={style2.sectionHeader}>
-        <h1>
+        <h1 className="header-md">
           {currentStep === 1
             ? "Data Filtering"
             : currentStep === 2
@@ -422,7 +425,7 @@ const DataExploration = () => {
       </div>
       {currentStep === 1 ? (
         <div className={style.dataExploration}>
-          <p>
+          <p className="text-sm">
             This dataset contains Food Prices data for Sri Lanka. Food prices
             data comes from the World Food Programme and covers foods such as
             maize, rice, beans, fish, and sugar for 76 countries and some 1,500
@@ -431,8 +434,8 @@ const DataExploration = () => {
             although many countries started reporting from 2003 or thereafter.
           </p>
           <div className="d-flex flex-column mb-4">
-            <p className="mt-0 mb-0">License -</p>
-            <span>
+            <p className="mt-0 mb-0 text-sm">License -</p>
+            <span className="text-sm">
               Creative Commons Attribution for Intergovernmental Organisations
             </span>
           </div>
@@ -769,14 +772,46 @@ const DataExploration = () => {
         </div>
       ) : currentStep === 2 ? (
         <div className={style.dataExploration}>
-          <p>
-            This dataset contains Food Prices data for Sri Lanka. Food prices
-            data comes from the World Food Programme and covers foods such as
-            maize, rice, beans, fish, and sugar for 76 countries and some 1,500
-            markets. It is updated weekly but contains to a large extent monthly
-            data. The data goes back as far as 1992 for a few countries,
-            although many countries started reporting from 2003 or thereafter.
+          <p className="text-sm">
+            To move on to the next step, "Data Analysis," you need to choose at
+            least one of the following models. Each model helps analyze your
+            data in a different way. Here's a brief description of each model to
+            help you decide:
           </p>
+          <ul className={style2.modalDescriptionUI}>
+            <li>
+              <p className={style2.head}>Linear Model</p>
+              <p>
+                The Linear Model is a straightforward approach that assumes a
+                direct relationship between your data points. It’s like drawing
+                a straight line through your data to see how they relate.
+              </p>
+            </li>
+            <li>
+              <p className={style2.head}>Random Forest</p>
+              <p>
+                Random Forest is like a team of decision-makers. It combines the
+                decisions of many smaller models to give you a more accurate and
+                balanced result.
+              </p>
+            </li>
+            <li>
+              <p className={style2.head}>Support Vector Machine (SVM)</p>
+              <p>
+                SVM helps classify your data by drawing a boundary that best
+                separates different groups. Think of it as a way to categorize
+                your data into distinct sections.
+              </p>
+            </li>
+            <li>
+              <p className={style2.head}>K-Means Clustering</p>
+              <p>
+                K-Means groups your data into clusters that are similar to each
+                other. It helps you see patterns or groupings in your data that
+                you might not notice at first glance.
+              </p>
+            </li>
+          </ul>
 
           <div>
             <div class={style2.modalContainer}>
@@ -879,8 +914,7 @@ const DataExploration = () => {
           </div>
         </div>
       ) : currentStep === 3 ? (
-        <>
-          step 3
+        <div>
           {/* get the data from api
           check each of these below modal to see which modals have selected. according to that you can send api calls
           *isLinearSelected
@@ -894,9 +928,9 @@ const DataExploration = () => {
           check getCsvData() function in above to see how to send api request for backend
           
           */}
-        </>
+        </div>
       ) : (
-        <>Step 4</>
+        <div>Step 4</div>
       )}
     </div>
   );
