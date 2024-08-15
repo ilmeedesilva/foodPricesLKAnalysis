@@ -171,6 +171,24 @@
 
 }
 
+.modalDescriptionUI {
+
+    li {
+        list-style: none;
+
+        .head {
+            font-weight: 600;
+        }
+
+        p {
+            padding: 4px 0;
+            margin: 0;
+            font-size: 12px;
+            line-height: 1;
+        }
+    }
+}
+
 .alertModal {
     position: absolute;
     top: 20%;
@@ -178,6 +196,7 @@
     transform: translate(-50%, -50%);
     transition: all 500ms;
     animation: moveDown 1s ease-in-out forwards;
+    z-index: 3;
 }
 
 
