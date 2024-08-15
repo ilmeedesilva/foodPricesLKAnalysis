@@ -1,0 +1,42 @@
+@import '../../styles/variables';
+
+.modalwrp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    max-width: 375px;
+    border-radius: 4px;
+
+    .msgIcon {
+        display: flex;
+        align-items: center;
+    }
+
+    .msgDesc {
+        margin-left: 12px;
+    }
+}
+
+.errorModal {
+    background-color: #F2DFE0;
+    color: #C9515E;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.closebtn {
+    min-width: 25px;
+    width: 24px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    padding: 0;
+
+    svg {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
