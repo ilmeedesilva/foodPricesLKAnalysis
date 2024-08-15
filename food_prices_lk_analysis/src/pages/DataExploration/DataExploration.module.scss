@@ -130,6 +130,7 @@
 
             p {
                 margin: 12px 0;
+
             }
 
             .modalIcon {
@@ -150,6 +151,10 @@
         .modalIcon {
             background-color: #E5EDF9 !important;
         }
+
+        p {
+            font-weight: 600;
+        }
     }
 
     .modalItem:hover {
@@ -162,4 +167,28 @@
 .card-checkbox:checked+.modalCenter {
     border-color: #007bff;
     background-color: #e0e7ff;
+
+
+}
+
+.alertModal {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 500ms;
+    animation: moveDown 1s ease-in-out forwards;
+}
+
+
+@keyframes moveDown {
+    from {
+        top: -5%;
+        opacity: 0;
+    }
+
+    to {
+        top: 20%;
+        opacity: 1;
+    }
 }

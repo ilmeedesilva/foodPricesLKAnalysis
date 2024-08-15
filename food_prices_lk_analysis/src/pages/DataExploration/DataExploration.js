@@ -23,6 +23,7 @@ import KmeanIcon from "../../img/svg/Kmean.icon";
 import RandomForestIcon from "../../img/svg/RandomForest.icon";
 import SVMIcon from "../../img/svg/SVM.icon";
 import LinearIcon from "../../img/svg/Linear.icon";
+import MessageModal from "../../custom/message/MessageModal";
 
 const sampleData = {
   headers: ["Name", "Age", "Gender", "Country"],
@@ -297,8 +298,45 @@ const DataExploration = () => {
     }
   }, [filterModalOpen]);
 
+  const handleNextStep = () => {
+    if (currentStep === 2) {
+      if (
+        !isLinearSelected &&
+        !isSVMSelected &&
+        !isRFSelected &&
+        !isKMSelected
+      ) {
+        setError("Must select at least 1 modal to continue.");
+        return;
+      } else {
+        setError("");
+      }
+    }
+    setCurrentStep((pre) => (pre < 4 ? pre + 1 : pre));
+  };
+
+  useEffect(() => {
+    if (
+      currentStep === 2 &&
+      (isLinearSelected || isSVMSelected || isRFSelected || isKMSelected)
+    ) {
+      if (error === "Must select at least 1 modal to continue.") {
+        setError("");
+      }
+    }
+  }, [isLinearSelected, isSVMSelected, isRFSelected, isKMSelected]);
+
   return (
     <div className="content-wrap">
+      {console.log("error - ", error)}
+      {console.log("currentStep - ", currentStep)}
+      {error ? (
+        <div className={style2.alertModal}>
+          <MessageModal type={"error"} description={error} />
+        </div>
+      ) : (
+        ""
+      )}
       <div className={style2.stepperWrp}>
         <div
           className={
@@ -378,13 +416,7 @@ const DataExploration = () => {
           buttonClass={"NEXT_BUTTON"}
           rightIcon={<NextIcon color={"#ffffff"} size={20} />}
           onClick={() => {
-            currentStep === 2 &&
-            !isLinearSelected &&
-            !isSVMSelected &&
-            !isRFSelected &&
-            !isKMSelected
-              ? setError("Select Atleass 1 Modal")
-              : setCurrentStep((pre) => (pre < 4 ? pre + 1 : pre));
+            handleNextStep();
           }}
         />
       </div>
@@ -847,7 +879,22 @@ const DataExploration = () => {
           </div>
         </div>
       ) : currentStep === 3 ? (
-        <>step 3</>
+        <>
+          step 3
+          {/* get the data from api
+          check each of these below modal to see which modals have selected. according to that you can send api calls
+          *isLinearSelected
+          *isRFSelected
+          *isSVMSelected
+          *isKMSelected
+
+          !send 'tableData'(instead of csv) state values to backend it has the filtered csv values. using this value get the modal
+          results
+
+          check getCsvData() function in above to see how to send api request for backend
+          
+          */}
+        </>
       ) : (
         <>Step 4</>
       )}
