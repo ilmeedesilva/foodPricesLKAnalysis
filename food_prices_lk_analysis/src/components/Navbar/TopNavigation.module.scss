@@ -54,8 +54,6 @@ body {
                 text-decoration: none;
                 font-size: 1rem;
             }
-
-
         }
 
         .activeLink {
@@ -67,6 +65,10 @@ body {
             justify-content: center;
             box-shadow: 1px 1px 3px 1px rgb(172, 165, 165);
         }
+    }
+
+    .logoWrp {
+        text-decoration: none;
     }
 
 }

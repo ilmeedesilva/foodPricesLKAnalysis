@@ -8,12 +8,14 @@ const TopNavigation = () => {
 
   return (
     <div className={style.navWrap}>
-      <div className={style.leftLogoWrp}>
-        <div className={style.leftLogo}>
-          <img src={careAILogo} alt="care bear" />
+      <NavLink to="/" className={style.logoWrp}>
+        <div className={style.leftLogoWrp}>
+          <div className={style.leftLogo}>
+            <img src={careAILogo} alt="care bear" />
+          </div>
+          <h1>CARE BEAR AI</h1>
         </div>
-        <h1>CARE BEAR AI</h1>
-      </div>
+      </NavLink>
       <nav>
         <ul>
           <li className={location.pathname === "/" ? style.activeLink : ""}>
@@ -28,20 +30,20 @@ const TopNavigation = () => {
           >
             <NavLink to="/data-exploration">Data Exploration</NavLink>
           </li>
-          <li
+          {/* <li
             className={
               location.pathname === "/model-selection" ? style.activeLink : ""
             }
           >
             <NavLink to="/model-selection">Model Selection</NavLink>
-          </li>
-          <li
+          </li> */}
+          {/* <li
             className={
               location.pathname === "/predictions" ? style.activeLink : ""
             }
           >
             <NavLink to="/predictions">Predictions</NavLink>
-          </li>
+          </li> */}
           <li
             className={
               location.pathname === "/performance-analysis"
@@ -49,16 +51,16 @@ const TopNavigation = () => {
                 : ""
             }
           >
-            <NavLink to="/performance-analysis">Performance Analysis</NavLink>
+            <NavLink to="/performance-analysis">About</NavLink>
           </li>
           <li
             className={location.pathname === "/reports" ? style.activeLink : ""}
           >
-            <NavLink to="/reports">Reports</NavLink>
+            <NavLink to="/reports">Login</NavLink>
           </li>
         </ul>
       </nav>
-      <div className={style.rightExt}></div>
+      {/* <div className={style.rightExt}></div> */}
     </div>
   );
 };
