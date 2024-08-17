@@ -53,6 +53,34 @@ button:hover {
     }
 }
 
+.submitButton {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    min-width: 100px;
+    width: 100px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: none;
+    margin-right: 8px;
+    background-color: #0377EF;
+    color: #FFFFFF;
+}
+
+.cancelButton {
+    min-width: 100px;
+    width: 100px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: none;
+    margin-right: 8px;
+    background-color: #EF4939;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
 .nextBtn {
     display: flex;
     align-items: center;
@@ -68,5 +96,29 @@ button:hover {
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+
+}
+
+.buttonLoading {
+    position: relative !important;
+    margin-right: 4px !important;
+    display: flex;
+    align-items: center;
+    justify-content: c;
+
+    svg {
+        animation: rotateInfinite 2s linear infinite !important;
+    }
+}
+
+@keyframes rotateInfinite {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
     }
 }

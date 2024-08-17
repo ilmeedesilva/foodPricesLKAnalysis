@@ -1,5 +1,6 @@
 import React from "react";
 import style from "./CustomButton.module.scss";
+import LoaderIcon from "../img/svg/Loader.icon";
 
 const CustomButton = ({
   text,
@@ -8,6 +9,7 @@ const CustomButton = ({
   icon = "",
   rightIcon = "",
   onClick,
+  loading = false,
 }) => {
   const getButtonClass = () => {
     switch (buttonClass) {
@@ -15,6 +17,10 @@ const CustomButton = ({
         return style.primaryButton;
       case "SECONDARY":
         return style.secondaryButton;
+      case "SUBMIT":
+        return style.submitButton;
+      case "CANCEL":
+        return style.cancelButton;
       case "LEFT_ICON_BTN":
         return style.leftIconBtn;
       case "CLOSE":
@@ -31,10 +37,45 @@ const CustomButton = ({
       className={getButtonClass()}
       type={type}
       onClick={(event) => onClick(event)}
+      disabled={loading}
     >
-      {icon ? <div>{icon}</div> : ""}
+      {!icon && !rightIcon && loading ? (
+        <div className={style.buttonLoading}>
+          <LoaderIcon size={20} color={"#F5F6F7"} />
+        </div>
+      ) : (
+        ""
+      )}
+
+      {icon ? (
+        loading ? (
+          <div className={style.buttonLoading}>
+            <LoaderIcon
+              size={20}
+              color={buttonClass === "LEFT_ICON_BTN" ? "#EEEFF2" : "#F5F6F7"}
+            />
+          </div>
+        ) : (
+          <div>{icon}</div>
+        )
+      ) : (
+        ""
+      )}
       {buttonClass !== "CLOSE" ? <div> {text}</div> : ""}
-      {rightIcon ? <div>{rightIcon}</div> : ""}
+      {rightIcon ? (
+        loading ? (
+          <div className={style.buttonLoading}>
+            <LoaderIcon
+              size={20}
+              color={buttonClass === "LEFT_ICON_BTN" ? "#EEEFF2" : "#F5F6F7"}
+            />
+          </div>
+        ) : (
+          <div>{rightIcon}</div>
+        )
+      ) : (
+        ""
+      )}
     </button>
   );
 };

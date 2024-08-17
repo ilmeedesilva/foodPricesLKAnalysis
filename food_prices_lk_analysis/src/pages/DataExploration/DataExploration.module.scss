@@ -211,3 +211,31 @@
         opacity: 1;
     }
 }
+
+.wrapFilters {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .dropdownWrp {
+        margin-right: 20px;
+    }
+
+    .checkBoxWrp {
+        width: 500px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+
+    }
+
+    .checkboxItem {
+        min-width: 120px;
+        margin: 4px;
+
+        label {
+            padding-left: 4px;
+        }
+    }
+}

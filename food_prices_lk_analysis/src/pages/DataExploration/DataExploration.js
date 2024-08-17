@@ -24,6 +24,9 @@ import RandomForestIcon from "../../img/svg/RandomForest.icon";
 import SVMIcon from "../../img/svg/SVM.icon";
 import LinearIcon from "../../img/svg/Linear.icon";
 import MessageModal from "../../custom/message/MessageModal";
+import CustomDropdown from "../../custom/dropdown/CustomDropdown";
+import CustomCheckbox from "../../custom/checkBox/CustomeCheckBox";
+import LinearRegression from "../mlModals/LinearRegression";
 
 const sampleData = {
   headers: ["Name", "Age", "Gender", "Country"],
@@ -62,6 +65,7 @@ const DataExploration = () => {
   const [tableData, setTableData] = useState([]);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [filterHeader, setFilterHeaders] = useState([]);
+  const [filterRowData, setFilterRowData] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [advanceFilterVisible, setAdvanceFilterVisible] = useState(false);
@@ -82,6 +86,9 @@ const DataExploration = () => {
   const [selectedUSDRate, setSelectedUSDRate] = useState([]);
   const [currentStep, setCurrentStep] = useState(1);
   const [isLinearSelected, setIsLinearSelected] = useState(false);
+  const [isLinearFilterModalOpen, setIsLinearFilterModalOpen] = useState(false);
+  const [linearXaxis, setLinearXaxis] = useState("");
+  const [linearYaxis, setLinearYaxis] = useState([]);
   const [isRFSelected, setIsRFSelected] = useState(false);
   const [isSVMSelected, setIsSVMSelected] = useState(false);
   const [isKMSelected, setIsKMSelected] = useState(false);
@@ -93,8 +100,6 @@ const DataExploration = () => {
       behavior: "smooth",
     });
   };
-
-  console.log("selectedPriceRange - ", selectedPriceRange);
 
   const getCsvData = async () => {
     setIsLoading(true);
@@ -273,8 +278,18 @@ const DataExploration = () => {
           });
           return filteredRow;
         });
+      console.log("filteredPriceType - ", filteredPriceType);
 
       setFilterModalOpen(false);
+      setFilterRowData([
+        ...filterRowData,
+        ...filteredPriceType,
+        ...filteredPriceFlag,
+        ...filteredCommodity,
+        ...filteredMarket,
+        ...filteredAdmin1,
+        ...filteredAdmin2,
+      ]);
       return {
         headers: filteredHeaders,
         rows: filteredRows,
@@ -309,6 +324,9 @@ const DataExploration = () => {
         setError("Must select at least 1 modal to continue.");
         return;
       } else {
+        if (isLinearSelected) {
+          setIsLinearFilterModalOpen(true);
+        }
         setError("");
       }
     }
@@ -328,8 +346,6 @@ const DataExploration = () => {
 
   return (
     <div className="content-wrap">
-      {console.log("error - ", error)}
-      {console.log("currentStep - ", currentStep)}
       {error ? (
         <div className={style2.alertModal}>
           <MessageModal type={"error"} description={error} />
@@ -421,6 +437,7 @@ const DataExploration = () => {
           onClick={() => {
             handleNextStep();
           }}
+          loading={isLoading}
         />
       </div>
       {currentStep === 1 ? (
@@ -447,6 +464,7 @@ const DataExploration = () => {
                 text={"Filter"}
                 onClick={() => setFilterModalOpen(true)}
                 icon={<FilterIcon size={20} />}
+                loading={isLoading}
               />
               <CustomButton
                 buttonClass={"LEFT_ICON_BTN"}
@@ -454,6 +472,7 @@ const DataExploration = () => {
                 text={"Export"}
                 icon={<ExportIcon size={20} />}
                 onClick={() => exportCsv()}
+                loading={isLoading}
               />
 
               <CustomButton
@@ -462,6 +481,7 @@ const DataExploration = () => {
                 text={"Reset"}
                 icon={<ResetIcon size={20} />}
                 onClick={() => getCsvData()}
+                loading={isLoading}
               />
               {/* <CustomButton /> */}
             </div>
@@ -914,20 +934,17 @@ const DataExploration = () => {
           </div>
         </div>
       ) : currentStep === 3 ? (
-        <div>
-          {/* get the data from api
-          check each of these below modal to see which modals have selected. according to that you can send api calls
-          *isLinearSelected
-          *isRFSelected
-          *isSVMSelected
-          *isKMSelected
-
-          !send 'tableData'(instead of csv) state values to backend it has the filtered csv values. using this value get the modal
-          results
-
-          check getCsvData() function in above to see how to send api request for backend
-          
-          */}
+        <div className={style2.wrpAnyzls}>
+          {isLinearSelected ? (
+            <div className={style2.regWrp}>
+              <LinearRegression
+                dataset={tableData.rows}
+                variables={filterHeader}
+              />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       ) : (
         <div>Step 4</div>
