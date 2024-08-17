@@ -940,6 +940,7 @@ const DataExploration = () => {
               <LinearRegression
                 dataset={tableData.rows}
                 variables={filterHeader}
+                setStep={(step) => setCurrentStep(step)}
               />
             </div>
           ) : (
