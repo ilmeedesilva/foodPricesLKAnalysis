@@ -27,6 +27,7 @@ import MessageModal from "../../custom/message/MessageModal";
 import CustomDropdown from "../../custom/dropdown/CustomDropdown";
 import CustomCheckbox from "../../custom/checkBox/CustomeCheckBox";
 import LinearRegression from "../mlModals/LinearRegression";
+import RandomForest from "../mlModals/RandomForest";
 
 const sampleData = {
   headers: ["Name", "Age", "Gender", "Country"],
@@ -88,7 +89,7 @@ const DataExploration = () => {
   const [isLinearSelected, setIsLinearSelected] = useState(false);
   const [isLinearFilterModalOpen, setIsLinearFilterModalOpen] = useState(false);
   const [linearXaxis, setLinearXaxis] = useState("");
-  const [linearYaxis, setLinearYaxis] = useState([]);
+  const [linearYaxis] = useState([]);
   const [isRFSelected, setIsRFSelected] = useState(false);
   const [isSVMSelected, setIsSVMSelected] = useState(false);
   const [isKMSelected, setIsKMSelected] = useState(false);
@@ -278,7 +279,6 @@ const DataExploration = () => {
           });
           return filteredRow;
         });
-      console.log("filteredPriceType - ", filteredPriceType);
 
       setFilterModalOpen(false);
       setFilterRowData([
@@ -935,12 +935,21 @@ const DataExploration = () => {
         </div>
       ) : currentStep === 3 ? (
         <div className={style2.wrpAnyzls}>
+          {JSON.stringify(isLinearSelected)}
           {isLinearSelected ? (
             <div className={style2.regWrp}>
               <LinearRegression
                 dataset={tableData.rows}
                 variables={filterHeader}
                 setStep={(step) => setCurrentStep(step)}
+              />
+            </div>
+          ) : isRFSelected ? (
+            <div className={style2.regWrp}>
+              <RandomForest
+                dataset={tableData.rows}
+                // variables={filterHeader}
+                // setStep={(step) => setCurrentStep(step)}
               />
             </div>
           ) : (
