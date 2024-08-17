@@ -8,10 +8,9 @@ import CareBearFoods from "../../api/services/CareBearFoods";
 import RegressionChart from "./RegressionChart";
 import ModelMetrics from "./ModelMetrics";
 import Explanation from "./Explanation";
-import MessageModal from "../../custom/message/MessageModal";
 
 const numarics = ["price", "usdprice", "USD RATE"];
-const LinearRegression = ({ dataset, variables }) => {
+const LinearRegression = ({ dataset, variables, setStep }) => {
   const [linearXaxis, setLinearXaxis] = useState([]);
   const [linearYaxis, setLinearYaxis] = useState(variables[0]);
   const [openFilterModal, setOpenFilterModal] = useState(true);
@@ -42,6 +41,14 @@ const LinearRegression = ({ dataset, variables }) => {
       setIsLoading(false);
       setOpenFilterModal(false);
     }
+  };
+
+  const handleCancel = () => {
+    if (!response) {
+      setStep(2);
+      return;
+    }
+    setOpenFilterModal(false);
   };
 
   return (
@@ -121,7 +128,7 @@ const LinearRegression = ({ dataset, variables }) => {
               <CustomButton
                 buttonClass={"CANCEL"}
                 text={"Cancel"}
-                onClick={() => setOpenFilterModal(false)}
+                onClick={handleCancel}
                 loading={isLoading}
               />
               <CustomButton

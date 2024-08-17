@@ -16,6 +16,7 @@ const CareBearFoods = {
       console.log("error in get all csv data : ", e);
     }
   },
+
   handleLinearRegression: async (data) => {
     console.log("data - ", data);
 
@@ -30,20 +31,47 @@ const CareBearFoods = {
     }
   },
 
-  // create necessary functions in here
-  // You only need to create your endpoint function (in this case, it's an object here).
-  // SERVICETYPE.CARE_BEAR_SERVICE is a constant; don’t change it. It must be included in the every function call.
+  handleKmean: async (data) => {
+    console.log("data - ", data);
 
-  // example post request
+    try {
+      return await apiUtils.post(
+        "modals/k_mean",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling linear regression data : ", e);
+    }
+  },
 
-  // functionName: async (data) => { //when you call this pass necessary value
-  //   try {
-  //     return await apiUtils.put(`modal/kmean`, data, SERVICETYPE.CARE_BEAR_SERVICE);
-  //   } catch (e) {
-  //     console.log("error in put  users : ", e);
-  //   }
-  // },
-  // },
+  handleRanomForest: async (data) => {
+    console.log("data - ", data);
+
+    try {
+      return await apiUtils.post(
+        "modals/random_forest",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling random forest data : ", e);
+    }
+  },
+
+  handleSVM: async (data) => {
+    console.log("data - ", data);
+
+    try {
+      return await apiUtils.post(
+        "modals/svm",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling svm data : ", e);
+    }
+  },
 };
 
 export default CareBearFoods;
