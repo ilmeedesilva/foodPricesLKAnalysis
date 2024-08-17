@@ -16,6 +16,19 @@ const CareBearFoods = {
       console.log("error in get all csv data : ", e);
     }
   },
+  handleLinearRegression: async (data) => {
+    console.log("data - ", data);
+
+    try {
+      return await apiUtils.post(
+        "modals/linear_regression",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling linear regression data : ", e);
+    }
+  },
 
   // create necessary functions in here
   // You only need to create your endpoint function (in this case, it's an object here).
