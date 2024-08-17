@@ -18,8 +18,6 @@ const CareBearFoods = {
   },
 
   handleLinearRegression: async (data) => {
-    console.log("data - ", data);
-
     try {
       return await apiUtils.post(
         "modals/linear_regression",
@@ -31,9 +29,19 @@ const CareBearFoods = {
     }
   },
 
-  handleKmean: async (data) => {
-    console.log("data - ", data);
+  handleRFPredictions: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/rf-evaluate",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling random forest data : ", e);
+    }
+  },
 
+  handleKmean: async (data) => {
     try {
       return await apiUtils.post(
         "modals/k_mean",
@@ -46,8 +54,6 @@ const CareBearFoods = {
   },
 
   handleRanomForest: async (data) => {
-    console.log("data - ", data);
-
     try {
       return await apiUtils.post(
         "modals/random_forest",
@@ -60,8 +66,6 @@ const CareBearFoods = {
   },
 
   handleSVM: async (data) => {
-    console.log("data - ", data);
-
     try {
       return await apiUtils.post(
         "modals/svm",

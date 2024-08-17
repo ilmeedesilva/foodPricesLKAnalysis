@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "../page.module.scss";
 import style2 from "./LinearRegression.module.scss";
 import CustomButton from "../../custom/CustomButton";
@@ -10,35 +10,19 @@ import ModelMetrics from "./ModelMetrics";
 import Explanation from "./Explanation";
 
 const numarics = ["price", "usdprice", "USD RATE"];
-const LinearRegression = ({ dataset, variables, setStep }) => {
+const RandomForest = ({ dataset, variables, setStep }) => {
   const [linearXaxis, setLinearXaxis] = useState([]);
-  const [linearYaxis, setLinearYaxis] = useState(variables[0]);
-  const [openFilterModal, setOpenFilterModal] = useState(true);
+  const [linearYaxis, setLinearYaxis] = useState();
+  const [openFilterModal, setOpenFilterModal] = useState(false);
   const [response, setResponse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLinearRegression = async () => {
-    if (!linearXaxis.length || !linearYaxis) {
-      if (!linearXaxis.length && linearYaxis) {
-        setError("Must select Independent Variable");
-      } else if (linearXaxis.length && !linearYaxis) {
-        setError("Must select at least 1 Depending.");
-      }
-      return;
-    }
+  const handleRandomForest = async () => {
     setIsLoading(true);
     try {
-      const respond = await CareBearFoods.handleLinearRegression({
-        dataset,
-        linearYaxis,
-        linearXaxis,
-      });
-
       const responfFromRF = await CareBearFoods.handleRFPredictions(dataset);
-      console.log("responfFromRF - ", responfFromRF);
-
-      setResponse(respond);
+      setResponse(responfFromRF);
     } catch (e) {
       setError(e);
     } finally {
@@ -46,6 +30,10 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
       setOpenFilterModal(false);
     }
   };
+
+  useEffect(() => {
+    handleRandomForest();
+  }, []);
 
   const handleCancel = () => {
     if (!response) {
@@ -59,8 +47,10 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
     <div>
       {response && (
         <div>
-          <h2>Linear Regression Analysis for {response.y_column}</h2>
-          <RegressionChart
+          <h2>Random forest</h2>
+          {isLoading ? "Loading...." : JSON.stringify(response)}
+
+          {/* <RegressionChart
             actuals={response.actuals}
             predictions={response.predictions}
           />
@@ -77,7 +67,7 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
             intercept={response.intercept}
             linearXaxis={linearXaxis}
             linearYaxis={response.y_column}
-          />
+          /> */}
         </div>
       )}
 
@@ -138,7 +128,7 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
               <CustomButton
                 buttonClass={"SUBMIT"}
                 text={"Apply"}
-                onClick={handleLinearRegression}
+                // onClick={handleLinearRegression}
                 loading={isLoading}
               />
             </div>
@@ -151,4 +141,4 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
   );
 };
 
-export default LinearRegression;
+export default RandomForest;

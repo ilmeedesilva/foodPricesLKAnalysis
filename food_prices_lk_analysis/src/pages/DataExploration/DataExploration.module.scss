@@ -58,6 +58,9 @@
     width: 90%;
     margin: 30px auto;
     transition: all 500ms;
+    padding: 36px 52px 20px 20px;
+    box-shadow: 1px 0px 8px 1px #e5e5e5;
+    border-radius: 8px;
 
     .stepPoint {
         width: 35%;
@@ -68,7 +71,7 @@
 
         .stepperTitle {
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             left: 6px;
             font-weight: 600;
             color: #EEEFF2;
