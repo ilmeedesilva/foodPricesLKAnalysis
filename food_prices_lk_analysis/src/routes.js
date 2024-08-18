@@ -7,6 +7,7 @@ import ModelSelection from "./pages/ModelSelection/ModelSelection";
 import Predictions from "./pages/Predictions/Predictions";
 import PerformanceAnalysis from "./pages/PerformanceAnalysis/PerformanceAnalysis";
 import Reports from "./pages/Reports/Reports";
+import DatasetsSelection from "./pages/DatasetsSelection/DatasetsSelection";
 
 const AppRoutes = () => (
   <>
@@ -16,6 +17,7 @@ const AppRoutes = () => (
       <Route path="/data-exploration" element={<DataExploration />} />
       <Route path="/model-selection" element={<ModelSelection />} />
       <Route path="/predictions" element={<Predictions />} />
+      <Route path="/datasets" element={<DatasetsSelection />} />
       <Route path="/performance-analysis" element={<PerformanceAnalysis />} />
       <Route path="/reports" element={<Reports />} />
     </Routes>

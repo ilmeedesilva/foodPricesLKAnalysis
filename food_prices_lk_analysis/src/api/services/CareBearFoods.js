@@ -41,6 +41,57 @@ const CareBearFoods = {
     }
   },
 
+  getPredictionsFor12: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/rf-forecast-custom",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling RF predictions for 12 months : ", e);
+    }
+  },
+
+  handleSVMPredictions: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/svm-evaluate",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling SVM data : ", e);
+    }
+  },
+
+  getSVMPredictionsFor12: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/svm-forecast-custom",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling RF predictions for 12 months : ", e);
+    }
+  },
+
+  getSVMHighLow: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/forecast-high-low",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log(
+        "error in handling svm high low predictions for next month : ",
+        e
+      );
+    }
+  },
+
   handleKmean: async (data) => {
     try {
       return await apiUtils.post(

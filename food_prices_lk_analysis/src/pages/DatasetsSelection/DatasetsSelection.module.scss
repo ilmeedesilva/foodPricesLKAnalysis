@@ -1,0 +1,23 @@
+@import '../../styles/variables';
+
+.wrapCards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .cards {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+
+        .card {
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}

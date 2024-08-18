@@ -36,6 +36,29 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
         linearYaxis,
         linearXaxis,
       });
+
+      // const respond2 = await CareBearFoods.getPredictionsFor12({
+      //   dataset,
+      //   market: ["Matale", "Ampara"],
+      //   category: ["meat, fish and eggs"],
+      //   commodity: ["Eggs", "Fish (yellowfin tuna)"],
+      // });
+
+      // const respond2 = await CareBearFoods.getSVMPredictionsFor12({
+      //   dataset,
+      //   market: ["Matale", "Ampara"],
+      //   category: ["meat, fish and eggs"],
+      //   commodity: ["Eggs", "Fish (yellowfin tuna)"],
+      // });
+
+      const respond2 = await CareBearFoods.getSVMHighLow({
+        dataset,
+        end_date: "2024-06-15",
+        start_date: "2023-06-15",
+      });
+
+      console.log("respond2 - ", respond2);
+
       setResponse(respond);
     } catch (e) {
       setError(e);
