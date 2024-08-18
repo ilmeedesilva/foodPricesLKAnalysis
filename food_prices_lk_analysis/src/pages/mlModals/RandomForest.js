@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
-import style from "../page.module.scss";
-import style2 from "./LinearRegression.module.scss";
-import CustomButton from "../../custom/CustomButton";
-import CustomDropdown from "../../custom/dropdown/CustomDropdown";
-import CustomModal from "../../custom/modal/CustomModal";
 import CareBearFoods from "../../api/services/CareBearFoods";
-import RegressionChart from "./RegressionChart";
-import ModelMetrics from "./ModelMetrics";
-import Explanation from "./Explanation";
+import ContentLoader from "react-content-loader";
+import style from "./MlModals.module.scss";
+import NoData from "../../components/NoData/NoData";
 
-const numarics = ["price", "usdprice", "USD RATE"];
 const RandomForest = ({ dataset, variables, setStep }) => {
-  const [linearXaxis, setLinearXaxis] = useState([]);
-  const [linearYaxis, setLinearYaxis] = useState();
-  const [openFilterModal, setOpenFilterModal] = useState(false);
   const [response, setResponse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -27,29 +18,21 @@ const RandomForest = ({ dataset, variables, setStep }) => {
       setError(e);
     } finally {
       setIsLoading(false);
-      setOpenFilterModal(false);
     }
   };
-
   useEffect(() => {
-    handleRandomForest();
+    if (dataset.length) {
+      handleRandomForest();
+    }
   }, []);
 
-  const handleCancel = () => {
-    if (!response) {
-      setStep(2);
-      return;
-    }
-    setOpenFilterModal(false);
-  };
+  const handleCancel = () => {};
 
   return (
     <div>
-      {response && (
+      {response ? (
         <div>
           <h2>Random forest</h2>
-          {isLoading ? "Loading...." : JSON.stringify(response)}
-
           {/* <RegressionChart
             actuals={response.actuals}
             predictions={response.predictions}
@@ -69,9 +52,24 @@ const RandomForest = ({ dataset, variables, setStep }) => {
             linearYaxis={response.y_column}
           /> */}
         </div>
+      ) : isLoading ? (
+        <>
+          <ContentLoader viewBox="0 0 600 160">
+            <rect x="0" y="0" rx="2" ry="2" width="200" height="18" />
+            <rect x="0" y="30" rx="2" ry="2" width="570" height="12" />
+            <rect x="0" y="47" rx="2" ry="2" width="420" height="12" />
+            <rect x="0" y="64" rx="2" ry="2" width="540" height="12" />
+            <rect x="0" y="82" rx="2" ry="2" width="568" height="12" />
+            <rect x="0" y="100" rx="2" ry="2" width="570" height="12" />
+            <rect x="0" y="118" rx="2" ry="2" width="563" height="12" />
+            <rect x="0" y="136" rx="2" ry="2" width="563" height="12" />
+          </ContentLoader>
+        </>
+      ) : (
+        <NoData />
       )}
 
-      {openFilterModal ? (
+      {/* {openFilterModal ? (
         <CustomModal
           title={"Filter"}
           open={setOpenFilterModal}
@@ -136,7 +134,7 @@ const RandomForest = ({ dataset, variables, setStep }) => {
         </CustomModal>
       ) : (
         ""
-      )}
+      )} */}
     </div>
   );
 };

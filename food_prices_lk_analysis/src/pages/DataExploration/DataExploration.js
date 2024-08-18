@@ -17,17 +17,14 @@ import CloseIcon from "../../img/svg/Close.icon";
 import DatePicker from "react-datepicker";
 import ResetIcon from "../../img/svg/Reset.icon";
 import PriceRangeSlider from "../../custom/customPriceRangeSlider/PriceRangeSlider";
-import StepIcon from "../../img/svg/Step.icon";
 import NextIcon from "../../img/svg/Next.icon";
-import KmeanIcon from "../../img/svg/Kmean.icon";
-import RandomForestIcon from "../../img/svg/RandomForest.icon";
-import SVMIcon from "../../img/svg/SVM.icon";
-import LinearIcon from "../../img/svg/Linear.icon";
 import MessageModal from "../../custom/message/MessageModal";
-import CustomDropdown from "../../custom/dropdown/CustomDropdown";
-import CustomCheckbox from "../../custom/checkBox/CustomeCheckBox";
 import LinearRegression from "../mlModals/LinearRegression";
 import RandomForest from "../mlModals/RandomForest";
+import Stepper from "../../components/Stepper/Stepper";
+import Modal from "../../components/Modal/Modal";
+import { MODAL_TYPES } from "../../enums";
+import NoData from "../../components/NoData/NoData";
 
 const sampleData = {
   headers: ["Name", "Age", "Gender", "Country"],
@@ -61,7 +58,6 @@ const chartOptions = {
 };
 
 const DataExploration = () => {
-  const [chartType, setChartType] = useState("line");
   const [isLoading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
@@ -70,7 +66,6 @@ const DataExploration = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [advanceFilterVisible, setAdvanceFilterVisible] = useState(false);
-  const [showReset, setShowReset] = useState(false);
   const [tableHeadersWidth, setTalbeHeadersWidth] = useState({});
   const [filteredAdmin1, setFilteredAdmin1] = useState();
   const [filteredAdmin2, setFilteredAdmin2] = useState();
@@ -78,7 +73,6 @@ const DataExploration = () => {
   const [filteredCommodity, setFilteredCommodity] = useState();
   const [filteredPriceFlag, setFilteredPriceFlag] = useState();
   const [filteredPriceType, setFilteredPriceType] = useState();
-  const [filteredPriceCurrency, setFilteredPriceCurrency] = useState();
   const [filteredPrice, setFilteredPrice] = useState();
   const [filteredUsdPrice, setFilteredUsdPrice] = useState();
   const [filteredUsdRate, setFilteredUsdRate] = useState();
@@ -86,13 +80,7 @@ const DataExploration = () => {
   const [selectedUSDPriceRange, setSelectedUSDPriceRange] = useState([]);
   const [selectedUSDRate, setSelectedUSDRate] = useState([]);
   const [currentStep, setCurrentStep] = useState(1);
-  const [isLinearSelected, setIsLinearSelected] = useState(false);
-  const [isLinearFilterModalOpen, setIsLinearFilterModalOpen] = useState(false);
-  const [linearXaxis, setLinearXaxis] = useState("");
-  const [linearYaxis] = useState([]);
-  const [isRFSelected, setIsRFSelected] = useState(false);
-  const [isSVMSelected, setIsSVMSelected] = useState(false);
-  const [isKMSelected, setIsKMSelected] = useState(false);
+  const [selectedModal, setSelectedModal] = useState("");
   const [error, setError] = useState("");
 
   const ScrollToTopButton = () => {
@@ -150,8 +138,6 @@ const DataExploration = () => {
       setFilteredCommodity(Array.from(uniqueCommodity));
       setFilteredPriceFlag(Array.from(uniquePriceFlag));
       setFilteredPriceType(Array.from(uniquePriceType));
-      setFilteredPriceCurrency(Array.from(uniquePriceCurrency));
-
       setFilteredPrice({ min: minPrice, max: maxPrice });
       setFilteredUsdPrice({ min: minUsdPrice, max: maxUsdPrice });
       setFilteredUsdRate({ min: minUsdRate, max: maxUsdRate });
@@ -308,25 +294,17 @@ const DataExploration = () => {
   }, []);
 
   useEffect(() => {
-    if (filterModalOpen) {
+    if (filterModalOpen || error) {
       ScrollToTopButton();
     }
-  }, [filterModalOpen]);
+  }, [filterModalOpen, error]);
 
   const handleNextStep = () => {
     if (currentStep === 2) {
-      if (
-        !isLinearSelected &&
-        !isSVMSelected &&
-        !isRFSelected &&
-        !isKMSelected
-      ) {
+      if (!selectedModal) {
         setError("Must select at least 1 modal to continue.");
         return;
       } else {
-        if (isLinearSelected) {
-          setIsLinearFilterModalOpen(true);
-        }
         setError("");
       }
     }
@@ -334,15 +312,12 @@ const DataExploration = () => {
   };
 
   useEffect(() => {
-    if (
-      currentStep === 2 &&
-      (isLinearSelected || isSVMSelected || isRFSelected || isKMSelected)
-    ) {
+    if (currentStep === 2 && selectedModal) {
       if (error === "Must select at least 1 modal to continue.") {
         setError("");
       }
     }
-  }, [isLinearSelected, isSVMSelected, isRFSelected, isKMSelected]);
+  }, [selectedModal]);
 
   return (
     <div className="content-wrap">
@@ -353,70 +328,10 @@ const DataExploration = () => {
       ) : (
         ""
       )}
-      <div className={style2.stepperWrp}>
-        <div
-          className={
-            currentStep >= 1
-              ? [style2.stepPoint, style2.stepPointActive].join(" ")
-              : style2.stepPoint
-          }
-          onClick={() => setCurrentStep(1)}
-        >
-          <span className={style2.stepperTitle}>Data Filtering</span>
-          <StepIcon
-            size={25}
-            color={currentStep >= 1 ? "#7050F9" : "#EEEFF2"}
-          />
-          <span className={style2.stepperLine} />
-        </div>
-        <div
-          className={
-            currentStep >= 2
-              ? [style2.stepPoint, style2.stepPointActive].join(" ")
-              : style2.stepPoint
-          }
-          onClick={() => (currentStep > 2 ? setCurrentStep(2) : "")}
-        >
-          <span className={style2.stepperTitle}>Model Selection</span>
-          <StepIcon
-            size={25}
-            color={currentStep >= 2 ? "#7050F9" : "#EEEFF2"}
-          />
-          <span className={style2.stepperLine} />
-        </div>
-        <div
-          className={
-            currentStep >= 3
-              ? [style2.stepPoint, style2.stepPointActive].join(" ")
-              : style2.stepPoint
-          }
-          onClick={() => (currentStep > 3 ? setCurrentStep(3) : "")}
-        >
-          <span className={style2.stepperTitle}>
-            data analysis & Predictions
-          </span>
-          <StepIcon
-            size={25}
-            color={currentStep >= 3 ? "#7050F9" : "#EEEFF2"}
-          />
-          <span className={style2.stepperLine} />
-        </div>
-        <div
-          className={
-            currentStep >= 4
-              ? [style2.stepPoint, style2.stepPointActive, style2.endStep].join(
-                  " "
-                )
-              : [style2.stepPoint, style2.endStep].join(" ")
-          }
-        >
-          <span className={style2.stepperTitle}>Report</span>
-          <StepIcon
-            size={25}
-            color={currentStep >= 4 ? "#7050F9" : "#EEEFF2"}
-          />
-        </div>
-      </div>
+      <Stepper
+        getSelectedStepper={(value) => setCurrentStep(value)}
+        selectedStepper={currentStep}
+      />
       <div className={style2.sectionHeader}>
         <h1 className="header-md">
           {currentStep === 1
@@ -489,14 +404,17 @@ const DataExploration = () => {
           <div className={`content-100 ${style.wrpRow}`}>
             {isLoading ? (
               <div className={`content-100 ${style2.wrpRowCenter}`}>
-                <ContentLoader viewBox="0 0 800 120">
-                  <rect x="67" y="0" rx="2" ry="2" width="600" height="18" />
-                  <rect x="67" y="22" rx="2" ry="2" width="600" height="18" />
-                  <rect x="67" y="44" rx="2" ry="2" width="600" height="18" />
-                  <rect x="67" y="66" rx="2" ry="2" width="600" height="18" />
-                  <rect x="67" y="88" rx="2" ry="2" width="600" height="18" />
+                <ContentLoader viewBox="0 0 800 260">
+                  <rect x="0" y="0" rx="2" ry="2" width="765" height="34" />
+                  <rect x="0" y="40" rx="2" ry="2" width="765" height="34" />
+                  <rect x="0" y="80" rx="2" ry="2" width="765" height="34" />
+                  <rect x="0" y="120" rx="2" ry="2" width="765" height="34" />
+                  <rect x="0" y="160" rx="2" ry="2" width="765" height="34" />
+                  <rect x="0" y="200" rx="2" ry="2" width="765" height="34" />
                 </ContentLoader>
               </div>
+            ) : !isLoading && tableData.headers && !tableData.headers.length ? (
+              <NoData />
             ) : (
               <div className={style2.tableWrp}>
                 <CustomTable Data={tableData} tableWidth={tableHeadersWidth} />
@@ -791,152 +709,10 @@ const DataExploration = () => {
           )}
         </div>
       ) : currentStep === 2 ? (
-        <div className={style.dataExploration}>
-          <p className="text-sm">
-            To move on to the next step, "Data Analysis," you need to choose at
-            least one of the following models. Each model helps analyze your
-            data in a different way. Here's a brief description of each model to
-            help you decide:
-          </p>
-          <ul className={style2.modalDescriptionUI}>
-            <li>
-              <p className={style2.head}>Linear Model</p>
-              <p>
-                The Linear Model is a straightforward approach that assumes a
-                direct relationship between your data points. It’s like drawing
-                a straight line through your data to see how they relate.
-              </p>
-            </li>
-            <li>
-              <p className={style2.head}>Random Forest</p>
-              <p>
-                Random Forest is like a team of decision-makers. It combines the
-                decisions of many smaller models to give you a more accurate and
-                balanced result.
-              </p>
-            </li>
-            <li>
-              <p className={style2.head}>Support Vector Machine (SVM)</p>
-              <p>
-                SVM helps classify your data by drawing a boundary that best
-                separates different groups. Think of it as a way to categorize
-                your data into distinct sections.
-              </p>
-            </li>
-            <li>
-              <p className={style2.head}>K-Means Clustering</p>
-              <p>
-                K-Means groups your data into clusters that are similar to each
-                other. It helps you see patterns or groupings in your data that
-                you might not notice at first glance.
-              </p>
-            </li>
-          </ul>
-
-          <div>
-            <div class={style2.modalContainer}>
-              <label
-                className={
-                  isLinearSelected
-                    ? [style2.modalItem, style2.modalItemActive].join(" ")
-                    : style2.modalItem
-                }
-              >
-                <input
-                  type="checkbox"
-                  class="card-checkbox"
-                  id="card1"
-                  onChange={(e) => setIsLinearSelected(e.target.checked)}
-                />
-                <div className={style2.modalCenter}>
-                  <div className={style2.modalIcon}>
-                    <LinearIcon
-                      size={40}
-                      color={isLinearSelected ? "#105CD1" : "#000000"}
-                    />
-                  </div>
-                  <p>LINEAR</p>
-                </div>
-              </label>
-
-              <label
-                className={
-                  isRFSelected
-                    ? [style2.modalItem, style2.modalItemActive].join(" ")
-                    : style2.modalItem
-                }
-              >
-                <input
-                  type="checkbox"
-                  class="card-checkbox"
-                  id="card2"
-                  onChange={(e) => setIsRFSelected(e.target.checked)}
-                />
-                <div className={style2.modalCenter}>
-                  <div className={style2.modalIcon}>
-                    <RandomForestIcon
-                      size={40}
-                      color={isRFSelected ? "#105CD1" : "#000000"}
-                    />
-                  </div>
-                  <p>RANDOM FOREST</p>
-                </div>
-              </label>
-
-              <label
-                className={
-                  isSVMSelected
-                    ? [style2.modalItem, style2.modalItemActive].join(" ")
-                    : style2.modalItem
-                }
-              >
-                <input
-                  type="checkbox"
-                  class="card-checkbox"
-                  id="card3"
-                  onChange={(e) => setIsSVMSelected(e.target.checked)}
-                />
-                <div className={style2.modalCenter}>
-                  <div className={style2.modalIcon}>
-                    <SVMIcon
-                      size={40}
-                      color={isSVMSelected ? "#105CD1" : "#000000"}
-                    />
-                  </div>
-                  <p>SVM</p>
-                </div>
-              </label>
-
-              <label
-                className={
-                  isKMSelected
-                    ? [style2.modalItem, style2.modalItemActive].join(" ")
-                    : style2.modalItem
-                }
-              >
-                <input
-                  type="checkbox"
-                  class="card-checkbox"
-                  id="card4"
-                  onChange={(e) => setIsKMSelected(e.target.checked)}
-                />
-                <div className={style2.modalCenter}>
-                  <div className={style2.modalIcon}>
-                    <KmeanIcon
-                      size={40}
-                      color={isKMSelected ? "#105CD1" : "#000000"}
-                    />
-                  </div>
-                  <p>K-MEANS</p>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
+        <Modal getSelectedModal={(value) => setSelectedModal(value)} />
       ) : currentStep === 3 ? (
         <div className={style2.wrpAnyzls}>
-          {JSON.stringify(isLinearSelected)}
-          {isLinearSelected ? (
+          {selectedModal === MODAL_TYPES.LINEAR_REGRESSION ? (
             <div className={style2.regWrp}>
               <LinearRegression
                 dataset={tableData.rows}
@@ -944,12 +720,12 @@ const DataExploration = () => {
                 setStep={(step) => setCurrentStep(step)}
               />
             </div>
-          ) : isRFSelected ? (
+          ) : selectedModal === MODAL_TYPES.RANDOM_FOREST ? (
             <div className={style2.regWrp}>
               <RandomForest
                 dataset={tableData.rows}
-                // variables={filterHeader}
-                // setStep={(step) => setCurrentStep(step)}
+                variables={filterHeader}
+                setStep={(step) => setCurrentStep(step)}
               />
             </div>
           ) : (

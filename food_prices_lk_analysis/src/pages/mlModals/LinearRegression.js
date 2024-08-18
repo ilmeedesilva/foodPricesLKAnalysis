@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import style from "../page.module.scss";
-import style2 from "./LinearRegression.module.scss";
+import style2 from "./MlModals.module.scss";
 import CustomButton from "../../custom/CustomButton";
 import CustomDropdown from "../../custom/dropdown/CustomDropdown";
 import CustomModal from "../../custom/modal/CustomModal";
@@ -8,6 +8,8 @@ import CareBearFoods from "../../api/services/CareBearFoods";
 import RegressionChart from "./RegressionChart";
 import ModelMetrics from "./ModelMetrics";
 import Explanation from "./Explanation";
+import ContentLoader from "react-content-loader";
+import NoData from "../../components/NoData/NoData";
 
 const numarics = ["price", "usdprice", "USD RATE"];
 const LinearRegression = ({ dataset, variables, setStep }) => {
@@ -34,10 +36,6 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
         linearYaxis,
         linearXaxis,
       });
-
-      const responfFromRF = await CareBearFoods.handleRFPredictions(dataset);
-      console.log("responfFromRF - ", responfFromRF);
-
       setResponse(respond);
     } catch (e) {
       setError(e);
@@ -57,7 +55,7 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
 
   return (
     <div>
-      {response && (
+      {response ? (
         <div>
           <h2>Linear Regression Analysis for {response.y_column}</h2>
           <RegressionChart
@@ -79,6 +77,21 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
             linearYaxis={response.y_column}
           />
         </div>
+      ) : isLoading || openFilterModal ? (
+        <>
+          <ContentLoader viewBox="0 0 600 160">
+            <rect x="0" y="0" rx="2" ry="2" width="200" height="18" />
+            <rect x="0" y="30" rx="2" ry="2" width="570" height="12" />
+            <rect x="0" y="47" rx="2" ry="2" width="420" height="12" />
+            <rect x="0" y="64" rx="2" ry="2" width="540" height="12" />
+            <rect x="0" y="82" rx="2" ry="2" width="568" height="12" />
+            <rect x="0" y="100" rx="2" ry="2" width="570" height="12" />
+            <rect x="0" y="118" rx="2" ry="2" width="563" height="12" />
+            <rect x="0" y="136" rx="2" ry="2" width="563" height="12" />
+          </ContentLoader>
+        </>
+      ) : (
+        <NoData />
       )}
 
       {openFilterModal ? (
@@ -97,7 +110,7 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
             <div className={style.dropdownWrp}>
               <CustomDropdown
                 data={variables}
-                label={"Select Independent Variable"}
+                label={"Select Dependent Variable"}
                 getSelected={(value) => setLinearYaxis(value)}
               />
             </div>
@@ -133,7 +146,7 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
                 buttonClass={"CANCEL"}
                 text={"Cancel"}
                 onClick={handleCancel}
-                loading={isLoading}
+                // loading={isLoading}
               />
               <CustomButton
                 buttonClass={"SUBMIT"}
