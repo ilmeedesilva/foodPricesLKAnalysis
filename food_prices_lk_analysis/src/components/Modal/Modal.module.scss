@@ -1,0 +1,81 @@
+@import '../../styles/variables';
+
+.modalDescriptionUI {
+
+    li {
+        list-style: none;
+
+        .head {
+            font-weight: 600;
+        }
+
+        p {
+            padding: 4px 0;
+            margin: 0;
+            font-size: 12px;
+            line-height: 1;
+        }
+    }
+}
+
+
+.modalContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .modalItem {
+        width: 270px;
+        height: 270px;
+        padding: 50px;
+        border-radius: 10px;
+        box-shadow: 1px 2px 5px 0px #e9e4e4;
+        cursor: pointer;
+        transition: all 500ms;
+
+        input {
+            visibility: hidden;
+        }
+
+        .modalCenter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+
+            p {
+                margin: 12px 0;
+
+            }
+
+            .modalIcon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 70px;
+                height: 70px;
+                border-radius: 50%;
+                background-color: #EEEFF2;
+            }
+        }
+    }
+
+    .modalItemActive {
+        border: 3px solid #8AADE6;
+
+        .modalIcon {
+            background-color: #E5EDF9 !important;
+        }
+
+        p {
+            font-weight: 600;
+        }
+    }
+
+    .modalItem:hover {
+        background-color: #f8f8f8;
+    }
+
+
+}
