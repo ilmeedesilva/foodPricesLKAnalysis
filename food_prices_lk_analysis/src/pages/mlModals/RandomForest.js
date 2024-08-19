@@ -6,6 +6,7 @@ import NoData from "../../components/NoData/NoData";
 import CustomButton from "../../custom/CustomButton";
 import CustomModal from "../../custom/modal/CustomModal";
 import CloseIcon from "../../img/svg/Close.icon";
+import RFExplanation from "./RFExplanation";
 
 const selectedables = ["market", "category", "commodity"];
 
@@ -210,6 +211,16 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
             linearYaxis={response.y_column}
           /> */
           }
+          <RFExplanation
+            accuracy={response.accuracy}
+            classificationReport={response.classification_report}
+            confusionMatrix={response.confusion_matrix}
+            cvScores={response.cv_scores}
+            gridSearchResults={response.grid_search_results}
+            meanAbsoluteError={response.mean_absolute_error}
+            meanSquaredError={response.mean_squared_error}
+            r2Score={response.r2_score}
+          />
         </div>
       ) : isLoading ? (
         <>
