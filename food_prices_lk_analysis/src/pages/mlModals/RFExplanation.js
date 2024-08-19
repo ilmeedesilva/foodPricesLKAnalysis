@@ -2,7 +2,6 @@ import React from "react";
 // import BoxplotChart from "./BoxPlotChart";
 import HeatmapChart from "./BoxPlotChart";
 
-
 const RFExplanation = ({
   accuracy = 0,
   classificationReport = {},
@@ -61,13 +60,13 @@ const RFExplanation = ({
 
   return (
     <div>
-      <h3>Random Forest Evaluation</h3>
-      <p>
+      <h3 className="text-md mt-4 mb-4">Random Forest Evaluation</h3>
+      <p className="text-sm">
         The Random Forest algorithm provides various metrics to evaluate the
         model's performance. Here is a detailed explanation of the results:
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Accuracy:</strong>{" "}
         <i>
           The accuracy of the model is {accuracy ? accuracy.toFixed(4) : "N/A"}.
@@ -77,26 +76,26 @@ const RFExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Classification Report:</strong>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {formatClassificationReport(classificationReport)}
         </div>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Confusion Matrix:</strong>
         {/* <BoxplotChart confusionMatrix={confusionMatrix} /> */}
         <HeatmapChart confusionMatrix={confusionMatrix} />
         <i>
-          The Heatmap shows the distribution of true positives, false
-          positives, false negatives, and true negatives for each class. In this
-          case, it reflects the model's performance in distinguishing between
-          different classes.
+          The Heatmap shows the distribution of true positives, false positives,
+          false negatives, and true negatives for each class. In this case, it
+          reflects the model's performance in distinguishing between different
+          classes.
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Cross-Validation Scores:</strong>
         <pre>
           <i>{cvScores.length ? cvScores.join(", ") : "N/A"}</i>
@@ -109,7 +108,7 @@ const RFExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Grid Search Results:</strong>
         {/* <pre>
           {gridSearchResults.params ? (
@@ -124,7 +123,7 @@ const RFExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Mean Absolute Error (MAE):</strong>{" "}
         <i>
           The MAE is {meanAbsoluteError ? meanAbsoluteError.toFixed(4) : "N/A"}.
@@ -133,7 +132,7 @@ const RFExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Mean Squared Error (MSE):</strong>{" "}
         <i>
           The MSE is {meanSquaredError ? meanSquaredError.toFixed(4) : "N/A"}.
@@ -143,7 +142,7 @@ const RFExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>R-squared:</strong>{" "}
         <i>
           The R-squared value is {r2Score ? r2Score.toFixed(4) : "N/A"}. This

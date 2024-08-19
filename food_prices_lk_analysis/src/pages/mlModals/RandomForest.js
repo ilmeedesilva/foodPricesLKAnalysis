@@ -325,7 +325,6 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
                 </div>
               </div>
             </div>
-            {console.log("isLoading - ", isLoading)}
             <div className={style.footerFilter}>
               <CustomButton
                 buttonClass={"CANCEL"}

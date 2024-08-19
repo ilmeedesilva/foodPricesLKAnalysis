@@ -9,8 +9,8 @@ const ModelMetrics = ({
 }) => {
   return (
     <div>
-      <h3>Model Metrics</h3>
-      <ul>
+      <h3 className="text-md">Model Metrics</h3>
+      <ul className="text-sm">
         <li>
           <strong>Mean Squared Error (MSE):</strong> {mse.toFixed(2)}
         </li>
@@ -18,7 +18,7 @@ const ModelMetrics = ({
           <strong>R-squared:</strong> {r2.toFixed(2)}
         </li>
         <li>
-          <strong>Coefficients:</strong>{" "}
+          <strong className="text-md">Coefficients:</strong>{" "}
           {coefficients.length > 0
             ? coefficients.map((coef, index) => (
                 <span key={index}>
@@ -29,7 +29,7 @@ const ModelMetrics = ({
             : "N/A"}
         </li>
         <li>
-          <strong>Intercept:</strong> {intercept.toFixed(2)}
+          <strong className="text-md">Intercept:</strong> {intercept.toFixed(2)}
         </li>
       </ul>
     </div>
