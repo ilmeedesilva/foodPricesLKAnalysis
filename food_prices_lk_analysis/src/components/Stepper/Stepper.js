@@ -62,7 +62,7 @@ const Stepper = ({ getSelectedStepper, selectedStepper }) => {
         }
         onClick={() => (currentStep > 3 ? setCurrentStep(3) : "")}
       >
-        <span className={style.stepperTitle}>data analysis & Predictions</span>
+        <span className={style.stepperTitle}>Data Analysis & Predictions</span>
         {currentStep > 3 ? (
           <CheckedIcon size={24} color={"#7050F9"} />
         ) : (
