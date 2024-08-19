@@ -18,7 +18,7 @@ import CustomTable from "../../custom/table/CustomTable";
 const numarics = ["price", "usdprice", "USD RATE"];
 const LinearRegression = ({ dataset, variables, headers, setStep }) => {
   const [linearXaxis, setLinearXaxis] = useState([]);
-  const [linearYaxis, setLinearYaxis] = useState(variables[0]);
+  const [linearYaxis, setLinearYaxis] = useState(variables ? variables[0] : []);
   const [openFilterModal, setOpenFilterModal] = useState(true);
   const [response, setResponse] = useState(null);
   const [linearPredictionResponse, setLinearPredictionResponse] =
