@@ -62,15 +62,21 @@
     }
 
     .modalItemActive {
-        border: 3px solid #8AADE6;
+        border: 3px solid #496bf3;
+        background-color: #ebf1ff;
 
         .modalIcon {
             background-color: #E5EDF9 !important;
         }
 
         p {
+            color: #496bf3;
             font-weight: 600;
         }
+    }
+
+    .modalItemActive:hover {
+        background-color: #dbe4f8 !important;
     }
 
     .modalItem:hover {

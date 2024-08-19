@@ -1,9 +1,9 @@
-// RegressionChart.jsx
+// RegressionBarChart.jsx
 import React from "react";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
-  LineElement,
+  BarElement,
   CategoryScale,
   LinearScale,
   Title,
@@ -12,7 +12,7 @@ import {
 } from "chart.js";
 
 ChartJS.register(
-  LineElement,
+  BarElement,
   CategoryScale,
   LinearScale,
   Title,
@@ -20,30 +20,29 @@ ChartJS.register(
   Legend
 );
 
-const RegressionChart = ({ actuals = [], predictions = [] }) => {
+const RegressionBarChart = ({ actuals = [], predictions = [] }) => {
   const data = {
     labels: Array.from({ length: actuals.length }, (_, i) => i + 1), // Index-based labels
     datasets: [
       {
         label: "Actual Values",
         data: actuals,
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        fill: false,
-        color: "#97A1B7",
+        backgroundColor: "#3C91FF",
+        borderColor: "#3C91FF",
+        borderWidth: 1,
       },
       {
         label: "Predicted Values",
         data: predictions,
-        borderColor: "rgba(255, 99, 132, 1)",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        fill: false,
-        color: "#97A1B7",
+        backgroundColor: "#3240FF",
+        borderColor: "#3240FF",
+        borderWidth: 1,
       },
     ],
   };
 
   const options = {
+    responsive: true,
     scales: {
       x: {
         title: {
@@ -72,13 +71,28 @@ const RegressionChart = ({ actuals = [], predictions = [] }) => {
         },
       },
     },
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "#97A1B7",
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+          },
+        },
+      },
+    },
   };
 
   return (
     <div>
-      <Line data={data} options={options} />
+      <Bar data={data} options={options} />
     </div>
   );
 };
 
-export default RegressionChart;
+export default RegressionBarChart;

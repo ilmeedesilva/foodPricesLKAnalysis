@@ -9,7 +9,7 @@ import CloseIcon from "../../img/svg/Close.icon";
 
 const selectedables = ["market", "category", "commodity"];
 
-const RandomForest = ({ dataset, headers, variables, setStep }) => {
+const SVM = ({ dataset, headers, variables, setStep }) => {
   const [response, setResponse] = useState(null);
   const [predicteableValues, setPredicteableValues] = useState([]);
   const [selectedPredicteableValues, setSelectedPredicteableValues] = useState(
@@ -26,10 +26,10 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const [isPredictionModalOpen, setIsPredictionModalOpen] = useState(false);
   const [error, setError] = useState("");
 
-  const handleRandomForest = async () => {
+  const handleSVM = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.handleRFPredictions(dataset);
+      const responfFromRF = await CareBearFoods.handleSVMPredictions(dataset);
       setResponse(responfFromRF);
     } catch (e) {
       setError(e);
@@ -41,7 +41,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const handleRFPredictions = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.getRFPredictions({
+      const responfFromRF = await CareBearFoods.getSVMPredictions({
         dataset,
         market: selectedMarkets,
         category: selectedCategory,
@@ -57,7 +57,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
 
   useEffect(() => {
     if (dataset.length) {
-      handleRandomForest();
+      handleSVM();
     }
   }, []);
 
@@ -83,7 +83,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
     <div>
       {response ? (
         <div>
-          <h2>Random forest</h2>
+          <h2>Support Vector Machine (SVM)</h2>
           <CustomButton
             text={"Prediction"}
             onClick={() => setIsPredictionModalOpen(true)}
@@ -233,4 +233,4 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
   );
 };
 
-export default RandomForest;
+export default SVM;

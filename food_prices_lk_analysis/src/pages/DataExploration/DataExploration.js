@@ -25,6 +25,7 @@ import Stepper from "../../components/Stepper/Stepper";
 import Modal from "../../components/Modal/Modal";
 import { MODAL_TYPES } from "../../enums";
 import NoData from "../../components/NoData/NoData";
+import SVM from "../mlModals/SVM";
 
 const sampleData = {
   headers: ["Name", "Age", "Gender", "Country"],
@@ -70,6 +71,7 @@ const DataExploration = () => {
   const [filteredAdmin1, setFilteredAdmin1] = useState();
   const [filteredAdmin2, setFilteredAdmin2] = useState();
   const [filteredMarket, setFilteredMarket] = useState();
+  const [filteredCategory, setFilteredCategory] = useState();
   const [filteredCommodity, setFilteredCommodity] = useState();
   const [filteredPriceFlag, setFilteredPriceFlag] = useState();
   const [filteredPriceType, setFilteredPriceType] = useState();
@@ -103,6 +105,7 @@ const DataExploration = () => {
       const uniqueAdmin1 = new Set();
       const uniqueAdmin2 = new Set();
       const uniqueMarket = new Set();
+      const uniqueCategory = new Set();
       const uniqueCommodity = new Set();
       const uniquePriceFlag = new Set();
       const uniquePriceType = new Set();
@@ -119,6 +122,7 @@ const DataExploration = () => {
         uniqueAdmin1.add(row.admin1);
         uniqueAdmin2.add(row.admin2);
         uniqueMarket.add(row.market);
+        uniqueCategory.add(row.category);
         uniqueCommodity.add(row.commodity);
         uniquePriceFlag.add(row.priceflag);
         uniquePriceType.add(row.pricetype);
@@ -135,6 +139,7 @@ const DataExploration = () => {
       setFilteredAdmin1(Array.from(uniqueAdmin1));
       setFilteredAdmin2(Array.from(uniqueAdmin2));
       setFilteredMarket(Array.from(uniqueMarket));
+      setFilteredCategory(Array.from(uniqueCategory));
       setFilteredCommodity(Array.from(uniqueCommodity));
       setFilteredPriceFlag(Array.from(uniquePriceFlag));
       setFilteredPriceType(Array.from(uniquePriceType));
@@ -332,17 +337,22 @@ const DataExploration = () => {
         getSelectedStepper={(value) => setCurrentStep(value)}
         selectedStepper={currentStep}
       />
-      <div className={style2.sectionHeader}>
-        <h1 className="header-md">
-          {currentStep === 1
-            ? "Data Filtering"
-            : currentStep === 2
-            ? "Modal Selection"
-            : currentStep === 3
-            ? "Data Analysis"
-            : currentStep === 4
-            ? "Report"
-            : "Finshed"}
+      <div className={`${style2.sectionHeader}  mb-2`}>
+        <h1 className={`header-md d-flex align-center`}>
+          {currentStep === 1 ? (
+            "Data Filtering"
+          ) : currentStep === 2 ? (
+            "Modal Selection"
+          ) : currentStep === 3 ? (
+            <>
+              Data Analysis
+              <span className={style.curretnModal}>{selectedModal}</span>
+            </>
+          ) : currentStep === 4 ? (
+            "Report"
+          ) : (
+            "Finshed"
+          )}
         </h1>
 
         <CustomButton
@@ -469,7 +479,7 @@ const DataExploration = () => {
                         onClick={() => filterHeaders(header)}
                       >
                         <p>{header}</p>
-                        <CloseIcon size={12} />
+                        <CloseIcon size={12} color={"#496bf3"} />
                       </button>
                     ))}
                   </div>
@@ -489,7 +499,7 @@ const DataExploration = () => {
                                 }
                               >
                                 <p>{header}</p>
-                                <CloseIcon size={12} />
+                                <CloseIcon size={12} color={"#496bf3"} />
                               </button>
                             ))}
                           </div>
@@ -512,7 +522,7 @@ const DataExploration = () => {
                                 }
                               >
                                 <p>{header}</p>
-                                <CloseIcon size={12} />
+                                <CloseIcon size={12} color={"#496bf3"} />
                               </button>
                             ))}
                           </div>
@@ -535,7 +545,30 @@ const DataExploration = () => {
                                 }
                               >
                                 <p>{header}</p>
-                                <CloseIcon size={12} />
+                                <CloseIcon size={12} color={"#496bf3"} />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {filterHeader.find((item) => item === "category") ? (
+                        <div className={style3.filterItemSection}>
+                          <h6 className="mb-0">Filter Category</h6>
+                          <div className={style3.headersWrp}>
+                            {filteredCategory.map((header) => (
+                              <button
+                                className={style3.headerItem}
+                                onClick={() =>
+                                  setFilteredCategory((pre) =>
+                                    pre.filter((item) => item !== header)
+                                  )
+                                }
+                              >
+                                <p>{header}</p>
+                                <CloseIcon size={12} color={"#496bf3"} />
                               </button>
                             ))}
                           </div>
@@ -558,7 +591,7 @@ const DataExploration = () => {
                                 }
                               >
                                 <p>{header}</p>
-                                <CloseIcon size={12} />
+                                <CloseIcon size={12} color={"#496bf3"} />
                               </button>
                             ))}
                           </div>
@@ -581,7 +614,7 @@ const DataExploration = () => {
                                 }
                               >
                                 <p>{header}</p>
-                                <CloseIcon size={12} />
+                                <CloseIcon size={12} color={"#496bf3"} />
                               </button>
                             ))}
                           </div>
@@ -717,6 +750,11 @@ const DataExploration = () => {
               <LinearRegression
                 dataset={tableData.rows}
                 variables={filterHeader}
+                headers={{
+                  markets: filteredMarket,
+                  category: filteredCategory,
+                  commoditiy: filteredCommodity,
+                }}
                 setStep={(step) => setCurrentStep(step)}
               />
             </div>
@@ -724,10 +762,26 @@ const DataExploration = () => {
             <div className={style2.regWrp}>
               <RandomForest
                 dataset={tableData.rows}
+                headers={{
+                  markets: filteredMarket,
+                  category: filteredCategory,
+                  commoditiy: filteredCommodity,
+                }}
                 variables={filterHeader}
                 setStep={(step) => setCurrentStep(step)}
               />
             </div>
+          ) : selectedModal === MODAL_TYPES.SUPPORT_VECTOR_MACHINE ? (
+            <SVM
+              dataset={tableData.rows}
+              headers={{
+                markets: filteredMarket,
+                category: filteredCategory,
+                commoditiy: filteredCommodity,
+              }}
+              variables={filterHeader}
+              setStep={(step) => setCurrentStep(step)}
+            />
           ) : (
             ""
           )}

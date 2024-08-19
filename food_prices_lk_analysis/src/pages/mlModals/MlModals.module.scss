@@ -18,17 +18,18 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border-radius: 20px;
+                border-radius: .25rem;
                 max-width: 160px;
                 min-width: 120px;
                 margin: 8px;
                 padding: 8px 14px;
-                border: 1px solid #3B47FE;
+                border: 1px solid #496bf3;
                 box-shadow: none;
+                background-color: #ebf1ff;
 
                 p {
                     margin: 0;
-                    color: #3B47FE;
+                    color: #496bf3;
                     font-size: 12px;
                     text-align: center;
                     display: flex;
@@ -55,4 +56,102 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+}
+
+.advanceFilterApply {
+    width: 35vw;
+    overflow: auto;
+}
+
+.selectionalModal {
+    width: 40vw;
+    max-height: 70vh;
+    overflow: auto;
+
+
+    .headerItem {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between !important;
+        padding: 8px !important;
+    }
+}
+
+.wrpGrp {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h5 {
+        font-size: 14px;
+    }
+}
+
+
+.wrapGrp42 {
+    width: 42%;
+    height: 100%;
+}
+
+.wrapGrp48 {
+    width: 48%;
+    height: 100%;
+}
+
+.wrapGrp30 {
+    width: 30%;
+    height: 100%;
+}
+
+
+.wrapGrp50 {
+    width: 50%;
+    height: 100%;
+}
+
+.wrapGrp55 {
+    width: 55%;
+    height: 100%;
+}
+
+.wrapGrp60 {
+    width: 60%;
+    height: 100%;
+}
+
+.wrapGrp68 {
+    width: 68%;
+    height: 100%;
+}
+
+.wrapGrp70 {
+    width: 70%;
+    height: 100%;
+}
+
+.wrapGrptbleChr {
+    .groupTblChrt {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.wrapGrp {
+    box-shadow: 1px 0px 5px 0px #dbcece;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 4px;
+
+    .graphTitle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .groupTblChrt {
+        display: flex;
+        justify-content: space-between;
+    }
 }

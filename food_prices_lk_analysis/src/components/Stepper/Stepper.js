@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import style from "./Stepper.module.scss";
 import StepIcon from "../../img/svg/Step.icon";
+import CheckedIcon from "../../img/svg/Checked.icon";
 
 const Stepper = ({ getSelectedStepper, selectedStepper }) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -24,7 +25,14 @@ const Stepper = ({ getSelectedStepper, selectedStepper }) => {
         onClick={() => setCurrentStep(1)}
       >
         <span className={style.stepperTitle}>Data Filtering</span>
-        <StepIcon size={25} color={currentStep >= 1 ? "#7050F9" : "#EEEFF2"} />
+        {currentStep > 1 ? (
+          <CheckedIcon size={24} color={"#7050F9"} />
+        ) : (
+          <StepIcon
+            size={25}
+            color={currentStep >= 1 ? "#7050F9" : "#EEEFF2"}
+          />
+        )}
         <span className={style.stepperLine} />
       </div>
       <div
@@ -36,7 +44,14 @@ const Stepper = ({ getSelectedStepper, selectedStepper }) => {
         onClick={() => (currentStep > 2 ? setCurrentStep(2) : "")}
       >
         <span className={style.stepperTitle}>Model Selection</span>
-        <StepIcon size={25} color={currentStep >= 2 ? "#7050F9" : "#EEEFF2"} />
+        {currentStep > 2 ? (
+          <CheckedIcon size={24} color={"#7050F9"} />
+        ) : (
+          <StepIcon
+            size={25}
+            color={currentStep >= 2 ? "#7050F9" : "#EEEFF2"}
+          />
+        )}
         <span className={style.stepperLine} />
       </div>
       <div
@@ -48,7 +63,14 @@ const Stepper = ({ getSelectedStepper, selectedStepper }) => {
         onClick={() => (currentStep > 3 ? setCurrentStep(3) : "")}
       >
         <span className={style.stepperTitle}>data analysis & Predictions</span>
-        <StepIcon size={25} color={currentStep >= 3 ? "#7050F9" : "#EEEFF2"} />
+        {currentStep > 3 ? (
+          <CheckedIcon size={24} color={"#7050F9"} />
+        ) : (
+          <StepIcon
+            size={25}
+            color={currentStep >= 3 ? "#7050F9" : "#EEEFF2"}
+          />
+        )}
         <span className={style.stepperLine} />
       </div>
       <div
@@ -59,7 +81,14 @@ const Stepper = ({ getSelectedStepper, selectedStepper }) => {
         }
       >
         <span className={style.stepperTitle}>Report</span>
-        <StepIcon size={25} color={currentStep >= 4 ? "#7050F9" : "#EEEFF2"} />
+        {currentStep > 4 ? (
+          <CheckedIcon size={24} color={"#7050F9"} />
+        ) : (
+          <StepIcon
+            size={25}
+            color={currentStep >= 4 ? "#7050F9" : "#EEEFF2"}
+          />
+        )}
       </div>
     </div>
   );
