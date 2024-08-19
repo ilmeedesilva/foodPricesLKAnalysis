@@ -14,6 +14,7 @@ const selectedables = ["market", "category", "commodity"];
 const SVM = ({ dataset, headers, variables, setStep }) => {
   const [response, setResponse] = useState(null);
   const [responseForPredict, setResponseForPredict] = useState(null);
+  const [responseForHighLow, setResponseForHighLow] = useState(null);
   const [selectedMarkets, setSelectedMarkets] = useState(headers.markets ?? []);
   const [selectedCategory, setSelectedCategory] = useState(
     headers.category ?? []
@@ -31,6 +32,9 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     endDate: "",
   });
 
+  const [selectStartDate, setStartDate] = useState();
+  const [selectEndsDate, setEndDate] = useState();
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -38,11 +42,70 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     return `${year}-${month < 10 ? `0${month}` : month}`;
   };
 
+  function getMinMaxDates(data) {
+    console.log("DATA LEN: ", data.length);
+
+    if (data.length) {
+      const dates = data.map((row) => new Date(row.date));
+
+      const minDate = new Date(Math.min(...dates));
+      const maxDate = new Date(Math.max(...dates));
+
+      console.log("minDate: ", minDate);
+      console.log("maxDate: ", maxDate);
+
+      setStartDate(minDate);
+      setEndDate(maxDate);
+
+      console.log("START DATE: ", selectStartDate);
+      console.log("END DATE: ", selectEndsDate);
+    }
+  }
+
+  const getMinDate = () => {
+    if (dataset.length) {
+        const dates = dataset.map((row) => new Date(row.date));
+        const minDate = new Date(Math.min(...dates));
+        return minDate.toISOString().split('T')[0];  // Format as 'YYYY-MM-DD'
+    }
+};
+
+const getMaxDate = () => {
+    if (dataset.length) {
+        const dates = dataset.map((row) => new Date(row.date));
+        const maxDate = new Date(Math.max(...dates));  // Fixed to use Math.max instead of Math.min
+        return maxDate.toISOString().split('T')[0];   // Convert to ISO string without timezone
+    }
+};
+
+  // useEffect(() => {
+  //   if (dataset && dataset.length) {
+  //     getMinMaxDates(dataset);
+  //   }
+  // }, [dataset]);
+
   const handleSVM = async () => {
     setIsLoading(true);
     try {
       const responfFromRF = await CareBearFoods.handleSVMEvaluate(dataset);
       setResponse(responfFromRF);
+    } catch (e) {
+      setError(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSVMHighLow = async () => {
+    setIsLoading(true);
+    try {
+      const responfFromRF = await CareBearFoods.getSVMHighLow({
+        dataset,
+        start_date: getMinDate(),
+        end_date: getMaxDate(),
+      });
+
+      setResponseForHighLow(responfFromRF);
     } catch (e) {
       setError(e);
     } finally {
@@ -85,6 +148,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
   useEffect(() => {
     if (dataset && dataset.length) {
       handleSVM();
+      handleSVMHighLow();
     }
   }, []);
 
@@ -222,21 +286,25 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
             linearYaxis={response.y_column}
           /> */
           }
-          <SVMExplanation
-            accuracy={response.accuracy}
-            classificationReport={response.classification_report}
-            confusionMatrix={response.confusion_matrix}
-            cvScores={response.cv_scores}
-            gridSearchResults={response.grid_search_results}
-            meanAbsoluteError={response.mean_absolute_error}
-            meanSquaredError={response.mean_squared_error}
-            r2Score={response.r2_score}
-            rocCurve={{
-              fpr: response.roc_curve.fpr,
-              tpr: response.roc_curve.tpr,
-              roc_auc: response.roc_curve.roc_auc,
-            }}
-          />
+          {response ? (
+            <SVMExplanation
+              accuracy={response.accuracy}
+              classificationReport={response.classification_report}
+              confusionMatrix={response.confusion_matrix}
+              cvScores={response.cv_scores}
+              gridSearchResults={response.grid_search_results}
+              meanAbsoluteError={response.mean_absolute_error}
+              meanSquaredError={response.mean_squared_error}
+              r2Score={response.r2_score}
+              rocCurve={{
+                fpr: response.roc_curve.fpr,
+                tpr: response.roc_curve.tpr,
+                roc_auc: response.roc_curve.roc_auc,
+              }}
+            />
+          ) : (
+            ""
+          )}
         </div>
       ) : isLoading ? (
         <>
