@@ -385,9 +385,9 @@ const DataExploration = () => {
             </div>
           </div>
           <div className={style2.summeryItem}>
-            <h6>Loading...</h6>
+            <h6>Dataset</h6>
             <span className={style2.summeryValue}>
-              {tableData.length ? tableData.rows.length : "Loading..."}
+              WFP Food Prices Lk(wfp_food_prices_lka)
             </span>
           </div>
         </div>
@@ -422,6 +422,7 @@ const DataExploration = () => {
           loading={isLoading}
         />
       </div>
+
       {currentStep === 1 ? (
         <div className={style.dataExploration}>
           <p className="text-sm">
@@ -804,6 +805,15 @@ const DataExploration = () => {
         <div className={style2.wrpAnyzls}>
           {selectedModal === MODAL_TYPES.LINEAR_REGRESSION ? (
             <div className={style2.regWrp}>
+              <p className="text-sm">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur.
+              </p>
+
               <LinearRegression
                 dataset={tableData.rows}
                 variables={filterHeader}
@@ -817,6 +827,14 @@ const DataExploration = () => {
             </div>
           ) : selectedModal === MODAL_TYPES.RANDOM_FOREST ? (
             <div className={style2.regWrp}>
+              <p className="text-sm">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur.
+              </p>
               <RandomForest
                 dataset={tableData.rows}
                 headers={{
@@ -829,16 +847,26 @@ const DataExploration = () => {
               />
             </div>
           ) : selectedModal === MODAL_TYPES.SUPPORT_VECTOR_MACHINE ? (
-            <SVM
-              dataset={tableData.rows}
-              headers={{
-                markets: filteredMarket,
-                category: filteredCategory,
-                commoditiy: filteredCommodity,
-              }}
-              variables={filterHeader}
-              setStep={(step) => setCurrentStep(step)}
-            />
+            <div className={style2.regWrp}>
+              <p className="text-sm">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur.
+              </p>
+              <SVM
+                dataset={tableData.rows}
+                headers={{
+                  markets: filteredMarket,
+                  category: filteredCategory,
+                  commoditiy: filteredCommodity,
+                }}
+                variables={filterHeader}
+                setStep={(step) => setCurrentStep(step)}
+              />
+            </div>
           ) : (
             ""
           )}
