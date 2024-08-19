@@ -56,6 +56,10 @@ const CustomTable = ({ Data, tableWidth, isSelectedable, rowsPerView = 5 }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
+  const capitalize = (txt) => {
+    return txt[0].toUpperCase() + txt.slice(1);
+  };
+
   return (
     <div>
       {Data.headers && Data.headers.length ? (
@@ -98,7 +102,7 @@ const CustomTable = ({ Data, tableWidth, isSelectedable, rowsPerView = 5 }) => {
                         : "50px",
                   }}
                 >
-                  {header}{" "}
+                  {capitalize(header)}{" "}
                   {sortConfig.key === header
                     ? sortConfig.direction === "ascending"
                       ? "▲"
@@ -123,7 +127,7 @@ const CustomTable = ({ Data, tableWidth, isSelectedable, rowsPerView = 5 }) => {
                   </td>
                 )}
                 {Data.headers.map((header) => (
-                  <td key={header}>{row[header]}</td>
+                  <td key={header}>{row[header] ?? "__"}</td>
                 ))}
               </tr>
             ))}

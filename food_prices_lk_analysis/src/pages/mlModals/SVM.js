@@ -7,6 +7,7 @@ import CustomButton from "../../custom/CustomButton";
 import CustomModal from "../../custom/modal/CustomModal";
 import CloseIcon from "../../img/svg/Close.icon";
 import SVMExplanation from "./SVMExplanation";
+import CustomTable from "../../custom/table/CustomTable";
 
 const selectedables = ["market", "category", "commodity"];
 
@@ -108,8 +109,15 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
           <div key={chunkIndex} className={style.row}>
             {commodityChunk.map((commodity) => (
               <div key={commodity} className={style.commoditySection}>
-                <h3>{commodity}</h3>
-                <table className={style.table}>
+                <h3 className="text-sm">{commodity}</h3>
+                <CustomTable
+                  Data={{
+                    headers: ["date", "price"],
+                    rows: forecasts[commodity],
+                  }}
+                />
+
+                {/* <table className={style.table}>
                   <thead>
                     <tr>
                       <th>Date</th>
@@ -128,7 +136,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </table> */}
               </div>
             ))}
           </div>
@@ -333,7 +341,6 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
                 </div>
               </div>
             </div>
-            {console.log("isLoading - ", isLoading)}
             <div className={style.footerFilter}>
               <CustomButton
                 buttonClass={"CANCEL"}

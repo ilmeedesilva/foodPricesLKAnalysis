@@ -60,13 +60,13 @@ const SVMExplanation = ({
 
   return (
     <div>
-      <h3>SVM Evaluation</h3>
-      <p>
+      <h3 className="mt-3 mb-3 header-md">SVM Evaluation</h3>
+      <p className="text-sm">
         The SVM algorithm provides various metrics to evaluate the model's
         performance. Here is a detailed explanation of the results:
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Accuracy:</strong>{" "}
         <i>
           The accuracy of the model is {accuracy ? accuracy.toFixed(4) : "N/A"}.
@@ -76,14 +76,14 @@ const SVMExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Classification Report:</strong>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {formatClassificationReport(classificationReport)}
         </div>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Confusion Matrix:</strong>
         <HeatmapChart confusionMatrix={confusionMatrix} />
         <i>
@@ -93,7 +93,7 @@ const SVMExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Cross-Validation Scores:</strong>
         <pre>
           <i>{cvScores.length ? cvScores.join(", ") : "N/A"}</i>
@@ -106,7 +106,7 @@ const SVMExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Grid Search Results:</strong>
         <i>
           The average mean fit time is {meanFitTime} seconds, and the average
@@ -114,7 +114,7 @@ const SVMExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Mean Absolute Error (MAE):</strong>{" "}
         <i>
           The MAE is {meanAbsoluteError ? meanAbsoluteError.toFixed(4) : "N/A"}.
@@ -123,7 +123,7 @@ const SVMExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>Mean Squared Error (MSE):</strong>{" "}
         <i>
           The MSE is {meanSquaredError ? meanSquaredError.toFixed(4) : "N/A"}.
@@ -133,7 +133,7 @@ const SVMExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>R-squared:</strong>{" "}
         <i>
           The R-squared value is {r2Score ? r2Score.toFixed(4) : "N/A"}. This
@@ -143,7 +143,7 @@ const SVMExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>ROC Curve and AUC:</strong>{" "}
         <i>
           The ROC Curve helps in evaluating the performance of the classifier
@@ -155,7 +155,7 @@ const SVMExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>False Positive Rate (FPR):</strong>{" "}
         <i>
           The FPR values range from 0 to 1 and indicate how often the model
@@ -169,7 +169,7 @@ const SVMExplanation = ({
         </i>
       </p>
 
-      <p>
+      <p className="text-sm">
         <strong>True Positive Rate (TPR):</strong>{" "}
         <i>
           The TPR values, also known as sensitivity or recall, show how often

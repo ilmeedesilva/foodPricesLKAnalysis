@@ -57,7 +57,7 @@ const Modal = ({ getSelectedModal }) => {
       </ul>
 
       <div>
-        <div class={style.modalContainer}>
+        <div className={style.modalContainer}>
           <label
             className={
               selectedModal === MODAL_TYPES.LINEAR_REGRESSION

@@ -37,7 +37,6 @@ const apiUtils = {
   },
 
   put: async (url, data, serviceType) => {
-    console.log("data :", data);
     try {
       const response = await axios.put(BASE_URLS[serviceType] + url, data, {
         headers: {
@@ -53,7 +52,6 @@ const apiUtils = {
   },
 
   delete: async (url, serviceType) => {
-    console.log("BASE_URL + url - ", BASE_URLS[serviceType] + url);
     try {
       const response = await axios.delete(BASE_URLS[serviceType] + url, {
         headers: {

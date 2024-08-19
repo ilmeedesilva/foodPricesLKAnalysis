@@ -157,7 +157,7 @@ const DataExploration = () => {
 
       setTalbeHeadersWidth({ select: "42px", id: "45px", date: "86px" });
     } catch (e) {
-      console.log("error - ", e);
+      setError(e);
     } finally {
       setIsLoading(false);
     }
