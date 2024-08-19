@@ -77,7 +77,7 @@ const CareBearFoods = {
     }
   },
 
-  handleSVMPredictions: async (data) => {
+  handleSVMEvaluate: async (data) => {
     try {
       return await apiUtils.post(
         "modals/svm-evaluate",
@@ -97,7 +97,7 @@ const CareBearFoods = {
         SERVICETYPE.CARE_BEAR_SERVICE
       );
     } catch (e) {
-      console.log("error in handling RF predictions for 12 months : ", e);
+      console.log("error in handling SVM predictions for 12 months : ", e);
     }
   },
 

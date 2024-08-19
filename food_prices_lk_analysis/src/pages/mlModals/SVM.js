@@ -6,30 +6,41 @@ import NoData from "../../components/NoData/NoData";
 import CustomButton from "../../custom/CustomButton";
 import CustomModal from "../../custom/modal/CustomModal";
 import CloseIcon from "../../img/svg/Close.icon";
+import SVMExplanation from "./SVMExplanation";
 
 const selectedables = ["market", "category", "commodity"];
 
 const SVM = ({ dataset, headers, variables, setStep }) => {
   const [response, setResponse] = useState(null);
-  const [predicteableValues, setPredicteableValues] = useState([]);
-  const [selectedPredicteableValues, setSelectedPredicteableValues] = useState(
-    []
-  );
+  const [responseForPredict, setResponseForPredict] = useState(null);
   const [selectedMarkets, setSelectedMarkets] = useState(headers.markets ?? []);
   const [selectedCategory, setSelectedCategory] = useState(
     headers.category ?? []
   );
   const [selectedCommodity, setSelectedCommodity] = useState(
-    headers.commoditiy ?? []
+    headers.commodity ?? []
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isPredictionModalOpen, setIsPredictionModalOpen] = useState(false);
   const [error, setError] = useState("");
+  const [forecasts, setForecasts] = useState({});
+
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    startDate: "",
+    endDate: "",
+  });
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    return `${year}-${month < 10 ? `0${month}` : month}`;
+  };
 
   const handleSVM = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.handleSVMPredictions(dataset);
+      const responfFromRF = await CareBearFoods.handleSVMEvaluate(dataset);
       setResponse(responfFromRF);
     } catch (e) {
       setError(e);
@@ -38,7 +49,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     }
   };
 
-  const handleRFPredictions = async () => {
+  const handleSVMPredictions = async () => {
     setIsLoading(true);
     try {
       const responfFromRF = await CareBearFoods.getSVMPredictions({
@@ -46,10 +57,25 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
         market: selectedMarkets,
         category: selectedCategory,
         commodity: selectedCommodity,
+        startDate: selectedDateRange.startDate,
+        endDate: selectedDateRange.endDate,
       });
-      setResponse(responfFromRF);
+      setResponseForPredict(responfFromRF);
+      const forecastData = responfFromRF.forecasts;
+      const formattedForecasts = {};
+      for (const [commodity, forecastList] of Object.entries(forecastData)) {
+        formattedForecasts[commodity] = forecastList.map((entry) => ({
+          date: formatDate(entry.date),
+          price: entry.forecasted_price,
+        }));
+      }
+
+      setForecasts(formattedForecasts);
+      setIsPredictionModalOpen(false);
+      setIsLoading(false);
     } catch (e) {
       setError(e);
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -61,34 +87,115 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (headers.length) {
-      const updatedPredicteableValues = selectedables.filter((item) =>
-        headers.includes(item)
-      );
-      setPredicteableValues(updatedPredicteableValues);
-    }
-  }, [headers]);
-
   const handleCancel = () => {
     setSelectedMarkets(headers.markets ?? []);
     setSelectedCategory(headers.category ?? []);
-    setSelectedCommodity(headers.commoditiy ?? []);
+    setSelectedCommodity(headers.commodity ?? []);
     setIsPredictionModalOpen(false);
   };
 
-  console.log("predicteableValues : ", selectedPredicteableValues);
+  const renderForecastTable = (forecasts) => {
+    const commodities = Object.keys(forecasts);
+
+    const chunkedCommodities = [];
+    for (let i = 0; i < commodities.length; i += 3) {
+      chunkedCommodities.push(commodities.slice(i, i + 3));
+    }
+
+    return (
+      <div className={style.forecastTable}>
+        {chunkedCommodities.map((commodityChunk, chunkIndex) => (
+          <div key={chunkIndex} className={style.row}>
+            {commodityChunk.map((commodity) => (
+              <div key={commodity} className={style.commoditySection}>
+                <h3>{commodity}</h3>
+                <table className={style.table}>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th style={{ paddingLeft: "20px" }}>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {forecasts[commodity].map((entry, index) => (
+                      <tr key={index}>
+                        <td>{entry.date}</td>
+                        <td style={{ paddingLeft: "20px" }}>
+                          {entry.price !== undefined && entry.price !== null
+                            ? entry.price.toFixed(2)
+                            : "N/A"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div>
       {response ? (
         <div>
-          <h2>Support Vector Machine (SVM)</h2>
           <CustomButton
             text={"Prediction"}
             onClick={() => setIsPredictionModalOpen(true)}
           />
-          {/* <RegressionChart
+
+          {responseForPredict ? (
+            <div className={style.selectedFilters}>
+              <h3 className="text-md mt-3">Predictions Results</h3>
+              <div className={style.predictedItemSummery}>
+                <strong>Selected Markets:</strong>{" "}
+                <div className={style.predictedItemWrp}>
+                  {selectedMarkets.map((item) => (
+                    <p>{item}</p>
+                  ))}
+                </div>
+              </div>
+              <p>
+                <div className={style.predictedItemSummery}>
+                  <strong>Selected Categories:</strong>{" "}
+                  <div
+                    className={[
+                      style.predictedItemWrp,
+                      style.predictedItemWrpScn,
+                    ].join(" ")}
+                  >
+                    {selectedCategory.map((item) => (
+                      <p>{item}</p>
+                    ))}
+                  </div>
+                </div>
+              </p>
+              <p>
+                <div className={style.predictedItemSummery}>
+                  <strong>Selected Commodities:</strong>{" "}
+                  <div
+                    className={[
+                      style.predictedItemWrp,
+                      style.predictedItemWrpThr,
+                    ].join(" ")}
+                  >
+                    {selectedCommodity.map((item) => (
+                      <p>{item}</p>
+                    ))}
+                  </div>
+                </div>
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
+
+          {
+            Object.keys(forecasts).length > 0 && renderForecastTable(forecasts)
+
+            /* <RegressionChart
             actuals={response.actuals}
             predictions={response.predictions}
           />
@@ -105,7 +212,23 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
             intercept={response.intercept}
             linearXaxis={linearXaxis}
             linearYaxis={response.y_column}
-          /> */}
+          /> */
+          }
+          <SVMExplanation
+            accuracy={response.accuracy}
+            classificationReport={response.classification_report}
+            confusionMatrix={response.confusion_matrix}
+            cvScores={response.cv_scores}
+            gridSearchResults={response.grid_search_results}
+            meanAbsoluteError={response.mean_absolute_error}
+            meanSquaredError={response.mean_squared_error}
+            r2Score={response.r2_score}
+            rocCurve={{
+              fpr: response.roc_curve.fpr,
+              tpr: response.roc_curve.tpr,
+              roc_auc: response.roc_curve.roc_auc,
+            }}
+          />
         </div>
       ) : isLoading ? (
         <>
@@ -210,6 +333,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
                 </div>
               </div>
             </div>
+            {console.log("isLoading - ", isLoading)}
             <div className={style.footerFilter}>
               <CustomButton
                 buttonClass={"CANCEL"}
@@ -220,7 +344,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
               <CustomButton
                 buttonClass={"SUBMIT"}
                 text={"Apply"}
-                onClick={handleRFPredictions}
+                onClick={handleSVMPredictions}
                 loading={isLoading}
               />
             </div>
