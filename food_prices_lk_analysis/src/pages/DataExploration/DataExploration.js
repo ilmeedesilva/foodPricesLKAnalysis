@@ -360,7 +360,7 @@ const DataExploration = () => {
             <span className={style2.summeryValue}>
               {tableData.length
                 ? tableData.rows.length
-                : totalRows.length ?? "Loading..."}
+                : totalRows.length ?? "No Data"}
             </span>
           </div>
           <div className={style2.summeryItem}>
@@ -371,17 +371,23 @@ const DataExploration = () => {
                 ? getMinMaxDates(tableData.rows)
                 : totalRows.length
                 ? getMinMaxDates(tableData.rows)
-                : "Loading..."}
+                : isLoading
+                ? "Loading..."
+                : "No Data"}
             </span>
           </div>
           <div className={style2.summeryItem}>
             <h6>Available Columns</h6>
             <div className={style2.headerListWrp}>
-              {filterHeader && filterHeader.length
-                ? filterHeader.map((item) => {
-                    return <div className={style2.headerList}>{item}</div>;
-                  })
-                : ""}
+              {filterHeader && filterHeader.length ? (
+                filterHeader.map((item) => {
+                  return <div className={style2.headerList}>{item}</div>;
+                })
+              ) : isLoading ? (
+                <span className={style2.summeryValue}>Loading...</span>
+              ) : (
+                <span className={style2.summeryValue}>No Data</span>
+              )}
             </div>
           </div>
           <div className={style2.summeryItem}>

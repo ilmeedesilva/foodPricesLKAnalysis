@@ -56,7 +56,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
   };
 
   useEffect(() => {
-    if (dataset.length) {
+    if (dataset && dataset.length) {
       handleSVM();
     }
   }, []);
