@@ -828,12 +828,13 @@ const DataExploration = () => {
           ) : selectedModal === MODAL_TYPES.RANDOM_FOREST ? (
             <div className={style2.regWrp}>
               <p className="text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur.
+                Random Forest is an advanced algorithm used for predicting
+                future prices. It works by creating multiple decision trees,
+                each analyzing different aspects of the data. By combining the
+                results from all these trees, Random Forest provides a more
+                accurate and reliable forecast. This method helps in making
+                precise predictions by considering various factors and reducing
+                errors.
               </p>
               <RandomForest
                 dataset={tableData.rows}
@@ -849,12 +850,13 @@ const DataExploration = () => {
           ) : selectedModal === MODAL_TYPES.SUPPORT_VECTOR_MACHINE ? (
             <div className={style2.regWrp}>
               <p className="text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur.
+                SVM (Support Vector Machine) is a versatile algorithm used for
+                both classifying and forecasting prices. For classification, it
+                determines whether a commodity’s price is 'high' or 'low' based
+                on features like date and market conditions. For forecasting,
+                SVM predicts future price trends by analyzing historical data
+                and identifying patterns. This makes it a useful tool for making
+                informed decisions about price movements.
               </p>
               <SVM
                 dataset={tableData.rows}
