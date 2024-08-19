@@ -20,7 +20,12 @@ ChartJS.register(
   Legend
 );
 
-const RegressionBarChart = ({ actuals = [], predictions = [] }) => {
+const RegressionBarChart = ({
+  actuals = [],
+  predictions = [],
+  labelY,
+  labelX,
+}) => {
   const data = {
     labels: Array.from({ length: actuals.length }, (_, i) => i + 1), // Index-based labels
     datasets: [
@@ -47,7 +52,7 @@ const RegressionBarChart = ({ actuals = [], predictions = [] }) => {
       x: {
         title: {
           display: true,
-          text: "Sample Index",
+          text: labelX ?? "Sample Index",
           color: "#97A1B7",
         },
         ticks: {
@@ -60,7 +65,7 @@ const RegressionBarChart = ({ actuals = [], predictions = [] }) => {
       y: {
         title: {
           display: true,
-          text: "Value",
+          text: labelY ?? "Value",
           color: "#97A1B7",
         },
         ticks: {

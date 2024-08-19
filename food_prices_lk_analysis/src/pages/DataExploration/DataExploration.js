@@ -61,6 +61,7 @@ const chartOptions = {
 const DataExploration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [totalRows, settotalRows] = useState([]);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [filterHeader, setFilterHeaders] = useState([]);
   const [filterRowData, setFilterRowData] = useState([]);
@@ -101,6 +102,7 @@ const DataExploration = () => {
       respond = respond.replace(/NaN/g, "null");
 
       const parsedRows = JSON.parse(respond);
+      settotalRows(parsedRows);
 
       const uniqueAdmin1 = new Set();
       const uniqueAdmin2 = new Set();
@@ -324,6 +326,20 @@ const DataExploration = () => {
     }
   }, [selectedModal]);
 
+  function getMinMaxDates(data) {
+    if (data.length) {
+      const dates = data.map((row) => new Date(row.date));
+
+      const minDate = new Date(Math.min(...dates));
+      const maxDate = new Date(Math.max(...dates));
+
+      const formatDate = (date) => date.toISOString().split("T")[0];
+
+      return `${formatDate(minDate)} | ${formatDate(maxDate)}`;
+    }
+    return "";
+  }
+
   return (
     <div className="content-wrap">
       {error ? (
@@ -337,6 +353,47 @@ const DataExploration = () => {
         getSelectedStepper={(value) => setCurrentStep(value)}
         selectedStepper={currentStep}
       />
+      {currentStep > 1 ? (
+        <div className={style2.filteredSummery}>
+          <div className={style2.summeryItem}>
+            <h6>Total Available Data Rows</h6>
+            <span className={style2.summeryValue}>
+              {tableData.length
+                ? tableData.rows.length
+                : totalRows.length ?? "Loading..."}
+            </span>
+          </div>
+          <div className={style2.summeryItem}>
+            <h6>Date Range</h6>
+            <span className={style2.summeryValue}>
+              {" "}
+              {tableData.length
+                ? getMinMaxDates(tableData.rows)
+                : totalRows.length
+                ? getMinMaxDates(tableData.rows)
+                : "Loading..."}
+            </span>
+          </div>
+          <div className={style2.summeryItem}>
+            <h6>Available Columns</h6>
+            <div className={style2.headerListWrp}>
+              {filterHeader && filterHeader.length
+                ? filterHeader.map((item) => {
+                    return <div className={style2.headerList}>{item}</div>;
+                  })
+                : ""}
+            </div>
+          </div>
+          <div className={style2.summeryItem}>
+            <h6>Loading...</h6>
+            <span className={style2.summeryValue}>
+              {tableData.length ? tableData.rows.length : "Loading..."}
+            </span>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
       <div className={`${style2.sectionHeader}  mb-2`}>
         <h1 className={`header-md d-flex align-center`}>
           {currentStep === 1 ? (

@@ -29,6 +29,18 @@ const CareBearFoods = {
     }
   },
 
+  handleLinearRegression2: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/multiple-linear-regression",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling linear regression data : ", e);
+    }
+  },
+
   linearPredictionResponse: async (data) => {
     try {
       return await apiUtils.post(

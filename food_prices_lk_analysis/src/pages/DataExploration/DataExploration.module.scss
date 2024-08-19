@@ -56,6 +56,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin: 8px 0;
 }
 
 .card-checkbox:checked+.modalCenter {
@@ -113,5 +114,56 @@
         label {
             padding-left: 4px;
         }
+    }
+}
+
+.filteredSummery {
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    border-top: 1px solid #ECF0F5;
+    border-bottom: 1px solid #ECF0F5;
+    margin: 8px 0;
+    padding: 8px;
+
+    .summeryItem {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-width: 250px;
+        border-right: 1px solid #ECF0F5;
+        margin: 0 12px;
+        height: 130px;
+
+        h6 {
+            font-size: 12px;
+            padding: 8px 0;
+            color: #8E96A5;
+        }
+
+        .summeryValue {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .headerListWrp {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+
+            .headerList {
+                font-size: 10px;
+                margin: 4px;
+                background-color: #DFFBF0;
+                border-radius: 8px;
+                padding: 4px;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .summeryItem:last-child {
+        border: none;
     }
 }
