@@ -12,10 +12,7 @@ const selectedables = ["market", "category", "commodity"];
 
 const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const [response, setResponse] = useState(null);
-  const [predicteableValues, setPredicteableValues] = useState([]);
-  const [selectedPredicteableValues, setSelectedPredicteableValues] = useState(
-    []
-  );
+  const [responseForPredict, setResponseForPredict] = useState(null);
   const [selectedMarkets, setSelectedMarkets] = useState(headers.markets ?? []);
   const [selectedCategory, setSelectedCategory] = useState(
     headers.category ?? []
@@ -30,16 +27,15 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
 
   const [selectedDateRange, setSelectedDateRange] = useState({
     startDate: "",
-    endDate: ""
+    endDate: "",
   });
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = date.getMonth() + 1; // Months are zero-based
-    return `${year}-${month < 10 ? `0${month}` : month}`; // Format: YYYY-MM
+    const month = date.getMonth() + 1;
+    return `${year}-${month < 10 ? `0${month}` : month}`;
   };
-  
 
   const handleRandomForest = async () => {
     setIsLoading(true);
@@ -61,40 +57,34 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
         market: selectedMarkets,
         category: selectedCategory,
         commodity: selectedCommodity,
-        startDate: selectedDateRange.startDate,  
-        endDate: selectedDateRange.endDate  
+        startDate: selectedDateRange.startDate,
+        endDate: selectedDateRange.endDate,
       });
-      setResponse(responfFromRF);
-    const forecastData = responfFromRF.forecasts;
-    const formattedForecasts = {};
-    for (const [commodity, forecastList] of Object.entries(forecastData)) {
-      formattedForecasts[commodity] = forecastList.map(entry => ({
-        date: formatDate(entry.date),
-        price: entry.price
-      }));
+      setResponseForPredict(responfFromRF);
+      const forecastData = responfFromRF.forecasts;
+      const formattedForecasts = {};
+      for (const [commodity, forecastList] of Object.entries(forecastData)) {
+        formattedForecasts[commodity] = forecastList.map((entry) => ({
+          date: formatDate(entry.date),
+          price: entry.price,
+        }));
+      }
+      setForecasts(formattedForecasts);
+      setIsPredictionModalOpen(false);
+      setIsLoading(false);
+    } catch (e) {
+      setError(e);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
-    setForecasts(formattedForecasts);
-  } catch (e) {
-    setError(e);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   useEffect(() => {
     if (dataset.length) {
       handleRandomForest();
     }
   }, []);
-
-  useEffect(() => {
-    if (headers.length) {
-      const updatedPredicteableValues = selectedables.filter((item) =>
-        headers.includes(item)
-      );
-      setPredicteableValues(updatedPredicteableValues);
-    }
-  }, [headers]);
 
   const handleCancel = () => {
     setSelectedMarkets(headers.markets ?? []);
@@ -103,17 +93,14 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
     setIsPredictionModalOpen(false);
   };
 
-  console.log("predicteableValues : ", selectedPredicteableValues);
-
   const renderForecastTable = (forecasts) => {
     const commodities = Object.keys(forecasts);
-    
-    // Split commodities into chunks of 3 for each row
+
     const chunkedCommodities = [];
     for (let i = 0; i < commodities.length; i += 3) {
       chunkedCommodities.push(commodities.slice(i, i + 3));
     }
-  
+
     return (
       <div className={style.forecastTable}>
         {chunkedCommodities.map((commodityChunk, chunkIndex) => (
@@ -125,14 +112,16 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
                   <thead>
                     <tr>
                       <th>Date</th>
-                      <th style={{ paddingLeft: '20px' }}>Price</th>
+                      <th style={{ paddingLeft: "20px" }}>Price</th>
                     </tr>
                   </thead>
                   <tbody>
                     {forecasts[commodity].map((entry, index) => (
                       <tr key={index}>
                         <td>{entry.date}</td>
-                        <td style={{ paddingLeft: '20px' }}>{entry.price.toFixed(2)}</td>
+                        <td style={{ paddingLeft: "20px" }}>
+                          {entry.price.toFixed(2)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -145,27 +134,65 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
     );
   };
 
-
   return (
     <div>
       {response ? (
         <div>
-         <h2>Random Forest Forecasts</h2>
-         <CustomButton
+          <CustomButton
             text={"Prediction"}
             onClick={() => setIsPredictionModalOpen(true)}
           />
-          
-          <div className={style.selectedFilters}>
-            <h3>Selected Filters</h3>
-            <p><strong>Selected Markets:</strong> {selectedMarkets.join(', ') || 'None'}</p>
-            <p><strong>Selected Categories:</strong> {selectedCategory.join(', ') || 'None'}</p>
-            <p><strong>Selected Commodities:</strong> {selectedCommodity.join(', ') || 'None'}</p>
-          </div>
-          
-          {Object.keys(forecasts).length > 0 && renderForecastTable(forecasts)
-          
-          /* <RegressionChart
+
+          {responseForPredict ? (
+            <div className={style.selectedFilters}>
+              <h3 className="text-md mt-3">Predictions Results</h3>
+              <div className={style.predictedItemSummery}>
+                <strong>Selected Markets:</strong>{" "}
+                <div className={style.predictedItemWrp}>
+                  {selectedMarkets.map((item) => (
+                    <p>{item}</p>
+                  ))}
+                </div>
+              </div>
+              <p>
+                <div className={style.predictedItemSummery}>
+                  <strong>Selected Categories:</strong>{" "}
+                  <div
+                    className={[
+                      style.predictedItemWrp,
+                      style.predictedItemWrpScn,
+                    ].join(" ")}
+                  >
+                    {selectedCategory.map((item) => (
+                      <p>{item}</p>
+                    ))}
+                  </div>
+                </div>
+              </p>
+              <p>
+                <div className={style.predictedItemSummery}>
+                  <strong>Selected Commodities:</strong>{" "}
+                  <div
+                    className={[
+                      style.predictedItemWrp,
+                      style.predictedItemWrpThr,
+                    ].join(" ")}
+                  >
+                    {selectedCommodity.map((item) => (
+                      <p>{item}</p>
+                    ))}
+                  </div>
+                </div>
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
+
+          {
+            Object.keys(forecasts).length > 0 && renderForecastTable(forecasts)
+
+            /* <RegressionChart
             actuals={response.actuals}
             predictions={response.predictions}
           />
@@ -182,7 +209,8 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
             intercept={response.intercept}
             linearXaxis={linearXaxis}
             linearYaxis={response.y_column}
-          /> */}
+          /> */
+          }
           <RFExplanation
             accuracy={response.accuracy}
             classificationReport={response.classification_report}
@@ -297,6 +325,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
                 </div>
               </div>
             </div>
+            {console.log("isLoading - ", isLoading)}
             <div className={style.footerFilter}>
               <CustomButton
                 buttonClass={"CANCEL"}
