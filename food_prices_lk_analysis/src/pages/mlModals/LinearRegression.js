@@ -235,7 +235,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
               <div className={style2.filterItemSection}>
                 <h6 className="mb-0">Select Independent Variables</h6>
                 <div className={style2.headersWrp}>
-                  {numarics.map((header) => (
+                  {numarics.map((header, key) => (
                     <button
                       className={
                         linearXaxis.includes(header)
@@ -251,6 +251,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                             : [...prv, header]
                         )
                       }
+                      key={key}
                     >
                       <p>{header}</p>
                     </button>
