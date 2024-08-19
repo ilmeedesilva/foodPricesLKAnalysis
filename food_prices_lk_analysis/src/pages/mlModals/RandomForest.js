@@ -25,11 +25,25 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPredictionModalOpen, setIsPredictionModalOpen] = useState(false);
   const [error, setError] = useState("");
+  const [forecasts, setForecasts] = useState({});
+
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    startDate: "",
+    endDate: ""
+  });
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Months are zero-based
+    return `${year}-${month < 10 ? `0${month}` : month}`; // Format: YYYY-MM
+  };
+  
 
   const handleRandomForest = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.handleRFPredictions(dataset);
+      const responfFromRF = await CareBearFoods.handleRFEvaluate(dataset);
       setResponse(responfFromRF);
     } catch (e) {
       setError(e);
@@ -46,14 +60,25 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
         market: selectedMarkets,
         category: selectedCategory,
         commodity: selectedCommodity,
+        startDate: selectedDateRange.startDate,  
+        endDate: selectedDateRange.endDate  
       });
       setResponse(responfFromRF);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setIsLoading(false);
+    const forecastData = responfFromRF.forecasts;
+    const formattedForecasts = {};
+    for (const [commodity, forecastList] of Object.entries(forecastData)) {
+      formattedForecasts[commodity] = forecastList.map(entry => ({
+        date: formatDate(entry.date),
+        price: entry.price
+      }));
     }
-  };
+    setForecasts(formattedForecasts);
+  } catch (e) {
+    setError(e);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   useEffect(() => {
     if (dataset.length) {
@@ -79,16 +104,68 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
 
   console.log("predicteableValues : ", selectedPredicteableValues);
 
+  const renderForecastTable = (forecasts) => {
+    const commodities = Object.keys(forecasts);
+    
+    // Split commodities into chunks of 3 for each row
+    const chunkedCommodities = [];
+    for (let i = 0; i < commodities.length; i += 3) {
+      chunkedCommodities.push(commodities.slice(i, i + 3));
+    }
+  
+    return (
+      <div className={style.forecastTable}>
+        {chunkedCommodities.map((commodityChunk, chunkIndex) => (
+          <div key={chunkIndex} className={style.row}>
+            {commodityChunk.map((commodity) => (
+              <div key={commodity} className={style.commoditySection}>
+                <h3>{commodity}</h3>
+                <table className={style.table}>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th style={{ paddingLeft: '20px' }}>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {forecasts[commodity].map((entry, index) => (
+                      <tr key={index}>
+                        <td>{entry.date}</td>
+                        <td style={{ paddingLeft: '20px' }}>{entry.price.toFixed(2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+
   return (
     <div>
       {response ? (
         <div>
-          <h2>Random forest</h2>
-          <CustomButton
+         <h2>Random Forest Forecasts</h2>
+         <CustomButton
             text={"Prediction"}
             onClick={() => setIsPredictionModalOpen(true)}
           />
-          {/* <RegressionChart
+          
+          <div className={style.selectedFilters}>
+            <h3>Selected Filters</h3>
+            <p><strong>Selected Markets:</strong> {selectedMarkets.join(', ') || 'None'}</p>
+            <p><strong>Selected Categories:</strong> {selectedCategory.join(', ') || 'None'}</p>
+            <p><strong>Selected Commodities:</strong> {selectedCommodity.join(', ') || 'None'}</p>
+          </div>
+          
+          {Object.keys(forecasts).length > 0 && renderForecastTable(forecasts)
+          
+          
+          /* <RegressionChart
             actuals={response.actuals}
             predictions={response.predictions}
           />
