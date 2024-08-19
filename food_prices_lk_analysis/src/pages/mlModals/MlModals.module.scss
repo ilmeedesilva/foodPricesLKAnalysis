@@ -155,3 +155,45 @@
         justify-content: space-between;
     }
 }
+
+.forecastTable {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: space-between; /* Distributes space evenly between columns */
+    margin-bottom: 20px; /* Add some space between rows */
+  }
+  
+  .commoditySection {
+    flex: 1;
+    margin: 0 10px; /* Adjust spacing between columns */
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+
+  .selectedFilters {
+    margin-bottom: 20px;
+  }
+  
+  .selectedFilters h3 {
+    margin-bottom: 10px;
+  }
+  
+  .selectedFilters p {
+    margin: 5px 0;
+  }
+  

@@ -41,7 +41,7 @@ const CareBearFoods = {
     }
   },
 
-  handleRFPredictions: async (data) => {
+  handleRFEvaluate: async (data) => {
     try {
       return await apiUtils.post(
         "modals/rf-evaluate",
