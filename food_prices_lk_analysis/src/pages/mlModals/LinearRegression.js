@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "../page.module.scss";
 import style2 from "./MlModals.module.scss";
 import CustomButton from "../../custom/CustomButton";
@@ -10,15 +10,30 @@ import ModelMetrics from "./ModelMetrics";
 import Explanation from "./Explanation";
 import ContentLoader from "react-content-loader";
 import NoData from "../../components/NoData/NoData";
+import RiskManagementChart from "../../custom/charts/RiskManagementChart/RiskManagementChart";
+import CloseIcon from "../../img/svg/Close.icon";
+import RegressionBarChart from "./RegressionBarChart";
+import CustomTable from "../../custom/table/CustomTable";
 
 const numarics = ["price", "usdprice", "USD RATE"];
-const LinearRegression = ({ dataset, variables, setStep }) => {
+const LinearRegression = ({ dataset, variables, headers, setStep }) => {
   const [linearXaxis, setLinearXaxis] = useState([]);
   const [linearYaxis, setLinearYaxis] = useState(variables[0]);
   const [openFilterModal, setOpenFilterModal] = useState(true);
   const [response, setResponse] = useState(null);
+  const [linearPredictionResponse, setLinearPredictionResponse] =
+    useState(null);
+  const [riskManagement, setRisManagement] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isPredictionModalOpen, setIsPredictionModalOpen] = useState(false);
+  const [selectedMarkets, setSelectedMarkets] = useState(headers.markets ?? []);
+  const [selectedCategory, setSelectedCategory] = useState(
+    headers.category ?? []
+  );
+  const [selectedCommodity, setSelectedCommodity] = useState(
+    headers.commoditiy ?? []
+  );
 
   const handleLinearRegression = async () => {
     if (!linearXaxis.length || !linearYaxis) {
@@ -36,30 +51,23 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
         linearYaxis,
         linearXaxis,
       });
-
-      // const respond2 = await CareBearFoods.getPredictionsFor12({
-      //   dataset,
-      //   market: ["Matale", "Ampara"],
-      //   category: ["meat, fish and eggs"],
-      //   commodity: ["Eggs", "Fish (yellowfin tuna)"],
-      // });
-
-      // const respond2 = await CareBearFoods.getSVMPredictionsFor12({
-      //   dataset,
-      //   market: ["Matale", "Ampara"],
-      //   category: ["meat, fish and eggs"],
-      //   commodity: ["Eggs", "Fish (yellowfin tuna)"],
-      // });
-
-      const respond2 = await CareBearFoods.getSVMHighLow({
+      setResponse(respond);
+      const respondForRiskManagement = await CareBearFoods.getRiskManagement({
         dataset,
-        end_date: "2024-06-15",
-        start_date: "2023-06-15",
+      });
+      const { dates } = respondForRiskManagement.risk_management;
+
+      const formattedDates = dates.map((dateStr) => {
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        return `${year}-${month}`;
       });
 
-      console.log("respond2 - ", respond2);
-
-      setResponse(respond);
+      setRisManagement({
+        ...respondForRiskManagement.risk_management,
+        dates: formattedDates,
+      });
     } catch (e) {
       setError(e);
     } finally {
@@ -76,15 +84,99 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
     setOpenFilterModal(false);
   };
 
+  const handleRFPredictions = async () => {
+    setIsLoading(true);
+    try {
+      const responfFromRF = await CareBearFoods.linearPredictionResponse({
+        dataset,
+        market: selectedMarkets,
+        category: selectedCategory,
+        commodity: selectedCommodity,
+      });
+      setLinearPredictionResponse(responfFromRF);
+    } catch (e) {
+      setError(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const [actulePredictedForFullSet, setActulePredictedForFullSet] =
+    useState(null);
+  useEffect(() => {
+    if (riskManagement) {
+      const actualPricesArray = riskManagement.actual_prices.map(
+        (value, index) => ({
+          date: riskManagement.dates[index],
+          actual_prices: value.toFixed(4),
+          predicted_prices:
+            riskManagement.predicted_prices[index].toFixed(4) ?? "",
+        })
+      );
+
+      setActulePredictedForFullSet(actualPricesArray);
+    }
+  }, [riskManagement]);
+
   return (
     <div>
       {response ? (
         <div>
-          <h2>Linear Regression Analysis for {response.y_column}</h2>
-          <RegressionChart
-            actuals={response.actuals}
-            predictions={response.predictions}
+          <CustomButton
+            text={"Prediction"}
+            onClick={() => setIsPredictionModalOpen(true)}
           />
+
+          <div className={`${[style2.wrapGrptbleChr].join(" ")} mt-4 mb-4`}>
+            <h5 className={style2.graphTitle}>Risk Management</h5>
+            <div className={style2.groupTblChrt}>
+              {riskManagement && (
+                <div
+                  className={`${[style2.wrapGrp, style2.wrapGrp68].join(
+                    " "
+                  )} mr-4`}
+                >
+                  <RiskManagementChart data={riskManagement} />{" "}
+                </div>
+              )}
+              {riskManagement && (
+                <div className={[style2.wrapGrp, style2.wrapGrp30].join(" ")}>
+                  <CustomTable
+                    Data={{
+                      headers: ["date", "actual_prices", "predicted_prices"],
+                      rows: actulePredictedForFullSet,
+                    }}
+                    isSelectedable={false}
+                    rowsPerView={9}
+                  />{" "}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className={`${style2.wrpGrp} mt-4 mb-4`}>
+            <div className={[style2.wrapGrp, style2.wrapGrp50].join(" ")}>
+              <h5 className={style2.graphTitle}>
+                Linear Regression Analysis for {linearYaxis}
+              </h5>
+              <RegressionChart
+                actuals={response.actuals}
+                predictions={response.predictions}
+              />
+            </div>
+            {riskManagement !== null && (
+              <div className={[style2.wrapGrp, style2.wrapGrp50].join(" ")}>
+                <h5 className={style2.graphTitle}>
+                  Linear Regression Analysis for {linearYaxis} (BarCharts)
+                </h5>
+                <RegressionBarChart
+                  actuals={response.actuals}
+                  predictions={response.predictions}
+                />
+              </div>
+            )}
+          </div>
+
           <ModelMetrics
             mse={response.mean_squared_error}
             r2={response.r2_score}
@@ -175,6 +267,113 @@ const LinearRegression = ({ dataset, variables, setStep }) => {
                 buttonClass={"SUBMIT"}
                 text={"Apply"}
                 onClick={handleLinearRegression}
+                loading={isLoading}
+              />
+            </div>
+          </div>
+        </CustomModal>
+      ) : (
+        ""
+      )}
+
+      {isPredictionModalOpen ? (
+        <CustomModal title={"Prediction"} open={setIsPredictionModalOpen}>
+          <div
+            className={[
+              style2.wrapFilters,
+              style2.advanceFilterApply,
+              style2.wrapFilters,
+              style2.selectionalModal,
+            ].join(" ")}
+          >
+            <div className={style2.filterWrp}>
+              <div className={style2.filterItemSection}>
+                <h6 className="mb-2 mt-0 text-sm">
+                  Filter out the unwanted variables
+                </h6>
+                <div className={style2.headersWrp}>
+                  {selectedMarkets.length ? (
+                    <div className={style2.filterItemSection}>
+                      <h6 className="mb-2 mt-2">Market</h6>
+                      <div className={style2.headersWrp}>
+                        {selectedMarkets.map((header) => (
+                          <button
+                            className={style2.headerItem}
+                            onClick={() =>
+                              setSelectedMarkets((pre) =>
+                                pre.filter((item) => item !== header)
+                              )
+                            }
+                          >
+                            <p>{header}</p>
+                            <CloseIcon size={12} color={"#496bf3"} />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
+                  {selectedCategory.length ? (
+                    <div className={style2.filterItemSection}>
+                      <h6 className="mb-0">Category</h6>
+                      <div className={style2.headersWrp}>
+                        {selectedCategory.map((header) => (
+                          <button
+                            className={style2.headerItem}
+                            onClick={() =>
+                              setSelectedCategory((pre) =>
+                                pre.filter((item) => item !== header)
+                              )
+                            }
+                          >
+                            <p>{header}</p>
+                            <CloseIcon size={12} color={"#496bf3"} />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
+                  {selectedCommodity.length ? (
+                    <div className={style2.filterItemSection}>
+                      <h6 className="mb-0">Commodity</h6>
+                      <div className={style2.headersWrp}>
+                        {selectedCommodity.map((header) => (
+                          <button
+                            className={style2.headerItem}
+                            onClick={() =>
+                              setSelectedCommodity((pre) =>
+                                pre.filter((item) => item !== header)
+                              )
+                            }
+                          >
+                            <p>{header}</p>
+                            <CloseIcon size={12} color={"#496bf3"} />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className={style2.footerFilter}>
+              <CustomButton
+                buttonClass={"CANCEL"}
+                text={"Cancel"}
+                onClick={handleCancel}
+                loading={isLoading}
+              />
+              <CustomButton
+                buttonClass={"SUBMIT"}
+                text={"Apply"}
+                onClick={handleRFPredictions}
                 loading={isLoading}
               />
             </div>

@@ -3,11 +3,11 @@ import style from "./CustomTable.module.scss";
 import NextIcon from "../../img/svg/Next.icon";
 import PreviousIcon from "../../img/svg/Previous.icon";
 
-const CustomTable = ({ Data, tableWidth }) => {
+const CustomTable = ({ Data, tableWidth, isSelectedable, rowsPerView = 5 }) => {
   const [tableData, setTableData] = useState(Data.rows || []);
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 5;
+  const rowsPerPage = rowsPerView;
 
   useEffect(() => {
     setTableData(Data.rows || []);
@@ -67,20 +67,22 @@ const CustomTable = ({ Data, tableWidth }) => {
         >
           <thead>
             <tr>
-              <th
-                style={{
-                  width:
-                    tableWidth && tableWidth.select
-                      ? tableWidth.select
-                      : "50px",
-                  maxWidth:
-                    tableWidth && tableWidth.select
-                      ? tableWidth.select
-                      : "50px",
-                }}
-              >
-                Select
-              </th>
+              {isSelectedable && (
+                <th
+                  style={{
+                    width:
+                      tableWidth && tableWidth.select
+                        ? tableWidth.select
+                        : "50px",
+                    maxWidth:
+                      tableWidth && tableWidth.select
+                        ? tableWidth.select
+                        : "50px",
+                  }}
+                >
+                  Select
+                </th>
+              )}
               {Data.headers.map((header) => (
                 <th
                   key={header}
@@ -109,15 +111,17 @@ const CustomTable = ({ Data, tableWidth }) => {
           <tbody>
             {currentRows.map((row, index) => (
               <tr key={indexOfFirstRow + index}>
-                <td className={style.checkBoxWrp}>
-                  <input
-                    type="checkbox"
-                    checked={!!row.isChecked}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, indexOfFirstRow + index)
-                    }
-                  />
-                </td>
+                {isSelectedable && (
+                  <td className={style.checkBoxWrp}>
+                    <input
+                      type="checkbox"
+                      checked={!!row.isChecked}
+                      onChange={(e) =>
+                        handleCheckboxChange(e, indexOfFirstRow + index)
+                      }
+                    />
+                  </td>
+                )}
                 {Data.headers.map((header) => (
                   <td key={header}>{row[header]}</td>
                 ))}

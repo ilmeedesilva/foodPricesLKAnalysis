@@ -29,6 +29,18 @@ const CareBearFoods = {
     }
   },
 
+  linearPredictionResponse: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/linear_regression/price_predictions",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling Linear forest data : ", e);
+    }
+  },
+
   handleRFPredictions: async (data) => {
     try {
       return await apiUtils.post(
@@ -41,7 +53,7 @@ const CareBearFoods = {
     }
   },
 
-  getPredictionsFor12: async (data) => {
+  getRFPredictions: async (data) => {
     try {
       return await apiUtils.post(
         "modals/rf-forecast-custom",
@@ -65,7 +77,7 @@ const CareBearFoods = {
     }
   },
 
-  getSVMPredictionsFor12: async (data) => {
+  getSVMPredictions: async (data) => {
     try {
       return await apiUtils.post(
         "modals/svm-forecast-custom",
@@ -91,40 +103,18 @@ const CareBearFoods = {
       );
     }
   },
-
-  handleKmean: async (data) => {
+  getRiskManagement: async (data) => {
     try {
       return await apiUtils.post(
-        "modals/k_mean",
+        "modals/linear_regression/risk_management",
         data,
         SERVICETYPE.CARE_BEAR_SERVICE
       );
     } catch (e) {
-      console.log("error in handling linear regression data : ", e);
-    }
-  },
-
-  handleRanomForest: async (data) => {
-    try {
-      return await apiUtils.post(
-        "modals/random_forest",
-        data,
-        SERVICETYPE.CARE_BEAR_SERVICE
+      console.log(
+        "error in handling svm high low predictions for next month : ",
+        e
       );
-    } catch (e) {
-      console.log("error in handling random forest data : ", e);
-    }
-  },
-
-  handleSVM: async (data) => {
-    try {
-      return await apiUtils.post(
-        "modals/svm",
-        data,
-        SERVICETYPE.CARE_BEAR_SERVICE
-      );
-    } catch (e) {
-      console.log("error in handling svm data : ", e);
     }
   },
 };
