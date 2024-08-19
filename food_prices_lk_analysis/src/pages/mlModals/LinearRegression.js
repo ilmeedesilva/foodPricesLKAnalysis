@@ -172,6 +172,8 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                 <RegressionBarChart
                   actuals={response.actuals}
                   predictions={response.predictions}
+                  labelX={linearXaxis}
+                  labelY={linearYaxis}
                 />
               </div>
             )}
