@@ -13,6 +13,16 @@ import MessageModal from "../../custom/message/MessageModal";
 
 const selectedables = ["market", "category", "commodity"];
 
+const PredictionDescription = () => (
+  <div className={style.predictionDescription}>
+    <p>
+      This tool predicts prices for each commodity over the <i><u><b>next 12 months</b></u></i>. It
+      analyzes the dataset within the selected date range, considering the
+      chosen markets, categories, and commodities.
+    </p>
+  </div>
+);
+
 const SVM = ({ dataset, headers, variables, setStep }) => {
   const [response, setResponse] = useState(null);
   const [responseForPredict, setResponseForPredict] = useState(null);
@@ -224,6 +234,8 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
       {response ? (
         <div>
           {forecastData ? <ForecastChart forecasts={forecastData} /> : ""}
+          <h2 className="text-md mt-3">Predictions - Forecast Prices</h2>
+          <PredictionDescription />
           <CustomButton
             text={"Prediction"}
             onClick={() => setIsPredictionModalOpen(true)}
@@ -231,7 +243,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
 
           {responseForPredict ? (
             <div className={style.selectedFilters}>
-              <h3 className="text-md mt-3">Predictions Results</h3>
+              <h4 className="text-md mt-3">Predictions Results</h4>
               <div className={style.predictedItemSummery}>
                 <strong>Selected Markets:</strong>{" "}
                 <div className={style.predictedItemWrp}>

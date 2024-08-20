@@ -12,26 +12,167 @@ const SVMExplanation = ({
   r2Score = 0,
   rocCurve = { fpr: [], tpr: [], roc_auc: 0 },
 }) => {
+  // Helper function to interpret F1-score
+  const interpretF1Score = (f1Score) => {
+    if (f1Score >= 0 && f1Score < 0.5) {
+      return (
+        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+          The F1-score is low, indicating that the model struggles to balance
+          precision and recall.
+        </span>
+      );
+    } else if (f1Score >= 0.5 && f1Score < 0.75) {
+      return (
+        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+          The F1-score is moderate, suggesting the model has a decent balance
+          between precision and recall, but there's room for improvement.
+        </span>
+      );
+    } else if (f1Score >= 0.75 && f1Score <= 1.0) {
+      return (
+        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+          The F1-score is high, showing that the model has an excellent balance
+          between precision and recall.
+        </span>
+      );
+    } else {
+      return "F1-score is not available.";
+    }
+  };
+
+  // Helper function to interpret Precision
+  const interpretPrecision = (precision) => {
+    if (precision >= 0 && precision < 0.5) {
+      return (
+        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+          The Precision is low, indicating a high number of false positives.
+        </span>
+      );
+    } else if (precision >= 0.5 && precision < 0.75) {
+      return (
+        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+          The Precision is moderate, suggesting some false positives but
+          acceptable accuracy.
+        </span>
+      );
+    } else if (precision >= 0.75 && precision <= 1.0) {
+      return (
+        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+          The Precision is high, indicating that the model is very accurate in
+          its positive predictions.
+        </span>
+      );
+    } else {
+      return "Precision is not available.";
+    }
+  };
+
+  // Helper function to interpret Recall
+  const interpretRecall = (recall) => {
+    if (recall >= 0 && recall < 0.5) {
+      return (
+        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+          The Recall is low, indicating the model is missing many positive
+          instances.
+        </span>
+      );
+    } else if (recall >= 0.5 && recall < 0.75) {
+      return (
+        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+          The Recall is moderate, suggesting that the model catches a fair
+          number of positive instances, but misses some.
+        </span>
+      );
+    } else if (recall >= 0.75 && recall <= 1.0) {
+      return (
+        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+          The Recall is high, showing that the model successfully identifies
+          most positive instances.
+        </span>
+      );
+    } else {
+      return "Recall is not available.";
+    }
+  };
+
+  // Helper function to interpret Support
+  const interpretSupport = (support) => {
+    if (support > 0 && support < 100) {
+      return (
+        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+          Support is low, indicating a small number of instances for this class.
+        </span>
+      );
+    } else if (support >= 100 && support < 500) {
+      return (
+        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+          Support is moderate, with a reasonable number of instances for this
+          class.
+        </span>
+      );
+    } else if (support >= 500) {
+      return (
+        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+          Support is high, indicating a large number of instances for this
+          class.
+        </span>
+      );
+    } else {
+      return "Support is not available.";
+    }
+  };
+
   // Helper function to format classification report
   const formatClassificationReport = (report) => {
     return Object.keys(report).map((key) =>
       key !== "accuracy" ? (
-        <div key={key} style={{ display: "inline-block", margin: "0 40px" }}>
-          <strong>Class {key}:</strong>
-          <p>
+        <div
+          key={key}
+          style={{
+            display: "inline-block",
+            margin: "0 40px",
+            textAlign: "left",
+            borderRadius: "10px",
+            padding: "20px",
+            backgroundColor: "#ecf0f1",
+            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+            maxWidth: "300px",
+          }}
+        >
+          <strong style={{ fontSize: "18px", color: "#2c3e50" }}>
+            Class {key}:
+          </strong>
+          <p style={{ margin: "10px 0" }}>
             <strong>F1-score:</strong>{" "}
-            <i>{report[key]?.["f1-score"]?.toFixed(4) || "N/A"}</i>
+            <span style={{ fontSize: "16px", color: "#34495e" }}>
+              {report[key]?.["f1-score"]?.toFixed(4) || "N/A"}
+            </span>
+            <br />
+            {interpretF1Score(report[key]?.["f1-score"])}
           </p>
-          <p>
+          <p style={{ margin: "10px 0" }}>
             <strong>Precision:</strong>{" "}
-            <i>{report[key]?.precision?.toFixed(4) || "N/A"}</i>
+            <span style={{ fontSize: "16px", color: "#34495e" }}>
+              {report[key]?.precision?.toFixed(4) || "N/A"}
+            </span>
+            <br />
+            {interpretPrecision(report[key]?.precision)}
           </p>
-          <p>
+          <p style={{ margin: "10px 0" }}>
             <strong>Recall:</strong>{" "}
-            <i>{report[key]?.recall?.toFixed(4) || "N/A"}</i>
+            <span style={{ fontSize: "16px", color: "#34495e" }}>
+              {report[key]?.recall?.toFixed(4) || "N/A"}
+            </span>
+            <br />
+            {interpretRecall(report[key]?.recall)}
           </p>
-          <p>
-            <strong>Support:</strong> <i>{report[key]?.support || "N/A"}</i>
+          <p style={{ margin: "10px 0" }}>
+            <strong>Support:</strong>{" "}
+            <span style={{ fontSize: "16px", color: "#34495e" }}>
+              {report[key]?.support || "N/A"}
+            </span>
+            <br />
+            {interpretSupport(report[key]?.support)}
           </p>
         </div>
       ) : null
@@ -59,130 +200,203 @@ const SVMExplanation = ({
   const { meanFitTime, meanScoreTime } = calculateAverages(gridSearchResults);
 
   return (
-    <div>
-      <h3 className="mt-3 mb-3 header-md">SVM Evaluation</h3>
-      <p className="text-sm">
+    <div
+      style={{
+        fontFamily: "Arial, sans-serif",
+        lineHeight: "1.6",
+        padding: "20px",
+      }}
+    >
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <h2
+        className="mt-3 mb-3 header-md"
+        style={{ color: "#2c3e50", fontWeight: "bold" }}
+      >
+        SVM Evaluation
+      </h2>
+      <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
         The SVM algorithm provides various metrics to evaluate the model's
         performance. Here is a detailed explanation of the results:
       </p>
 
-      <p className="text-sm">
-        <strong>Accuracy:</strong>{" "}
-        <i>
-          The accuracy of the model is {accuracy ? accuracy.toFixed(4) : "N/A"}.
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>Accuracy:</strong>{" "}
+          <i>
+            The accuracy of the model is{" "}
+            <strong>{accuracy ? accuracy.toFixed(4) : "N/A"}</strong>.
+          </i>
+          <br />
           This indicates that approximately{" "}
-          {accuracy ? Math.round(accuracy * 100) : "N/A"}% of the predictions
-          were correct.
-        </i>
-      </p>
+          <strong>{accuracy ? Math.round(accuracy * 100) : "N/A"}%</strong> of
+          the predictions were correct.
+        </p>
+      </div>
 
-      <p className="text-sm">
-        <strong>Classification Report:</strong>
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>Classification Report:</strong>
+        </p>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {formatClassificationReport(classificationReport)}
         </div>
-      </p>
+      </div>
 
-      <p className="text-sm">
-        <strong>Confusion Matrix:</strong>
-        <HeatmapChart confusionMatrix={confusionMatrix} />
-        <i>
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>Confusion Matrix:</strong>
+        </p>
+        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           The Heatmap shows the distribution of true positives, false positives,
           false negatives, and true negatives for each class. This helps in
           visualizing how well the model is performing.
         </i>
-      </p>
+        <HeatmapChart confusionMatrix={confusionMatrix} />
+      </div>
 
-      <p className="text-sm">
-        <strong>Cross-Validation Scores:</strong>
-        <br />
-        <i> {cvScores.length ? cvScores.join(", ") : "N/A"}</i>
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
-        <i>
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>Cross-Validation Scores:</strong>
+        </p>
+        <p style={{ fontSize: "14px", color: "#7f8c8d" }}>
+          <strong>{cvScores.length ? cvScores.join(", ") : "N/A"}</strong>
+        </p>
+        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           These scores are obtained by evaluating the model on different subsets
           of the data. They provide an indication of the model's stability and
           performance across different data splits. Higher scores indicate
           better performance.
         </i>
-      </p>
+      </div>
 
-      <p className="text-sm">
-        <strong>Grid Search Results:</strong>
-        <i>
-          {" "}
-          The average mean fit time is {meanFitTime} seconds, and the average
-          mean score time is {meanScoreTime} seconds.
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>Grid Search Results:</strong>
+        </p>
+        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+          The average mean fit time is <strong>{meanFitTime}</strong> seconds,
+          and the average mean score time is <strong>{meanScoreTime}</strong>{" "}
+          seconds.
         </i>
-      </p>
+      </div>
 
-      <p className="text-sm">
-        <strong>Mean Absolute Error (MAE):</strong>{" "}
-        <i>
-          The MAE is {meanAbsoluteError ? meanAbsoluteError.toFixed(4) : "N/A"}.
-          This indicates the average magnitude of the errors in the predictions.
-          Lower MAE values represent better model performance.
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>
+            Mean Absolute Error (MAE):
+          </strong>
+        </p>
+        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+          The MAE is{" "}
+          <strong>
+            {meanAbsoluteError ? meanAbsoluteError.toFixed(4) : "N/A"}
+          </strong>
+          . This indicates the average magnitude of the errors in the
+          predictions. Lower MAE values represent better model performance.
         </i>
-      </p>
+      </div>
 
-      <p className="text-sm">
-        <strong>Mean Squared Error (MSE):</strong>{" "}
-        <i>
-          The MSE is {meanSquaredError ? meanSquaredError.toFixed(4) : "N/A"}.
-          This metric provides the average squared difference between the
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>
+            Mean Squared Error (MSE):
+          </strong>
+        </p>
+        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+          The MSE is{" "}
+          <strong>
+            {meanSquaredError ? meanSquaredError.toFixed(4) : "N/A"}
+          </strong>
+          . This metric provides the average squared difference between the
           predicted and actual values. Lower MSE values indicate better model
           accuracy.
         </i>
-      </p>
+      </div>
 
-      <p className="text-sm">
-        <strong>R-squared:</strong>{" "}
-        <i>
-          The R-squared value is {r2Score ? r2Score.toFixed(4) : "N/A"}. This
-          shows the proportion of variance in the target variable that is
-          predictable from the features. A higher R-squared indicates a better
-          fit of the model to the data.
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>R-squared:</strong>
+        </p>
+        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+          The R-squared value is{" "}
+          <strong>{r2Score ? r2Score.toFixed(4) : "N/A"}</strong>, This shows
+          the proportion of variance in the target variable that is predictable
+          from the features. A higher R-squared indicates a better fit of the
+          model to the data.
         </i>
-      </p>
+      </div>
 
-      <p className="text-sm">
-        <strong>ROC Curve and AUC:</strong>{" "}
-        <i>
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>ROC Curve and AUC:</strong>
+        </p>
+        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           The ROC Curve helps in evaluating the performance of the classifier
           across different threshold settings. The AUC (Area Under the Curve) is{" "}
-          {rocCurve.roc_auc ? rocCurve.roc_auc.toFixed(4) : "N/A"}, which
-          reflects the overall ability of the model to distinguish between the
-          positive and negative classes. An AUC of 1.0 indicates perfect
-          prediction, while an AUC of 0.5 suggests no discriminative ability.
+          <strong>
+            {rocCurve.roc_auc ? rocCurve.roc_auc.toFixed(4) : "N/A"}
+          </strong>
+          , which reflects the overall ability of the model to distinguish
+          between the positive and negative classes. An AUC of 1.0 indicates
+          perfect prediction, while an AUC of 0.5 suggests no discriminative
+          ability.
         </i>
-      </p>
+      </div>
 
-      <p className="text-sm">
-        <strong>False Positive Rate (FPR):</strong>{" "}
-        <i>
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>
+            False Positive Rate (FPR):
+          </strong>
+        </p>
+        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+          FPR values:{" "}
+          <strong>
+            {rocCurve.fpr
+              .slice(0, 5)
+              .map((v) => v.toFixed(4))
+              .join(", ")}
+          </strong>{" "}
+          extend up to <strong>{rocCurve.fpr.slice(-1)[0].toFixed(4)}</strong>.
           The FPR values range from 0 to 1 and indicate how often the model
           falsely predicts the positive class when the actual class is negative.
-          For instance, FPR values in your data are{" "}
-          {rocCurve.fpr
-            .slice(0, 5)
-            .map((v) => v.toFixed(4))
-            .join(", ")}{" "}
-          and extend up to {rocCurve.fpr.slice(-1)[0].toFixed(4)}.
         </i>
-      </p>
+      </div>
 
-      <p className="text-sm">
-        <strong>True Positive Rate (TPR):</strong>{" "}
-        <i>
+      <div style={{ marginBottom: "20px" }}>
+        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+          <strong style={{ color: "#2980b9" }}>
+            True Positive Rate (TPR):
+          </strong>
+        </p>
+        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+          TPR values:{" "}
+          <strong>
+            {rocCurve.tpr
+              .slice(0, 5)
+              .map((v) => v.toFixed(4))
+              .join(", ")}
+          </strong>{" "}
+          extend up to <strong>{rocCurve.tpr.slice(-1)[0].toFixed(4)}</strong>.
           The TPR values, also known as sensitivity or recall, show how often
           the model correctly predicts the positive class when the actual class
-          is positive. For example, TPR values in your data are{" "}
-          {rocCurve.tpr
-            .slice(0, 5)
-            .map((v) => v.toFixed(4))
-            .join(", ")}{" "}
-          and extend up to {rocCurve.tpr.slice(-1)[0].toFixed(4)}.
+          is positive.
         </i>
-      </p>
+      </div>
     </div>
   );
 };

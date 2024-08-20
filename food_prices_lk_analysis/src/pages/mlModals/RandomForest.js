@@ -12,6 +12,16 @@ import MessageModal from "../../custom/message/MessageModal";
 
 const selectedables = ["market", "category", "commodity"];
 
+const PredictionDescription = () => (
+  <div className={style.predictionDescription}>
+    <p>
+    This tool predicts prices for each commodity over the <i><u><b>next 12 months</b></u></i>. It
+      analyzes the dataset within the selected date range, considering the
+      chosen markets, categories, and commodities.
+    </p>
+  </div>
+);
+
 const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const [response, setResponse] = useState(null);
   const [responseForPredict, setResponseForPredict] = useState(null);
@@ -42,20 +52,21 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const handleRandomForest = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.handleRFEvaluate(dataset);
-      setResponse(responfFromRF);
+      const responseFromRF = await CareBearFoods.handleRFEvaluate(dataset);
+      setResponse(responseFromRF);
       setError("");
     } catch (e) {
-      setError(e);
+      setError(e.message || "An unexpected error occurred.");
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   const handleRFPredictions = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.getRFPredictions({
+      const responseFromRF = await CareBearFoods.getRFPredictions({
         dataset,
         market: selectedMarkets,
         category: selectedCategory,
@@ -63,8 +74,8 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
         startDate: selectedDateRange.startDate,
         endDate: selectedDateRange.endDate,
       });
-      setResponseForPredict(responfFromRF);
-      const forecastData = responfFromRF.forecasts;
+      setResponseForPredict(responseFromRF);
+      const forecastData = responseFromRF.forecasts;
       const formattedForecasts = {};
       for (const [commodity, forecastList] of Object.entries(forecastData)) {
         formattedForecasts[commodity] = forecastList.map((entry) => ({
@@ -75,14 +86,13 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
       setForecasts(formattedForecasts);
       setIsPredictionModalOpen(false);
       setIsLoading(false);
-      setError("");
+      setError(""); 
     } catch (e) {
-      setError(e);
-      setIsLoading(false);
-    } finally {
+      setError(e.message || "An unexpected error occurred.");
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (dataset && dataset.length) {
@@ -137,6 +147,9 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
       )}
       {response ? (
         <div>
+          <h2 className="text-md mt-3">Predictions - Forecast Prices</h2>
+          <PredictionDescription />
+
           <CustomButton
             text={"Prediction"}
             onClick={() => setIsPredictionModalOpen(true)}
@@ -144,7 +157,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
 
           {responseForPredict ? (
             <div className={style.selectedFilters}>
-              <h3 className="text-md mt-3">Predictions Results</h3>
+              <h4 className="text-md mt-3">Predictions Results</h4>
               <div className={style.predictedItemSummery}>
                 <strong>Selected Markets:</strong>{" "}
                 <div className={style.predictedItemWrp}>
