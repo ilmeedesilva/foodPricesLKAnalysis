@@ -243,7 +243,7 @@ const SVMExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>Cross-Validation Scores:</strong>
         </p>
         <p style={{ fontSize: "14px", color: "#7f8c8d" }}>
@@ -260,7 +260,7 @@ const SVMExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>Grid Search Results:</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
@@ -273,7 +273,7 @@ const SVMExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>
             Mean Absolute Error (MAE):
           </strong>
@@ -291,7 +291,7 @@ const SVMExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>
             Mean Squared Error (MSE):
           </strong>
@@ -310,7 +310,7 @@ const SVMExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>R-squared:</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
@@ -323,7 +323,7 @@ const SVMExplanation = ({
       </div>
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>ROC Curve and AUC:</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
@@ -340,7 +340,7 @@ const SVMExplanation = ({
       </div>
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>
             False Positive Rate (FPR):
           </strong>
@@ -360,7 +360,7 @@ const SVMExplanation = ({
       </div>
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>
             True Positive Rate (TPR):
           </strong>
