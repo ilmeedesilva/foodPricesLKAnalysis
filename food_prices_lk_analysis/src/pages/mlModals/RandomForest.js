@@ -52,20 +52,21 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const handleRandomForest = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.handleRFEvaluate(dataset);
-      setResponse(responfFromRF);
+      const responseFromRF = await CareBearFoods.handleRFEvaluate(dataset);
+      setResponse(responseFromRF);
       setError("");
     } catch (e) {
-      setError(e);
+      setError(e.message || "An unexpected error occurred.");
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   const handleRFPredictions = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.getRFPredictions({
+      const responseFromRF = await CareBearFoods.getRFPredictions({
         dataset,
         market: selectedMarkets,
         category: selectedCategory,
@@ -73,8 +74,8 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
         startDate: selectedDateRange.startDate,
         endDate: selectedDateRange.endDate,
       });
-      setResponseForPredict(responfFromRF);
-      const forecastData = responfFromRF.forecasts;
+      setResponseForPredict(responseFromRF);
+      const forecastData = responseFromRF.forecasts;
       const formattedForecasts = {};
       for (const [commodity, forecastList] of Object.entries(forecastData)) {
         formattedForecasts[commodity] = forecastList.map((entry) => ({
@@ -85,14 +86,13 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
       setForecasts(formattedForecasts);
       setIsPredictionModalOpen(false);
       setIsLoading(false);
-      setError("");
+      setError(""); 
     } catch (e) {
-      setError(e);
-      setIsLoading(false);
-    } finally {
+      setError(e.message || "An unexpected error occurred.");
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (dataset && dataset.length) {
