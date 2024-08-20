@@ -13,171 +13,171 @@ const SVMExplanation = ({
   rocCurve = { fpr: [], tpr: [], roc_auc: 0 },
 }) => {
   // Helper function to interpret F1-score
-const interpretF1Score = (f1Score) => {
-  if (f1Score >= 0 && f1Score < 0.5) {
-    return (
-      <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
-        The F1-score is low, indicating that the model struggles to balance
-        precision and recall.
-      </span>
-    );
-  } else if (f1Score >= 0.5 && f1Score < 0.75) {
-    return (
-      <span style={{ color: "#f39c12", fontStyle: "italic" }}>
-        The F1-score is moderate, suggesting the model has a decent balance
-        between precision and recall, but there's room for improvement.
-      </span>
-    );
-  } else if (f1Score >= 0.75 && f1Score <= 1.0) {
-    return (
-      <span style={{ color: "#27ae60", fontStyle: "italic" }}>
-        The F1-score is high, showing that the model has an excellent balance
-        between precision and recall.
-      </span>
-    );
-  } else {
-    return "F1-score is not available.";
-  }
-};
+  const interpretF1Score = (f1Score) => {
+    if (f1Score >= 0 && f1Score < 0.5) {
+      return (
+        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+          The F1-score is low, indicating that the model struggles to balance
+          precision and recall.
+        </span>
+      );
+    } else if (f1Score >= 0.5 && f1Score < 0.75) {
+      return (
+        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+          The F1-score is moderate, suggesting the model has a decent balance
+          between precision and recall, but there's room for improvement.
+        </span>
+      );
+    } else if (f1Score >= 0.75 && f1Score <= 1.0) {
+      return (
+        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+          The F1-score is high, showing that the model has an excellent balance
+          between precision and recall.
+        </span>
+      );
+    } else {
+      return "F1-score is not available.";
+    }
+  };
 
-// Helper function to interpret Precision
-const interpretPrecision = (precision) => {
-  if (precision >= 0 && precision < 0.5) {
-    return (
-      <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
-        The Precision is low, indicating a high number of false positives.
-      </span>
-    );
-  } else if (precision >= 0.5 && precision < 0.75) {
-    return (
-      <span style={{ color: "#f39c12", fontStyle: "italic" }}>
-        The Precision is moderate, suggesting some false positives but
-        acceptable accuracy.
-      </span>
-    );
-  } else if (precision >= 0.75 && precision <= 1.0) {
-    return (
-      <span style={{ color: "#27ae60", fontStyle: "italic" }}>
-        The Precision is high, indicating that the model is very accurate in its
-        positive predictions.
-      </span>
-    );
-  } else {
-    return "Precision is not available.";
-  }
-};
+  // Helper function to interpret Precision
+  const interpretPrecision = (precision) => {
+    if (precision >= 0 && precision < 0.5) {
+      return (
+        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+          The Precision is low, indicating a high number of false positives.
+        </span>
+      );
+    } else if (precision >= 0.5 && precision < 0.75) {
+      return (
+        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+          The Precision is moderate, suggesting some false positives but
+          acceptable accuracy.
+        </span>
+      );
+    } else if (precision >= 0.75 && precision <= 1.0) {
+      return (
+        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+          The Precision is high, indicating that the model is very accurate in
+          its positive predictions.
+        </span>
+      );
+    } else {
+      return "Precision is not available.";
+    }
+  };
 
-// Helper function to interpret Recall
-const interpretRecall = (recall) => {
-  if (recall >= 0 && recall < 0.5) {
-    return (
-      <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
-        The Recall is low, indicating the model is missing many positive
-        instances.
-      </span>
-    );
-  } else if (recall >= 0.5 && recall < 0.75) {
-    return (
-      <span style={{ color: "#f39c12", fontStyle: "italic" }}>
-        The Recall is moderate, suggesting that the model catches a fair number
-        of positive instances, but misses some.
-      </span>
-    );
-  } else if (recall >= 0.75 && recall <= 1.0) {
-    return (
-      <span style={{ color: "#27ae60", fontStyle: "italic" }}>
-        The Recall is high, showing that the model successfully identifies most
-        positive instances.
-      </span>
-    );
-  } else {
-    return "Recall is not available.";
-  }
-};
+  // Helper function to interpret Recall
+  const interpretRecall = (recall) => {
+    if (recall >= 0 && recall < 0.5) {
+      return (
+        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+          The Recall is low, indicating the model is missing many positive
+          instances.
+        </span>
+      );
+    } else if (recall >= 0.5 && recall < 0.75) {
+      return (
+        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+          The Recall is moderate, suggesting that the model catches a fair
+          number of positive instances, but misses some.
+        </span>
+      );
+    } else if (recall >= 0.75 && recall <= 1.0) {
+      return (
+        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+          The Recall is high, showing that the model successfully identifies
+          most positive instances.
+        </span>
+      );
+    } else {
+      return "Recall is not available.";
+    }
+  };
 
-// Helper function to interpret Support
-const interpretSupport = (support) => {
-  if (support > 0 && support < 100) {
-    return (
-      <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
-        Support is low, indicating a small number of instances for this class.
-      </span>
-    );
-  } else if (support >= 100 && support < 500) {
-    return (
-      <span style={{ color: "#f39c12", fontStyle: "italic" }}>
-        Support is moderate, with a reasonable number of instances for this
-        class.
-      </span>
-    );
-  } else if (support >= 500) {
-    return (
-      <span style={{ color: "#27ae60", fontStyle: "italic" }}>
-        Support is high, indicating a large number of instances for this class.
-      </span>
-    );
-  } else {
-    return "Support is not available.";
-  }
-};
+  // Helper function to interpret Support
+  const interpretSupport = (support) => {
+    if (support > 0 && support < 100) {
+      return (
+        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+          Support is low, indicating a small number of instances for this class.
+        </span>
+      );
+    } else if (support >= 100 && support < 500) {
+      return (
+        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+          Support is moderate, with a reasonable number of instances for this
+          class.
+        </span>
+      );
+    } else if (support >= 500) {
+      return (
+        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+          Support is high, indicating a large number of instances for this
+          class.
+        </span>
+      );
+    } else {
+      return "Support is not available.";
+    }
+  };
 
-// Helper function to format classification report
-const formatClassificationReport = (report) => {
-  return Object.keys(report).map((key) =>
-    key !== "accuracy" ? (
-      <div
-        key={key}
-        style={{
-          display: "inline-block",
-          margin: "0 40px",
-          textAlign: "left",
-          borderRadius: "10px",
-          padding: "20px",
-          backgroundColor: "#ecf0f1",
-          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-          maxWidth: "300px",
-        }}
-      >
-        <strong style={{ fontSize: "18px", color: "#2c3e50" }}>
-          Class {key}:
-        </strong>
-        <p style={{ margin: "10px 0" }}>
-          <strong>F1-score:</strong>{" "}
-          <span style={{ fontSize: "16px", color: "#34495e" }}>
-            {report[key]?.["f1-score"]?.toFixed(4) || "N/A"}
-          </span>
-          <br />
-          {interpretF1Score(report[key]?.["f1-score"])}
-        </p>
-        <p style={{ margin: "10px 0" }}>
-          <strong>Precision:</strong>{" "}
-          <span style={{ fontSize: "16px", color: "#34495e" }}>
-            {report[key]?.precision?.toFixed(4) || "N/A"}
-          </span>
-          <br />
-          {interpretPrecision(report[key]?.precision)}
-        </p>
-        <p style={{ margin: "10px 0" }}>
-          <strong>Recall:</strong>{" "}
-          <span style={{ fontSize: "16px", color: "#34495e" }}>
-            {report[key]?.recall?.toFixed(4) || "N/A"}
-          </span>
-          <br />
-          {interpretRecall(report[key]?.recall)}
-        </p>
-        <p style={{ margin: "10px 0" }}>
-          <strong>Support:</strong>{" "}
-          <span style={{ fontSize: "16px", color: "#34495e" }}>
-            {report[key]?.support || "N/A"}
-          </span>
-          <br />
-          {interpretSupport(report[key]?.support)}
-        </p>
-      </div>
-    ) : null
-  );
-};
-
+  // Helper function to format classification report
+  const formatClassificationReport = (report) => {
+    return Object.keys(report).map((key) =>
+      key !== "accuracy" ? (
+        <div
+          key={key}
+          style={{
+            display: "inline-block",
+            margin: "0 40px",
+            textAlign: "left",
+            borderRadius: "10px",
+            padding: "20px",
+            backgroundColor: "#ecf0f1",
+            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+            maxWidth: "300px",
+          }}
+        >
+          <strong style={{ fontSize: "18px", color: "#2c3e50" }}>
+            Class {key}:
+          </strong>
+          <p style={{ margin: "10px 0" }}>
+            <strong>F1-score:</strong>{" "}
+            <span style={{ fontSize: "16px", color: "#34495e" }}>
+              {report[key]?.["f1-score"]?.toFixed(4) || "N/A"}
+            </span>
+            <br />
+            {interpretF1Score(report[key]?.["f1-score"])}
+          </p>
+          <p style={{ margin: "10px 0" }}>
+            <strong>Precision:</strong>{" "}
+            <span style={{ fontSize: "16px", color: "#34495e" }}>
+              {report[key]?.precision?.toFixed(4) || "N/A"}
+            </span>
+            <br />
+            {interpretPrecision(report[key]?.precision)}
+          </p>
+          <p style={{ margin: "10px 0" }}>
+            <strong>Recall:</strong>{" "}
+            <span style={{ fontSize: "16px", color: "#34495e" }}>
+              {report[key]?.recall?.toFixed(4) || "N/A"}
+            </span>
+            <br />
+            {interpretRecall(report[key]?.recall)}
+          </p>
+          <p style={{ margin: "10px 0" }}>
+            <strong>Support:</strong>{" "}
+            <span style={{ fontSize: "16px", color: "#34495e" }}>
+              {report[key]?.support || "N/A"}
+            </span>
+            <br />
+            {interpretSupport(report[key]?.support)}
+          </p>
+        </div>
+      ) : null
+    );
+  };
 
   const calculateAverages = (results) => {
     if (!results.length) return { meanFitTime: "N/A", meanScoreTime: "N/A" };
@@ -207,12 +207,13 @@ const formatClassificationReport = (report) => {
         padding: "20px",
       }}
     >
-      <h3
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <h2
         className="mt-3 mb-3 header-md"
         style={{ color: "#2c3e50", fontWeight: "bold" }}
       >
         SVM Evaluation
-      </h3>
+      </h2>
       <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
         The SVM algorithm provides various metrics to evaluate the model's
         performance. Here is a detailed explanation of the results:
@@ -232,6 +233,8 @@ const formatClassificationReport = (report) => {
         </p>
       </div>
 
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
           <strong style={{ color: "#2980b9" }}>Classification Report:</strong>
@@ -240,6 +243,8 @@ const formatClassificationReport = (report) => {
           {formatClassificationReport(classificationReport)}
         </div>
       </div>
+
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
@@ -252,6 +257,8 @@ const formatClassificationReport = (report) => {
         </i>
         <HeatmapChart confusionMatrix={confusionMatrix} />
       </div>
+
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
@@ -268,6 +275,8 @@ const formatClassificationReport = (report) => {
         </i>
       </div>
 
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
           <strong style={{ color: "#2980b9" }}>Grid Search Results:</strong>
@@ -278,6 +287,8 @@ const formatClassificationReport = (report) => {
           seconds.
         </i>
       </div>
+
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
@@ -295,6 +306,8 @@ const formatClassificationReport = (report) => {
         </i>
       </div>
 
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
           <strong style={{ color: "#2980b9" }}>
@@ -311,6 +324,8 @@ const formatClassificationReport = (report) => {
           accuracy.
         </i>
       </div>
+
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>

@@ -12,7 +12,7 @@ const RFExplanation = ({
   r2Score = 0,
 }) => {
   // Helper function to interpret F1-score
-const interpretF1Score = (f1Score) => {
+  const interpretF1Score = (f1Score) => {
     if (f1Score >= 0 && f1Score < 0.5) {
       return (
         <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
@@ -38,7 +38,7 @@ const interpretF1Score = (f1Score) => {
       return "F1-score is not available.";
     }
   };
-  
+
   // Helper function to interpret Precision
   const interpretPrecision = (precision) => {
     if (precision >= 0 && precision < 0.5) {
@@ -57,15 +57,15 @@ const interpretF1Score = (f1Score) => {
     } else if (precision >= 0.75 && precision <= 1.0) {
       return (
         <span style={{ color: "#27ae60", fontStyle: "italic" }}>
-          The Precision is high, indicating that the model is very accurate in its
-          positive predictions.
+          The Precision is high, indicating that the model is very accurate in
+          its positive predictions.
         </span>
       );
     } else {
       return "Precision is not available.";
     }
   };
-  
+
   // Helper function to interpret Recall
   const interpretRecall = (recall) => {
     if (recall >= 0 && recall < 0.5) {
@@ -78,22 +78,22 @@ const interpretF1Score = (f1Score) => {
     } else if (recall >= 0.5 && recall < 0.75) {
       return (
         <span style={{ color: "#f39c12", fontStyle: "italic" }}>
-          The Recall is moderate, suggesting that the model catches a fair number
-          of positive instances, but misses some.
+          The Recall is moderate, suggesting that the model catches a fair
+          number of positive instances, but misses some.
         </span>
       );
     } else if (recall >= 0.75 && recall <= 1.0) {
       return (
         <span style={{ color: "#27ae60", fontStyle: "italic" }}>
-          The Recall is high, showing that the model successfully identifies most
-          positive instances.
+          The Recall is high, showing that the model successfully identifies
+          most positive instances.
         </span>
       );
     } else {
       return "Recall is not available.";
     }
   };
-  
+
   // Helper function to interpret Support
   const interpretSupport = (support) => {
     if (support > 0 && support < 100) {
@@ -112,14 +112,15 @@ const interpretF1Score = (f1Score) => {
     } else if (support >= 500) {
       return (
         <span style={{ color: "#27ae60", fontStyle: "italic" }}>
-          Support is high, indicating a large number of instances for this class.
+          Support is high, indicating a large number of instances for this
+          class.
         </span>
       );
     } else {
       return "Support is not available.";
     }
   };
-  
+
   // Helper function to format classification report
   const formatClassificationReport = (report) => {
     return Object.keys(report).map((key) =>
@@ -176,7 +177,6 @@ const interpretF1Score = (f1Score) => {
       ) : null
     );
   };
-  
 
   const calculateAverages = (results) => {
     if (!results.length) return { meanFitTime: "N/A", meanScoreTime: "N/A" };
@@ -206,12 +206,13 @@ const interpretF1Score = (f1Score) => {
         padding: "20px",
       }}
     >
-      <h3
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <h2
         className="mt-3 mb-3 header-md"
         style={{ color: "#2c3e50", fontWeight: "bold" }}
       >
         Random Forest Evaluation
-      </h3>
+      </h2>
       <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
         The Random Forest algorithm provides various metrics to evaluate the
         model's performance. Here is a detailed explanation of the results:
@@ -231,6 +232,8 @@ const interpretF1Score = (f1Score) => {
         </p>
       </div>
 
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
           <strong style={{ color: "#2980b9" }}>Classification Report:</strong>
@@ -239,6 +242,8 @@ const interpretF1Score = (f1Score) => {
           {formatClassificationReport(classificationReport)}
         </div>
       </div>
+
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
@@ -252,6 +257,8 @@ const interpretF1Score = (f1Score) => {
         </i>
         <HeatmapChart confusionMatrix={confusionMatrix} />
       </div>
+
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
@@ -268,6 +275,8 @@ const interpretF1Score = (f1Score) => {
         </i>
       </div>
 
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
           <strong style={{ color: "#2980b9" }}>Grid Search Results:</strong>
@@ -278,6 +287,8 @@ const interpretF1Score = (f1Score) => {
           seconds.
         </i>
       </div>
+
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
@@ -295,6 +306,8 @@ const interpretF1Score = (f1Score) => {
         </i>
       </div>
 
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
           <strong style={{ color: "#2980b9" }}>
@@ -311,6 +324,8 @@ const interpretF1Score = (f1Score) => {
           accuracy.
         </i>
       </div>
+
+      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
