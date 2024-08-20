@@ -19,9 +19,7 @@ const TopNavigation = () => {
       <nav>
         <ul>
           <li className={location.pathname === "/" ? style.activeLink : ""}>
-            <NavLink to="/" exact>
-              Home
-            </NavLink>
+            <NavLink to="/">Home</NavLink>
           </li>
           <li
             className={
@@ -30,20 +28,6 @@ const TopNavigation = () => {
           >
             <NavLink to="/data-exploration">Data Exploration</NavLink>
           </li>
-          {/* <li
-            className={
-              location.pathname === "/model-selection" ? style.activeLink : ""
-            }
-          >
-            <NavLink to="/model-selection">Model Selection</NavLink>
-          </li> */}
-          {/* <li
-            className={
-              location.pathname === "/predictions" ? style.activeLink : ""
-            }
-          >
-            <NavLink to="/predictions">Predictions</NavLink>
-          </li> */}
           <li
             className={
               location.pathname === "/performance-analysis"

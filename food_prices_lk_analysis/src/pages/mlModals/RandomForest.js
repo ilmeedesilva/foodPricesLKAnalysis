@@ -7,6 +7,8 @@ import CustomButton from "../../custom/CustomButton";
 import CustomModal from "../../custom/modal/CustomModal";
 import CloseIcon from "../../img/svg/Close.icon";
 import RFExplanation from "./RFExplanation";
+import CustomTable from "../../custom/table/CustomTable";
+import MessageModal from "../../custom/message/MessageModal";
 
 const selectedables = ["market", "category", "commodity"];
 
@@ -42,6 +44,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
     try {
       const responfFromRF = await CareBearFoods.handleRFEvaluate(dataset);
       setResponse(responfFromRF);
+      setError("");
     } catch (e) {
       setError(e);
     } finally {
@@ -72,6 +75,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
       setForecasts(formattedForecasts);
       setIsPredictionModalOpen(false);
       setIsLoading(false);
+      setError("");
     } catch (e) {
       setError(e);
       setIsLoading(false);
@@ -107,25 +111,13 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
           <div key={chunkIndex} className={style.row}>
             {commodityChunk.map((commodity) => (
               <div key={commodity} className={style.commoditySection}>
-                <h3>{commodity}</h3>
-                <table className={style.table}>
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th style={{ paddingLeft: "20px" }}>Price</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {forecasts[commodity].map((entry, index) => (
-                      <tr key={index}>
-                        <td>{entry.date}</td>
-                        <td style={{ paddingLeft: "20px" }}>
-                          {entry.price.toFixed(2)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <h3 className="text-sm">{commodity}</h3>
+                <CustomTable
+                  Data={{
+                    headers: ["date", "price"],
+                    rows: forecasts[commodity],
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -136,6 +128,13 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
 
   return (
     <div>
+      {error ? (
+        <div className={style.alertModal}>
+          <MessageModal type={"error"} description={error} />
+        </div>
+      ) : (
+        ""
+      )}
       {response ? (
         <div>
           <CustomButton
@@ -149,8 +148,8 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
               <div className={style.predictedItemSummery}>
                 <strong>Selected Markets:</strong>{" "}
                 <div className={style.predictedItemWrp}>
-                  {selectedMarkets.map((item) => (
-                    <p>{item}</p>
+                  {selectedMarkets.map((item, index) => (
+                    <p key={index}>{item}</p>
                   ))}
                 </div>
               </div>
@@ -258,7 +257,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
                     <div className={style.filterItemSection}>
                       <h6 className="mb-2 mt-2">Market</h6>
                       <div className={style.headersWrp}>
-                        {selectedMarkets.map((header) => (
+                        {selectedMarkets.map((header, index) => (
                           <button
                             className={style.headerItem}
                             onClick={() =>
@@ -266,6 +265,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
                                 pre.filter((item) => item !== header)
                               )
                             }
+                            key={index}
                           >
                             <p>{header}</p>
                             <CloseIcon size={12} color={"#496bf3"} />
@@ -281,7 +281,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
                     <div className={style.filterItemSection}>
                       <h6 className="mb-0">Category</h6>
                       <div className={style.headersWrp}>
-                        {selectedCategory.map((header) => (
+                        {selectedCategory.map((header, index) => (
                           <button
                             className={style.headerItem}
                             onClick={() =>
@@ -289,6 +289,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
                                 pre.filter((item) => item !== header)
                               )
                             }
+                            key={index}
                           >
                             <p>{header}</p>
                             <CloseIcon size={12} color={"#496bf3"} />

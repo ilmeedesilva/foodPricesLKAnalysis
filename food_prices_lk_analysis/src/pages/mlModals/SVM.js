@@ -9,6 +9,7 @@ import CloseIcon from "../../img/svg/Close.icon";
 import SVMExplanation from "./SVMExplanation";
 import CustomTable from "../../custom/table/CustomTable";
 import ForecastChart from "./ForecastChart";
+import MessageModal from "../../custom/message/MessageModal";
 
 const selectedables = ["market", "category", "commodity"];
 
@@ -45,26 +46,6 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     return `${year}-${month < 10 ? `0${month}` : month}`;
   };
 
-  function getMinMaxDates(data) {
-    console.log("DATA LEN: ", data.length);
-
-    if (data.length) {
-      const dates = data.map((row) => new Date(row.date));
-
-      const minDate = new Date(Math.min(...dates));
-      const maxDate = new Date(Math.max(...dates));
-
-      console.log("minDate: ", minDate);
-      console.log("maxDate: ", maxDate);
-
-      setStartDate(minDate);
-      setEndDate(maxDate);
-
-      console.log("START DATE: ", selectStartDate);
-      console.log("END DATE: ", selectEndsDate);
-    }
-  }
-
   const getMinDate = () => {
     if (dataset.length) {
       const dates = dataset.map((row) => new Date(row.date));
@@ -92,6 +73,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     try {
       const responfFromRF = await CareBearFoods.handleSVMEvaluate(dataset);
       setResponse(responfFromRF);
+      setError("");
     } catch (e) {
       setError(e);
     } finally {
@@ -154,6 +136,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
       setForecasts(formattedForecasts);
       setIsPredictionModalOpen(false);
       setIsLoading(false);
+      setError("");
     } catch (e) {
       setError(e);
       setIsLoading(false);
@@ -188,6 +171,14 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
 
     return (
       <div className={style.forecastTable}>
+        {error ? (
+          <div className={style.alertModal}>
+            <MessageModal type={"error"} description={error} />
+          </div>
+        ) : (
+          ""
+        )}
+
         {chunkedCommodities.map((commodityChunk, chunkIndex) => (
           <div key={chunkIndex} className={style.row}>
             {commodityChunk.map((commodity) => (
@@ -244,8 +235,8 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
               <div className={style.predictedItemSummery}>
                 <strong>Selected Markets:</strong>{" "}
                 <div className={style.predictedItemWrp}>
-                  {selectedMarkets.map((item) => (
-                    <p>{item}</p>
+                  {selectedMarkets.map((item, index) => (
+                    <p key={index}>{item}</p>
                   ))}
                 </div>
               </div>
@@ -362,7 +353,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
                     <div className={style.filterItemSection}>
                       <h6 className="mb-2 mt-2">Market</h6>
                       <div className={style.headersWrp}>
-                        {selectedMarkets.map((header) => (
+                        {selectedMarkets.map((header, index) => (
                           <button
                             className={style.headerItem}
                             onClick={() =>
@@ -370,6 +361,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
                                 pre.filter((item) => item !== header)
                               )
                             }
+                            key={index}
                           >
                             <p>{header}</p>
                             <CloseIcon size={12} color={"#496bf3"} />
@@ -385,7 +377,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
                     <div className={style.filterItemSection}>
                       <h6 className="mb-0">Category</h6>
                       <div className={style.headersWrp}>
-                        {selectedCategory.map((header) => (
+                        {selectedCategory.map((header, index) => (
                           <button
                             className={style.headerItem}
                             onClick={() =>
@@ -393,6 +385,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
                                 pre.filter((item) => item !== header)
                               )
                             }
+                            key={index}
                           >
                             <p>{header}</p>
                             <CloseIcon size={12} color={"#496bf3"} />

@@ -213,6 +213,7 @@
     align-items: center;
     flex-wrap: wrap;
 
+
     p {
         font-size: 10px;
         margin: 4px;
@@ -221,6 +222,7 @@
         border-radius: 8px;
         padding: 4px;
         font-weight: 600;
+        box-shadow: 1px 1px 2px 0px #33333333;
     }
 
 }
@@ -235,4 +237,15 @@
     p {
         background-color: #F3E8FF;
     }
+}
+
+
+.alertModal {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 500ms;
+    animation: moveDown 1s ease-in-out forwards;
+    z-index: 3;
 }

@@ -26,6 +26,7 @@ import Modal from "../../components/Modal/Modal";
 import { MODAL_TYPES } from "../../enums";
 import NoData from "../../components/NoData/NoData";
 import SVM from "../mlModals/SVM";
+import KMean from "../mlModals/KMean";
 
 const sampleData = {
   headers: ["Name", "Age", "Gender", "Country"],
@@ -537,10 +538,11 @@ const DataExploration = () => {
                     {tableData.headers.length}
                   </span>
                   <div className={style3.headersWrp}>
-                    {filterHeader.map((header) => (
+                    {filterHeader.map((header, index) => (
                       <button
                         className={style3.headerItem}
                         onClick={() => filterHeaders(header)}
+                        key={index}
                       >
                         <p>{header}</p>
                         <CloseIcon size={12} color={"#496bf3"} />
@@ -875,6 +877,17 @@ const DataExploration = () => {
                 setStep={(step) => setCurrentStep(step)}
               />
             </div>
+          ) : selectedModal === MODAL_TYPES.KMEAN_CLUSTERING ? (
+            <KMean
+              dataset={tableData.rows}
+              headers={{
+                markets: filteredMarket,
+                category: filteredCategory,
+                commoditiy: filteredCommodity,
+              }}
+              variables={filterHeader}
+              setStep={(step) => setCurrentStep(step)}
+            />
           ) : (
             ""
           )}

@@ -129,6 +129,51 @@ const CareBearFoods = {
       );
     }
   },
+
+  handleKmeanEvaluate: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/k-means/km-evaluate",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling K-Mean Evaluate data : ", e);
+    }
+  },
+  handleKmeanForecast: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/k-means/km-forecast",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling K-Mean Forecast data : ", e);
+    }
+  },
+  handleKmeanVisualize: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/k-means/km-visualize",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling K-Mean Forecast data : ", e);
+    }
+  },
+  handleKmeaninsights: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/k-means/km-insights",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling K-Mean Forecast data : ", e);
+    }
+  },
 };
 
 export default CareBearFoods;
