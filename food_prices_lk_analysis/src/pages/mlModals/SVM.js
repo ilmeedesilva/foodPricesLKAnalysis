@@ -15,9 +15,14 @@ const selectedables = ["market", "category", "commodity"];
 
 const PredictionDescription = () => (
   <div className={style.predictionDescription}>
-    <p>
-      This tool predicts prices for each commodity over the <i><u><b>next 12 months</b></u></i>. It
-      analyzes the dataset within the selected date range, considering the
+    <p className="text-sm">
+      This tool predicts prices for each commodity over the{" "}
+      <i>
+        <u>
+          <b>next 12 months</b>
+        </u>
+      </i>
+      . It analyzes the dataset within the selected date range, considering the
       chosen markets, categories, and commodities.
     </p>
   </div>

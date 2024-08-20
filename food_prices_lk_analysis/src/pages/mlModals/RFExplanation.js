@@ -1,5 +1,6 @@
 import React from "react";
 import HeatmapChart from "./BoxPlotChart";
+import style from "./MlModals.module.scss";
 
 const RFExplanation = ({
   accuracy = 0,
@@ -15,21 +16,21 @@ const RFExplanation = ({
   const interpretF1Score = (f1Score) => {
     if (f1Score >= 0 && f1Score < 0.5) {
       return (
-        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           The F1-score is low, indicating that the model struggles to balance
           precision and recall.
         </span>
       );
     } else if (f1Score >= 0.5 && f1Score < 0.75) {
       return (
-        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           The F1-score is moderate, suggesting the model has a decent balance
           between precision and recall, but there's room for improvement.
         </span>
       );
     } else if (f1Score >= 0.75 && f1Score <= 1.0) {
       return (
-        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           The F1-score is high, showing that the model has an excellent balance
           between precision and recall.
         </span>
@@ -43,20 +44,20 @@ const RFExplanation = ({
   const interpretPrecision = (precision) => {
     if (precision >= 0 && precision < 0.5) {
       return (
-        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           The Precision is low, indicating a high number of false positives.
         </span>
       );
     } else if (precision >= 0.5 && precision < 0.75) {
       return (
-        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           The Precision is moderate, suggesting some false positives but
           acceptable accuracy.
         </span>
       );
     } else if (precision >= 0.75 && precision <= 1.0) {
       return (
-        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           The Precision is high, indicating that the model is very accurate in
           its positive predictions.
         </span>
@@ -70,21 +71,21 @@ const RFExplanation = ({
   const interpretRecall = (recall) => {
     if (recall >= 0 && recall < 0.5) {
       return (
-        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           The Recall is low, indicating the model is missing many positive
           instances.
         </span>
       );
     } else if (recall >= 0.5 && recall < 0.75) {
       return (
-        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           The Recall is moderate, suggesting that the model catches a fair
           number of positive instances, but misses some.
         </span>
       );
     } else if (recall >= 0.75 && recall <= 1.0) {
       return (
-        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           The Recall is high, showing that the model successfully identifies
           most positive instances.
         </span>
@@ -98,20 +99,20 @@ const RFExplanation = ({
   const interpretSupport = (support) => {
     if (support > 0 && support < 100) {
       return (
-        <span style={{ color: "#e74c3c", fontStyle: "italic" }}>
+        <span className={style.scrDescDng}>
           Support is low, indicating a small number of instances for this class.
         </span>
       );
     } else if (support >= 100 && support < 500) {
       return (
-        <span style={{ color: "#f39c12", fontStyle: "italic" }}>
+        <span className={style.scrDescMidDng}>
           Support is moderate, with a reasonable number of instances for this
           class.
         </span>
       );
     } else if (support >= 500) {
       return (
-        <span style={{ color: "#27ae60", fontStyle: "italic" }}>
+        <span className={style.scrDesc}>
           Support is high, indicating a large number of instances for this
           class.
         </span>
@@ -125,49 +126,35 @@ const RFExplanation = ({
   const formatClassificationReport = (report) => {
     return Object.keys(report).map((key) =>
       key !== "accuracy" ? (
-        <div
-          key={key}
-          style={{
-            display: "inline-block",
-            margin: "0 40px",
-            textAlign: "left",
-            borderRadius: "10px",
-            padding: "20px",
-            backgroundColor: "#ecf0f1",
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-            maxWidth: "300px",
-          }}
-        >
-          <strong style={{ fontSize: "18px", color: "#2c3e50" }}>
-            Class {key}:
-          </strong>
-          <p style={{ margin: "10px 0" }}>
-            <strong>F1-score:</strong>{" "}
-            <span style={{ fontSize: "16px", color: "#34495e" }}>
+        <div key={key} className={style.wrapCaliiCard}>
+          <strong className={style.cardTitle}>Class {key}:</strong>
+          <div className={style.scroeDescr}>
+            <strong className={style.scroeTitle}>F1-score:</strong>{" "}
+            <span className={style.scoreVal}>
               {report[key]?.["f1-score"]?.toFixed(4) || "N/A"}
             </span>
             <br />
             {interpretF1Score(report[key]?.["f1-score"])}
-          </p>
-          <p style={{ margin: "10px 0" }}>
+          </div>
+          <p>
             <strong>Precision:</strong>{" "}
-            <span style={{ fontSize: "16px", color: "#34495e" }}>
+            <span className={style.scoreVal}>
               {report[key]?.precision?.toFixed(4) || "N/A"}
             </span>
             <br />
             {interpretPrecision(report[key]?.precision)}
           </p>
-          <p style={{ margin: "10px 0" }}>
+          <p>
             <strong>Recall:</strong>{" "}
-            <span style={{ fontSize: "16px", color: "#34495e" }}>
+            <span className={style.scoreVal}>
               {report[key]?.recall?.toFixed(4) || "N/A"}
             </span>
             <br />
             {interpretRecall(report[key]?.recall)}
           </p>
-          <p style={{ margin: "10px 0" }}>
+          <p>
             <strong>Support:</strong>{" "}
-            <span style={{ fontSize: "16px", color: "#34495e" }}>
+            <span className={style.scoreVal}>
               {report[key]?.support || "N/A"}
             </span>
             <br />
@@ -201,25 +188,24 @@ const RFExplanation = ({
   return (
     <div
       style={{
-        fontFamily: "Arial, sans-serif",
         lineHeight: "1.6",
-        padding: "20px",
+        padding: "20px 0",
       }}
     >
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
       <h2
-        className="mt-3 mb-3 header-md"
+        className="mt-3 mb-3 header-md text-md"
         style={{ color: "#2c3e50", fontWeight: "bold" }}
       >
         Random Forest Evaluation
       </h2>
-      <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+      <p className="text-sm">
         The Random Forest algorithm provides various metrics to evaluate the
         model's performance. Here is a detailed explanation of the results:
       </p>
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>Accuracy:</strong>{" "}
           <i>
             The accuracy of the model is{" "}
@@ -235,10 +221,10 @@ const RFExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>Classification Report:</strong>
         </p>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
+        <div className="d-flex flex-wrap">
           {formatClassificationReport(classificationReport)}
         </div>
       </div>
@@ -246,10 +232,10 @@ const RFExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+        <p className="text-sm" className={style.scoreVal}>
           <strong style={{ color: "#2980b9" }}>Confusion Matrix:</strong>
         </p>
-        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+        <i className="text-sm">
           The Heatmap shows the distribution of true positives, false positives,
           false negatives, and true negatives for each class. In this case, it
           reflects the model's performance in distinguishing between different
@@ -261,13 +247,13 @@ const RFExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+        <p className="text-sm">
           <strong style={{ color: "#2980b9" }}>Cross-Validation Scores:</strong>
         </p>
-        <p style={{ fontSize: "14px", color: "#7f8c8d" }}>
+        <p className="text-sm">
           <strong>{cvScores.length ? cvScores.join(", ") : "N/A"}</strong>
         </p>
-        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+        <i className="text-sm">
           These scores are obtained by evaluating the model on different subsets
           of the data. They provide an indication of the model's stability and
           performance across different data splits. Higher scores indicate
@@ -278,10 +264,10 @@ const RFExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+        <p className="text-sm" className={style.scoreVal}>
           <strong style={{ color: "#2980b9" }}>Grid Search Results:</strong>
         </p>
-        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+        <i className="text-sm">
           The average mean fit time is <strong>{meanFitTime}</strong> seconds,
           and the average mean score time is <strong>{meanScoreTime}</strong>{" "}
           seconds.
@@ -291,12 +277,12 @@ const RFExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+        <p className="text-sm" className={style.scoreVal}>
           <strong style={{ color: "#2980b9" }}>
             Mean Absolute Error (MAE):
           </strong>
         </p>
-        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+        <i className="text-sm">
           The MAE is{" "}
           <strong>
             {meanAbsoluteError ? meanAbsoluteError.toFixed(4) : "N/A"}
@@ -309,12 +295,12 @@ const RFExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+        <p className="text-sm" className={style.scoreVal}>
           <strong style={{ color: "#2980b9" }}>
             Mean Squared Error (MSE):
           </strong>
         </p>
-        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+        <i className="text-sm">
           The MSE is{" "}
           <strong>
             {meanSquaredError ? meanSquaredError.toFixed(4) : "N/A"}
@@ -328,10 +314,10 @@ const RFExplanation = ({
       <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
       <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" style={{ fontSize: "16px", color: "#34495e" }}>
+        <p className="text-sm" className={style.scoreVal}>
           <strong style={{ color: "#2980b9" }}>R-squared:</strong>
         </p>
-        <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
+        <i className="text-sm">
           The R-squared value is{" "}
           <strong>{r2Score ? r2Score.toFixed(4) : "N/A"}</strong>, This shows
           the proportion of variance in the target variable that is predictable
