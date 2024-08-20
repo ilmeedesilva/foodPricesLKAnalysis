@@ -8,6 +8,7 @@ import CustomModal from "../../custom/modal/CustomModal";
 import CloseIcon from "../../img/svg/Close.icon";
 import SVMExplanation from "./SVMExplanation";
 import CustomTable from "../../custom/table/CustomTable";
+import ForecastChart from "./ForecastChart";
 
 const selectedables = ["market", "category", "commodity"];
 
@@ -34,6 +35,8 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
 
   const [selectStartDate, setStartDate] = useState();
   const [selectEndsDate, setEndDate] = useState();
+
+  const [forecastData, setForecastData] = useState({});
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -64,19 +67,19 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
 
   const getMinDate = () => {
     if (dataset.length) {
-        const dates = dataset.map((row) => new Date(row.date));
-        const minDate = new Date(Math.min(...dates));
-        return minDate.toISOString().split('T')[0];  // Format as 'YYYY-MM-DD'
+      const dates = dataset.map((row) => new Date(row.date));
+      const minDate = new Date(Math.min(...dates));
+      return minDate.toISOString().split("T")[0]; // Format as 'YYYY-MM-DD'
     }
-};
+  };
 
-const getMaxDate = () => {
+  const getMaxDate = () => {
     if (dataset.length) {
-        const dates = dataset.map((row) => new Date(row.date));
-        const maxDate = new Date(Math.max(...dates));  // Fixed to use Math.max instead of Math.min
-        return maxDate.toISOString().split('T')[0];   // Convert to ISO string without timezone
+      const dates = dataset.map((row) => new Date(row.date));
+      const maxDate = new Date(Math.max(...dates)); // Fixed to use Math.max instead of Math.min
+      return maxDate.toISOString().split("T")[0]; // Convert to ISO string without timezone
     }
-};
+  };
 
   // useEffect(() => {
   //   if (dataset && dataset.length) {
@@ -99,13 +102,27 @@ const getMaxDate = () => {
   const handleSVMHighLow = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.getSVMHighLow({
+      const responseFromRF = await CareBearFoods.getSVMHighLow({
         dataset,
         start_date: getMinDate(),
         end_date: getMaxDate(),
       });
 
-      setResponseForHighLow(responfFromRF);
+      setResponseForHighLow(responseFromRF);
+      const forecastData = responseFromRF.forecasts;
+      // console.log("FORECAST DAT: ", forecastData);
+
+      // const formattedForecasts = {};
+      // for (const [commodity, forecastList] of Object.entries(forecastData)) {
+      //   formattedForecasts[commodity] = forecastList.map((entry) => ({
+      //     date: formatDate(entry.date),
+      //     price: entry.forecasted_prices,
+      //   }));
+      // }
+
+      // console.log("formattedForecasts 11111: ", formattedForecasts);
+
+      setForecastData(forecastData);
     } catch (e) {
       setError(e);
     } finally {
@@ -147,10 +164,12 @@ const getMaxDate = () => {
 
   useEffect(() => {
     if (dataset && dataset.length) {
+      console.log("dataset length: ", dataset.length);
+
       handleSVM();
       handleSVMHighLow();
     }
-  }, []);
+  }, [dataset]);
 
   const handleCancel = () => {
     setSelectedMarkets(headers.markets ?? []);
@@ -213,6 +232,7 @@ const getMaxDate = () => {
     <div>
       {response ? (
         <div>
+          {forecastData ? <ForecastChart forecasts={forecastData} /> : ""}
           <CustomButton
             text={"Prediction"}
             onClick={() => setIsPredictionModalOpen(true)}
