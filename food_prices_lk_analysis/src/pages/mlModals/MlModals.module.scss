@@ -251,8 +251,61 @@
 }
 
 .predictionDescription {
-    font-weight:400;
+    font-weight: 400;
     color: #003265;
     margin-bottom: 1rem;
     font-size: 18px;
+}
+
+.wrapCaliiCard {
+    display: inline-block;
+    text-align: left;
+    border-radius: 20px;
+    padding: 32px;
+    background-color: #FAFAFA;
+    border: 2px solid #EBEBEB;
+    max-width: 280px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+
+
+    .cardTitle {
+        font-size: 24px;
+        margin: 4px 0;
+    }
+
+    .scroeDescr {
+        margin: 20px 0;
+
+        .scroeTitle {
+
+            font: 16px;
+        }
+    }
+
+    .scoreVal {
+        font-size: 14px;
+        font-weight: 500;
+        color: #7A7A7A;
+    }
+
+    .scrDesc,
+    .scrDescMidDng,
+    .scrDescDng {
+        color: #7A7A7A;
+        font-size: 12px;
+    }
+
+    .scrDescDng {
+        color: #EC6522;
+    }
+
+    .scrDescMidDng {
+        color: #F13672;
+    }
+
+}
+
+.wrapCaliiCard:last-child {
+    margin-right: 0;
 }
