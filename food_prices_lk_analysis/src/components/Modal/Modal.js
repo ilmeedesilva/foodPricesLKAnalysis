@@ -67,7 +67,7 @@ const Modal = ({ getSelectedModal }) => {
           >
             <input
               type="checkbox"
-              class="card-checkbox"
+              className="card-checkbox"
               id="card1"
               onChange={(e) => setSelectedModal(MODAL_TYPES.LINEAR_REGRESSION)}
             />
@@ -95,7 +95,7 @@ const Modal = ({ getSelectedModal }) => {
           >
             <input
               type="checkbox"
-              class="card-checkbox"
+              className="card-checkbox"
               id="card2"
               onChange={(e) => setSelectedModal(MODAL_TYPES.RANDOM_FOREST)}
             />
@@ -123,7 +123,7 @@ const Modal = ({ getSelectedModal }) => {
           >
             <input
               type="checkbox"
-              class="card-checkbox"
+              className="card-checkbox"
               id="card3"
               onChange={(e) =>
                 setSelectedModal(MODAL_TYPES.SUPPORT_VECTOR_MACHINE)
@@ -153,7 +153,7 @@ const Modal = ({ getSelectedModal }) => {
           >
             <input
               type="checkbox"
-              class="card-checkbox"
+              className="card-checkbox"
               id="card4"
               onChange={(e) => setSelectedModal(MODAL_TYPES.KMEAN_CLUSTERING)}
             />

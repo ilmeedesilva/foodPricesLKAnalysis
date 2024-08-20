@@ -97,9 +97,8 @@ const RFExplanation = ({
 
       <p className="text-sm">
         <strong>Cross-Validation Scores:</strong>
-        <pre>
-          <i>{cvScores.length ? cvScores.join(", ") : "N/A"}</i>
-        </pre>
+        <i> {cvScores.length ? cvScores.join(", ") : "N/A"}</i>
+        <br />
         <i>
           These scores are obtained by evaluating the model on different subsets
           of the data. They provide an indication of the model's stability and
@@ -118,6 +117,7 @@ const RFExplanation = ({
           )}
         </pre> */}
         <i>
+          {" "}
           The average mean fit time is {meanFitTime} seconds and the average
           mean score time is {meanScoreTime} seconds.
         </i>

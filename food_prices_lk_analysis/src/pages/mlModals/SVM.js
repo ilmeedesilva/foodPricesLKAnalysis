@@ -8,8 +8,7 @@ import CustomModal from "../../custom/modal/CustomModal";
 import CloseIcon from "../../img/svg/Close.icon";
 import SVMExplanation from "./SVMExplanation";
 import CustomTable from "../../custom/table/CustomTable";
-
-const selectedables = ["market", "category", "commodity"];
+import MessageModal from "../../custom/message/MessageModal";
 
 const SVM = ({ dataset, headers, variables, setStep }) => {
   const [response, setResponse] = useState(null);
@@ -42,53 +41,28 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     return `${year}-${month < 10 ? `0${month}` : month}`;
   };
 
-  function getMinMaxDates(data) {
-    console.log("DATA LEN: ", data.length);
-
-    if (data.length) {
-      const dates = data.map((row) => new Date(row.date));
-
-      const minDate = new Date(Math.min(...dates));
-      const maxDate = new Date(Math.max(...dates));
-
-      console.log("minDate: ", minDate);
-      console.log("maxDate: ", maxDate);
-
-      setStartDate(minDate);
-      setEndDate(maxDate);
-
-      console.log("START DATE: ", selectStartDate);
-      console.log("END DATE: ", selectEndsDate);
-    }
-  }
-
   const getMinDate = () => {
     if (dataset.length) {
-        const dates = dataset.map((row) => new Date(row.date));
-        const minDate = new Date(Math.min(...dates));
-        return minDate.toISOString().split('T')[0];  // Format as 'YYYY-MM-DD'
+      const dates = dataset.map((row) => new Date(row.date));
+      const minDate = new Date(Math.min(...dates));
+      return minDate.toISOString().split("T")[0];
     }
-};
+  };
 
-const getMaxDate = () => {
+  const getMaxDate = () => {
     if (dataset.length) {
-        const dates = dataset.map((row) => new Date(row.date));
-        const maxDate = new Date(Math.max(...dates));  // Fixed to use Math.max instead of Math.min
-        return maxDate.toISOString().split('T')[0];   // Convert to ISO string without timezone
+      const dates = dataset.map((row) => new Date(row.date));
+      const maxDate = new Date(Math.max(...dates));
+      return maxDate.toISOString().split("T")[0];
     }
-};
-
-  // useEffect(() => {
-  //   if (dataset && dataset.length) {
-  //     getMinMaxDates(dataset);
-  //   }
-  // }, [dataset]);
+  };
 
   const handleSVM = async () => {
     setIsLoading(true);
     try {
       const responfFromRF = await CareBearFoods.handleSVMEvaluate(dataset);
       setResponse(responfFromRF);
+      setError("");
     } catch (e) {
       setError(e);
     } finally {
@@ -106,6 +80,7 @@ const getMaxDate = () => {
       });
 
       setResponseForHighLow(responfFromRF);
+      setError("");
     } catch (e) {
       setError(e);
     } finally {
@@ -137,6 +112,7 @@ const getMaxDate = () => {
       setForecasts(formattedForecasts);
       setIsPredictionModalOpen(false);
       setIsLoading(false);
+      setError("");
     } catch (e) {
       setError(e);
       setIsLoading(false);
@@ -169,6 +145,14 @@ const getMaxDate = () => {
 
     return (
       <div className={style.forecastTable}>
+        {error ? (
+          <div className={style.alertModal}>
+            <MessageModal type={"error"} description={error} />
+          </div>
+        ) : (
+          ""
+        )}
+
         {chunkedCommodities.map((commodityChunk, chunkIndex) => (
           <div key={chunkIndex} className={style.row}>
             {commodityChunk.map((commodity) => (
@@ -224,8 +208,8 @@ const getMaxDate = () => {
               <div className={style.predictedItemSummery}>
                 <strong>Selected Markets:</strong>{" "}
                 <div className={style.predictedItemWrp}>
-                  {selectedMarkets.map((item) => (
-                    <p>{item}</p>
+                  {selectedMarkets.map((item, index) => (
+                    <p key={index}>{item}</p>
                   ))}
                 </div>
               </div>
@@ -342,7 +326,7 @@ const getMaxDate = () => {
                     <div className={style.filterItemSection}>
                       <h6 className="mb-2 mt-2">Market</h6>
                       <div className={style.headersWrp}>
-                        {selectedMarkets.map((header) => (
+                        {selectedMarkets.map((header, index) => (
                           <button
                             className={style.headerItem}
                             onClick={() =>
@@ -350,6 +334,7 @@ const getMaxDate = () => {
                                 pre.filter((item) => item !== header)
                               )
                             }
+                            key={index}
                           >
                             <p>{header}</p>
                             <CloseIcon size={12} color={"#496bf3"} />
@@ -365,7 +350,7 @@ const getMaxDate = () => {
                     <div className={style.filterItemSection}>
                       <h6 className="mb-0">Category</h6>
                       <div className={style.headersWrp}>
-                        {selectedCategory.map((header) => (
+                        {selectedCategory.map((header, index) => (
                           <button
                             className={style.headerItem}
                             onClick={() =>
@@ -373,6 +358,7 @@ const getMaxDate = () => {
                                 pre.filter((item) => item !== header)
                               )
                             }
+                            key={index}
                           >
                             <p>{header}</p>
                             <CloseIcon size={12} color={"#496bf3"} />

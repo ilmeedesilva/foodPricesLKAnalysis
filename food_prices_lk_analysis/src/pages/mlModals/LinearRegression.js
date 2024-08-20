@@ -14,6 +14,7 @@ import RiskManagementChart from "../../custom/charts/RiskManagementChart/RiskMan
 import CloseIcon from "../../img/svg/Close.icon";
 import RegressionBarChart from "./RegressionBarChart";
 import CustomTable from "../../custom/table/CustomTable";
+import MessageModal from "../../custom/message/MessageModal";
 
 const numarics = ["price", "usdprice", "USD RATE"];
 const LinearRegression = ({ dataset, variables, headers, setStep }) => {
@@ -84,6 +85,10 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
     setOpenFilterModal(false);
   };
 
+  const handleRFPredictionsCancel = () => {
+    setIsPredictionModalOpen(false);
+  };
+
   const handleRFPredictions = async () => {
     setIsLoading(true);
     try {
@@ -94,6 +99,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
         commodity: selectedCommodity,
       });
       setLinearPredictionResponse(responfFromRF);
+      handleRFPredictionsCancel();
     } catch (e) {
       setError(e);
     } finally {
@@ -120,6 +126,14 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
 
   return (
     <div>
+      {error ? (
+        <div className={style.alertModal}>
+          <MessageModal type={"error"} description={error} />
+        </div>
+      ) : (
+        ""
+      )}
+
       {response ? (
         <div>
           <CustomButton
@@ -299,7 +313,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                     <div className={style2.filterItemSection}>
                       <h6 className="mb-2 mt-2">Market</h6>
                       <div className={style2.headersWrp}>
-                        {selectedMarkets.map((header) => (
+                        {selectedMarkets.map((header, index) => (
                           <button
                             className={style2.headerItem}
                             onClick={() =>
@@ -307,6 +321,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                                 pre.filter((item) => item !== header)
                               )
                             }
+                            key={index}
                           >
                             <p>{header}</p>
                             <CloseIcon size={12} color={"#496bf3"} />
@@ -322,7 +337,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                     <div className={style2.filterItemSection}>
                       <h6 className="mb-0">Category</h6>
                       <div className={style2.headersWrp}>
-                        {selectedCategory.map((header) => (
+                        {selectedCategory.map((header, index) => (
                           <button
                             className={style2.headerItem}
                             onClick={() =>
@@ -330,6 +345,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                                 pre.filter((item) => item !== header)
                               )
                             }
+                            key={index}
                           >
                             <p>{header}</p>
                             <CloseIcon size={12} color={"#496bf3"} />
@@ -370,7 +386,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
               <CustomButton
                 buttonClass={"CANCEL"}
                 text={"Cancel"}
-                onClick={handleCancel}
+                onClick={handleRFPredictionsCancel}
                 loading={isLoading}
               />
               <CustomButton

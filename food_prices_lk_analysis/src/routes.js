@@ -13,13 +13,25 @@ const AppRoutes = () => (
   <>
     <TopNavigation />
     <Routes>
-      <Route path="/" element={<Dashboard />} />
-      <Route path="/data-exploration" element={<DataExploration />} />
-      <Route path="/model-selection" element={<ModelSelection />} />
-      <Route path="/predictions" element={<Predictions />} />
-      <Route path="/datasets" element={<DatasetsSelection />} />
-      <Route path="/performance-analysis" element={<PerformanceAnalysis />} />
-      <Route path="/reports" element={<Reports />} />
+      <Route path="/" exact={true} element={<Dashboard />} />
+      <Route
+        path="/data-exploration"
+        exact={true}
+        element={<DataExploration />}
+      />
+      <Route
+        path="/model-selection"
+        exact={true}
+        element={<ModelSelection />}
+      />
+      <Route path="/predictions" exact={true} element={<Predictions />} />
+      <Route path="/datasets" exact={true} element={<DatasetsSelection />} />
+      <Route
+        path="/performance-analysis"
+        exact={true}
+        element={<PerformanceAnalysis />}
+      />
+      <Route path="/reports" exact={true} element={<Reports />} />
     </Routes>
   </>
 );

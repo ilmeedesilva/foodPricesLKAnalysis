@@ -95,9 +95,9 @@ const SVMExplanation = ({
 
       <p className="text-sm">
         <strong>Cross-Validation Scores:</strong>
-        <pre>
-          <i>{cvScores.length ? cvScores.join(", ") : "N/A"}</i>
-        </pre>
+        <br />
+        <i> {cvScores.length ? cvScores.join(", ") : "N/A"}</i>
+
         <i>
           These scores are obtained by evaluating the model on different subsets
           of the data. They provide an indication of the model's stability and
@@ -109,6 +109,7 @@ const SVMExplanation = ({
       <p className="text-sm">
         <strong>Grid Search Results:</strong>
         <i>
+          {" "}
           The average mean fit time is {meanFitTime} seconds, and the average
           mean score time is {meanScoreTime} seconds.
         </i>
