@@ -203,7 +203,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>Accuracy:</strong>{" "}
+          <strong className="special-header">Accuracy:</strong>{" "}
           <i>
             The accuracy of the model is{" "}
             <strong>{accuracy ? accuracy.toFixed(4) : "N/A"}</strong>.
@@ -219,7 +219,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>Classification Report:</strong>
+          <strong className="special-header">Classification Report:</strong>
         </p>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {formatClassificationReport(classificationReport)}
@@ -230,7 +230,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>Confusion Matrix:</strong>
+          <strong style={{ color: "#0793D8" }}>Confusion Matrix:</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           The Heatmap shows the distribution of true positives, false positives,
@@ -244,7 +244,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>Cross-Validation Scores:</strong>
+          <strong className="special-header">Cross-Validation Scores:</strong>
         </p>
         <p style={{ fontSize: "14px", color: "#7f8c8d" }}>
           <strong>{cvScores.length ? cvScores.join(", ") : "N/A"}</strong>
@@ -261,7 +261,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>Grid Search Results:</strong>
+          <strong className="special-header">Grid Search Results:</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           The average mean fit time is <strong>{meanFitTime}</strong> seconds,
@@ -274,9 +274,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>
-            Mean Absolute Error (MAE):
-          </strong>
+          <strong className="special-header">Mean Absolute Error (MAE):</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           The MAE is{" "}
@@ -292,9 +290,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>
-            Mean Squared Error (MSE):
-          </strong>
+          <strong className="special-header">Mean Squared Error (MSE):</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           The MSE is{" "}
@@ -311,7 +307,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>R-squared:</strong>
+          <strong className="special-header">R-squared:</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           The R-squared value is{" "}
@@ -324,7 +320,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>ROC Curve and AUC:</strong>
+          <strong className="special-header">ROC Curve and AUC:</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           The ROC Curve helps in evaluating the performance of the classifier
@@ -341,9 +337,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>
-            False Positive Rate (FPR):
-          </strong>
+          <strong className="special-header">False Positive Rate (FPR):</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           FPR values:{" "}
@@ -361,9 +355,7 @@ const SVMExplanation = ({
 
       <div style={{ marginBottom: "20px" }}>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>
-            True Positive Rate (TPR):
-          </strong>
+          <strong className="special-header">True Positive Rate (TPR):</strong>
         </p>
         <i style={{ fontSize: "14px", color: "#7f8c8d" }}>
           TPR values:{" "}

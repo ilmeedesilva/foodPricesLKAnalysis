@@ -186,27 +186,17 @@ const RFExplanation = ({
   const { meanFitTime, meanScoreTime } = calculateAverages(gridSearchResults);
 
   return (
-    <div
-      style={{
-        lineHeight: "1.6",
-        padding: "20px 0",
-      }}
-    >
-      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
-      <h2
-        className="mt-3 mb-3 header-md text-md"
-        style={{ color: "#2c3e50", fontWeight: "bold" }}
-      >
-        Random Forest Evaluation
-      </h2>
+    <div>
+      <hr />
+      <h2 className="mt-3 mb-3 header-md">Random Forest Evaluation</h2>
       <p className="text-sm">
         The Random Forest algorithm provides various metrics to evaluate the
         model's performance. Here is a detailed explanation of the results:
       </p>
 
-      <div style={{ marginBottom: "20px" }}>
+      <div>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>Accuracy:</strong>{" "}
+          <strong className="special-header ">Accuracy:</strong>{" "}
           <i>
             The accuracy of the model is{" "}
             <strong>{accuracy ? accuracy.toFixed(4) : "N/A"}</strong>.
@@ -218,22 +208,22 @@ const RFExplanation = ({
         </p>
       </div>
 
-      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <hr />
 
-      <div style={{ marginBottom: "20px" }}>
+      <div>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>Classification Report:</strong>
+          <strong>Classification Report:</strong>
         </p>
         <div className="d-flex flex-wrap">
           {formatClassificationReport(classificationReport)}
         </div>
       </div>
 
-      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <hr />
 
-      <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
-          <strong style={{ color: "#2980b9" }}>Confusion Matrix:</strong>
+      <div>
+        <p className="text-sm">
+          <strong className="special-header ">Confusion Matrix:</strong>
         </p>
         <i className="text-sm">
           The Heatmap shows the distribution of true positives, false positives,
@@ -244,11 +234,11 @@ const RFExplanation = ({
         <HeatmapChart confusionMatrix={confusionMatrix} />
       </div>
 
-      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <hr />
 
-      <div style={{ marginBottom: "20px" }}>
+      <div>
         <p className="text-sm">
-          <strong style={{ color: "#2980b9" }}>Cross-Validation Scores:</strong>
+          <strong className="special-header">Cross-Validation Scores:</strong>
         </p>
         <p className="text-sm">
           <strong>{cvScores.length ? cvScores.join(", ") : "N/A"}</strong>
@@ -261,11 +251,11 @@ const RFExplanation = ({
         </i>
       </div>
 
-      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <hr />
 
-      <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
-          <strong style={{ color: "#2980b9" }}>Grid Search Results:</strong>
+      <div>
+        <p className="text-sm">
+          <strong className="special-header">Grid Search Results:</strong>
         </p>
         <i className="text-sm">
           The average mean fit time is <strong>{meanFitTime}</strong> seconds,
@@ -274,11 +264,11 @@ const RFExplanation = ({
         </i>
       </div>
 
-      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <hr />
 
-      <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
-          <strong style={{ color: "#2980b9" }}>
+      <div>
+        <p className="text-sm">
+          <strong className="special-header ">
             Mean Absolute Error (MAE):
           </strong>
         </p>
@@ -292,13 +282,11 @@ const RFExplanation = ({
         </i>
       </div>
 
-      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <hr />
 
-      <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
-          <strong style={{ color: "#2980b9" }}>
-            Mean Squared Error (MSE):
-          </strong>
+      <div>
+        <p className="text-sm">
+          <strong className="special-header">Mean Squared Error (MSE):</strong>
         </p>
         <i className="text-sm">
           The MSE is{" "}
@@ -311,11 +299,11 @@ const RFExplanation = ({
         </i>
       </div>
 
-      <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+      <hr />
 
-      <div style={{ marginBottom: "20px" }}>
-        <p className="text-sm" className={style.scoreVal}>
-          <strong style={{ color: "#2980b9" }}>R-squared:</strong>
+      <div>
+        <p className="text-sm">
+          <strong className="special-header">R-squared:</strong>
         </p>
         <i className="text-sm">
           The R-squared value is{" "}
