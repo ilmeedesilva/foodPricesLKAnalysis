@@ -42,6 +42,13 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const [error, setError] = useState("");
   const [forecasts, setForecasts] = useState({});
 
+  const ScrollToTopButton = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const [selectedDateRange, setSelectedDateRange] = useState({
     startDate: "",
     endDate: "",
@@ -139,6 +146,11 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
     );
   };
 
+  const handlePredictionClick = () => {
+    ScrollToTopButton();
+    setIsPredictionModalOpen(true);
+  };
+
   return (
     <div>
       {error ? (
@@ -153,10 +165,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
           <h2 className="text-md mt-3">Predictions - Forecast Prices</h2>
           <PredictionDescription />
 
-          <CustomButton
-            text={"Prediction"}
-            onClick={() => setIsPredictionModalOpen(true)}
-          />
+          <CustomButton text={"Prediction"} onClick={handlePredictionClick} />
 
           {responseForPredict ? (
             <div className={style.selectedFilters}>

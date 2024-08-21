@@ -54,6 +54,13 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
 
   const [forecastData, setForecastData] = useState({});
 
+  const ScrollToTopButton = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -234,6 +241,11 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     );
   };
 
+  const handlePredictionClick = () => {
+    ScrollToTopButton();
+    setIsPredictionModalOpen(true);
+  };
+
   return (
     <div>
       {response ? (
@@ -241,10 +253,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
           {forecastData ? <ForecastChart forecasts={forecastData} /> : ""}
           <h2 className="text-md mt-3">Predictions - Forecast Prices</h2>
           <PredictionDescription />
-          <CustomButton
-            text={"Prediction"}
-            onClick={() => setIsPredictionModalOpen(true)}
-          />
+          <CustomButton text={"Prediction"} onClick={handlePredictionClick} />
 
           {responseForPredict ? (
             <div className={style.selectedFilters}>
