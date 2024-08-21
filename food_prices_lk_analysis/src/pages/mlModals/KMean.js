@@ -109,15 +109,16 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
   const handleKmeaninsights = async () => {
     setIsLoading(true);
     try {
-      const responFromKm = await CareBearFoods.handleKmeaninsights(dataset);
-      setKmeanForeCasting(responFromKm);
-      setError("");
+        const responFromKm = await CareBearFoods.handleKmeaninsights({ dataset });
+        setKmeanForeCasting(responFromKm);
+        setError("");
     } catch (e) {
-      setError(e);
+        setError(e);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+};
+
 
   useEffect(() => {
     if (dataset && dataset.length) {

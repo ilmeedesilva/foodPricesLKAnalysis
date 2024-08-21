@@ -285,7 +285,7 @@ const RFExplanation = ({
         <i className="text-sm">
           The MAE is{" "}
           <strong>
-            {meanAbsoluteError ? meanAbsoluteError.toFixed(4) : "N/A"}
+            {meanAbsoluteError ? meanAbsoluteError.toFixed(4) : meanAbsoluteError}
           </strong>
           . This indicates the average magnitude of the errors in the
           predictions. Lower MAE values represent better model performance.
@@ -303,7 +303,7 @@ const RFExplanation = ({
         <i className="text-sm">
           The MSE is{" "}
           <strong>
-            {meanSquaredError ? meanSquaredError.toFixed(4) : "N/A"}
+            {meanSquaredError ? meanSquaredError.toFixed(4) : meanSquaredError}
           </strong>
           . This metric provides the average squared difference between the
           predicted and actual values. Lower MSE values indicate better model
@@ -319,7 +319,7 @@ const RFExplanation = ({
         </p>
         <i className="text-sm">
           The R-squared value is{" "}
-          <strong>{r2Score ? r2Score.toFixed(4) : "N/A"}</strong>, This shows
+          <strong>{r2Score ? r2Score.toFixed(4) : r2Score}</strong>, This shows
           the proportion of variance in the target variable that is predictable
           from the features. A higher R-squared indicates a better fit of the
           model to the data.
