@@ -10,6 +10,9 @@ import SVMExplanation from "./SVMExplanation";
 import CustomTable from "../../custom/table/CustomTable";
 import ForecastChart from "./ForecastChart";
 import MessageModal from "../../custom/message/MessageModal";
+import ConfusionMatrixHeatmap from "./SVMCrossValidationScoreDistribution";
+import CrossValidationScoreDistribution from "./SVMCrossValidationScoreDistribution";
+import GridSearchLinePlot from "./SVMGridSearchLinePlot";
 
 const selectedables = ["market", "category", "commodity"];
 
@@ -191,8 +194,6 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
       chunkedCommodities.push(commodities.slice(i, i + 3));
     }
 
-    
-
     return (
       <div className={style.forecastTable}>
         {error ? (
@@ -248,15 +249,10 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     setIsPredictionModalOpen(true);
   };
 
-  const plotImages = [
-    "Confusion Matrix Heatmap.png",
-    "Cross-Validation Score Distribution.png",
-    "Feature Distribution.png",
-    "Feature Importance.png",
-    "Grid Search Results.png",
-    "Outliers Visualization.png",
-    "Pairplot of Top Correlated Features.png",
-  ];
+  const plotImages = ["Feature Importance.png", "Outliers Visualization.png"];
+
+  const cValue = [0.1, 1];
+  const gamma = ["scale"];
 
   return (
     <div>
@@ -355,8 +351,63 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
             ""
           )}
           <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
+          <strong>
+            <h2>Graphs and Charts</h2>
+          </strong>
+
+          <strong>
+            <h3>Cross-Validation Score Distribution</h3>
+          </strong>
+          {response ? (
+            <CrossValidationScoreDistribution scores={response.cv_scores} />
+          ) : (
+            ""
+          )}
+          <p>
+            This box plot illustrates the distribution of model performance
+            scores (such as accuracy or R-squared) across multiple
+            cross-validation folds. The box represents the interquartile range
+            (IQR) of the scores, with the median score marked inside the box.
+            The whiskers indicate the range of the scores, and any points
+            outside this range represent outliers. This plot helps in
+            understanding the variability and stability of the model’s
+            performance.
+          </p>
+          <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+
+          <strong>
+            <h3>Grid Search Results</h3>
+          </strong>
+          {response ? (
+            <GridSearchLinePlot
+              param1Values={cValue}
+              param2Values={gamma}
+              scores={response.grid_search_results}
+            />
+          ) : (
+            ""
+          )}
+          <p>
+            This visualization shows the outcomes of a grid search process used
+            to tune the hyperparameters of a machine learning model. Grid search
+            systematically explores a predefined set of hyperparameters to find
+            the combination that yields the best performance according to a
+            specified metric. The plot typically includes a grid or matrix where
+            each cell represents a specific hyperparameter combination and its
+            corresponding performance score (e.g., accuracy, F1 score). This
+            visualization helps users understand how different hyperparameter
+            settings affect model performance and identify the optimal
+            parameters for the model. It provides insights into the sensitivity
+            of the model to various hyperparameters and guides the selection of
+            the best model configuration.
+          </p>
+
+          <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
           <div className={style.plotGallery}>
-            <strong><h3>Graphs and Charts</h3></strong>
+            <strong>
+              <h3>Other Visualizations</h3>
+            </strong>
             <div className={style.plotImagesContainer}>
               {plotImages.map((image, index) => (
                 <img
@@ -366,6 +417,25 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
                   className={style.plotImage}
                 />
               ))}
+              <p>
+                <strong>Outliers Visualization:</strong> This plot identifies
+                and highlights data points that are considered outliers in the
+                dataset—points that deviate significantly from the rest of the
+                data. Outliers can have a large impact on the model's
+                performance and may need special attention. This visualization
+                helps in understanding which points could be influencing the
+                model’s predictions in unexpected ways.
+              </p>
+              <p>
+                <strong> Top Feature Importances:</strong> This bar chart ranks
+                the features used in the model according to their importance in
+                making predictions. The importance is often determined by how
+                much each feature contributes to reducing uncertainty in the
+                model. Features with higher importance scores have a greater
+                influence on the model’s predictions. This visualization helps
+                users understand which variables are driving the predictions and
+                can provide insights into the underlying data relationships.
+              </p>
             </div>
           </div>
         </div>
