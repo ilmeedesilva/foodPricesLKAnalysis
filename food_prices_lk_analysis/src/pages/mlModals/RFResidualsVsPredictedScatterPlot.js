@@ -5,13 +5,13 @@ import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend, LineEleme
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, LineElement);
 
 const ResidualsVsPredictedScatterPlot = ({ yTest, yPred }) => {
-    // Calculate residuals
+ 
     const residuals = yTest.map((yActual, index) => yActual - yPred[index]);
 
     const data = {
         datasets: [
             {
-                label: 'Residuals vs Predicted Prices',
+                // label: 'Residuals vs Predicted Prices',
                 data: yPred.map((yPredicted, index) => ({
                     x: yPredicted,
                     y: residuals[index],

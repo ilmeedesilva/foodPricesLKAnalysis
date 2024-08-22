@@ -28,7 +28,7 @@ const CrossValidationScoreDistributionBoxPlot = ({ cvScores }) => {
     }];
 
     const layout = {
-        title: 'Cross-Validation Score Distribution',
+        // title: 'Cross-Validation Score Distribution',
         yaxis: {
             title: 'CV Scores'
         }

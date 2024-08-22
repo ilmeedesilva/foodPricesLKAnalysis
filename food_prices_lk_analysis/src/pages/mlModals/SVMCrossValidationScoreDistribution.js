@@ -7,27 +7,27 @@ const CrossValidationScoreDistribution = ({ scores }) => {
             <Plot
                 data={[
                     {
-                        y: scores, // Array of cross-validation scores
-                        type: 'box', // Box plot type
+                        y: scores, 
+                        type: 'box', 
                         name: 'CV Scores',
-                        boxpoints: 'all', // Show all points (for outliers)
-                        jitter: 0.5, // Spread the points
-                        pointpos: 0, // Position of points with respect to the box
-                        marker: { color: 'blue' }, // Customize marker color
-                        line: { color: 'darkblue' } // Customize line color
+                        boxpoints: 'all', 
+                        jitter: 0.5, 
+                        pointpos: 0, 
+                        marker: { color: 'blue' }, 
+                        line: { color: 'darkblue' } 
                     }
                 ]}
                 layout={{
-                    title: 'Cross-Validation Score Distribution',
+                    // title: 'Cross-Validation Score Distribution',
                     yaxis: {
                         title: 'Score',
-                        zeroline: false // Removes the line at y=0
+                        zeroline: false
                     },
                     xaxis: {
                         title: 'Cross-Validation Folds',
-                        showgrid: false // Removes the grid lines
+                        showgrid: false 
                     },
-                    showlegend: false, // No legend needed for this chart
+                    showlegend: false,
                     margin: {
                         l: 40,
                         r: 30,

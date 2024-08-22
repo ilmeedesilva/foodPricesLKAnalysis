@@ -5,11 +5,10 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const ResidualsDistributionHistogram = ({ yTest, yPred }) => {
-    // Calculate residuals
-    const residuals = yTest.map((yActual, index) => yActual - yPred[index]);
 
-    // Group residuals into bins for the histogram
-    const bins = 20; // Number of bars in the histogram
+    const residuals = yTest.map((yActual, index) => yActual - yPred[index]);
+    
+    const bins = 20; 
     const minResidual = Math.min(...residuals);
     const maxResidual = Math.max(...residuals);
     const binWidth = (maxResidual - minResidual) / bins;
@@ -17,7 +16,7 @@ const ResidualsDistributionHistogram = ({ yTest, yPred }) => {
     const histogramData = Array(bins).fill(0);
     residuals.forEach(residual => {
         const binIndex = Math.floor((residual - minResidual) / binWidth);
-        histogramData[Math.min(binIndex, bins - 1)] += 1; // Increment the count in the correct bin
+        histogramData[Math.min(binIndex, bins - 1)] += 1;
     });
 
     const data = {

@@ -5,14 +5,14 @@ import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Lege
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 const ActualVsPredictedScatterPlot = ({ yTest, yPred }) => {
-    // Calculate the min and max values for the ideal line
+
     const minValue = Math.min(...yTest, ...yPred);
     const maxValue = Math.max(...yTest, ...yPred);
 
     const data = {
       datasets: [
         {
-          label: 'Actual vs Predicted Prices',
+        //   label: 'Actual vs Predicted Prices',
           data: yTest.map((yActual, index) => ({
             x: yActual,
             y: yPred[index],

@@ -4,10 +4,10 @@ import Plot from 'react-plotly.js';
 const GridSearchLinePlot = ({ param1Values, param2Values, scores }) => {
     const traces = param2Values.map((param2Value, index) => {
         return {
-            x: param1Values, // Values of the first parameter (e.g., 'C' in SVM)
-            y: scores[index], // Corresponding scores for the current param2Value
-            mode: 'lines+markers', // Line plot with markers
-            name: `Param2: ${param2Value}`, // Legend entry for the second parameter value
+            x: param1Values, 
+            y: scores[index], 
+            mode: 'lines+markers', 
+            name: `Param2: ${param2Value}`, 
             line: {
                 shape: 'linear', // Line shape
                 width: 2,
@@ -23,9 +23,9 @@ const GridSearchLinePlot = ({ param1Values, param2Values, scores }) => {
             <Plot
                 data={traces}
                 layout={{
-                    title: 'Grid Search Results - Line Plot',
+                    // title: 'Grid Search Results - Line Plot',
                     xaxis: {
-                        title: 'Parameter 1 (e.g., C)',
+                        title: 'Parameter 1 (C - Hyperparameter)',
                     },
                     yaxis: {
                         title: 'Score',
