@@ -7,6 +7,7 @@
     .filterItemSection {
         display: flex;
         flex-direction: column;
+        width: 100%;
 
         .headersWrp {
             display: flex;
@@ -312,18 +313,102 @@
 
 .plotGallery {
     margin-top: 20px;
-  }
-  
-  .plotImagesContainer {
+}
+
+.plotImagesContainer {
     display: flex;
     flex-wrap: wrap;
-    gap: 24px; // Adjust spacing between images
-  }
-  
-  .plotImage {
-    width: 100%; // Adjust width as needed
-    max-width: 500px; // Adjust max-width as needed
+    gap: 24px;
+}
+
+.plotImage {
+    width: 100%;
+    max-width: 500px;
     height: auto;
-  }
-  
-  
+}
+
+
+.predictionHeaderWrp {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .predictionItemsWrp {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        .selectionItem {
+            width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: transparent;
+            border: 2px solid;
+            border: 2px solid #d8dde6 !important;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #3e4654;
+            margin: 8px 8px 8px 0;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        .selectionItemAct {
+            border: 2px solid #496bf3 !important;
+            color: #496bf3;
+        }
+    }
+
+
+
+
+}
+
+.wrpPredictedResultsWthTbWrp {
+    display: flex;
+    width: 100%;
+    margin: 20px 0;
+
+    .chartWrp {
+        width: 75% !important;
+        margin-right: 8px;
+        border-radius: 8px;
+        box-shadow: 1px 1px 4px 1px #d9d9d9;
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+
+    .tableWrp {
+        width: 25% !important;
+        margin-left: 8px;
+        border-radius: 8px;
+        box-shadow: 1px 1px 4px 1px #d9d9d9;
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+
+
+}
+
+.chartArea,
+.tableArea {
+    height: 435px;
+}
+
+.tableArea {
+    margin-bottom: 40px;
+}
+
+.chartArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    border-bottom: 1px dotted #d9d9d9;
+}

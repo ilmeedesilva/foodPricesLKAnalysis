@@ -44,7 +44,7 @@ const CareBearFoods = {
   linearPredictionResponse: async (data) => {
     try {
       return await apiUtils.post(
-        "modals/linear_regression/price_predictions",
+        "modals/predictions/linear_regression/price_predictions",
         data,
         SERVICETYPE.CARE_BEAR_SERVICE
       );
