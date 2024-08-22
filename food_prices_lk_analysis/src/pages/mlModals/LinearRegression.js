@@ -15,6 +15,7 @@ import CloseIcon from "../../img/svg/Close.icon";
 import RegressionBarChart from "./RegressionBarChart";
 import CustomTable from "../../custom/table/CustomTable";
 import MessageModal from "../../custom/message/MessageModal";
+import { MODAL_TITLES } from "../../enums";
 
 const numarics = ["price", "usdprice", "USD RATE"];
 const LinearRegression = ({ dataset, variables, headers, setStep }) => {
@@ -36,44 +37,61 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
     headers.commoditiy ?? []
   );
 
+  const ScrollToTopButton = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const handleLinearRegression = async () => {
     if (!linearXaxis.length || !linearYaxis) {
       if (!linearXaxis.length && linearYaxis) {
         setError("Must select Independent Variable");
       } else if (linearXaxis.length && !linearYaxis) {
         setError("Must select at least 1 Depending.");
+      } else {
+        setError("");
       }
       return;
     }
     setIsLoading(true);
-    try {
-      const respond = await CareBearFoods.handleLinearRegression({
-        dataset,
-        linearYaxis,
-        linearXaxis,
-      });
-      setResponse(respond);
-      const respondForRiskManagement = await CareBearFoods.getRiskManagement({
-        dataset,
-      });
-      const { dates } = respondForRiskManagement.risk_management;
+    if (dataset.length) {
+      try {
+        console.log("linearYaxis ", linearYaxis);
+        console.log("linearXaxis ", linearXaxis);
 
-      const formattedDates = dates.map((dateStr) => {
-        const date = new Date(dateStr);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        return `${year}-${month}`;
-      });
+        const respond = await CareBearFoods.handleLinearRegression({
+          dataset,
+          linearYaxis,
+          linearXaxis,
+        });
+        setResponse(respond);
+        const respondForRiskManagement = await CareBearFoods.getRiskManagement({
+          dataset,
+        });
+        setRisManagement([]);
+        const { dates } = respondForRiskManagement.risk_management;
+        const formattedDates = dates.map((dateStr) => {
+          const date = new Date(dateStr);
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          return `${year}-${month}`;
+        });
 
-      setRisManagement({
-        ...respondForRiskManagement.risk_management,
-        dates: formattedDates,
-      });
-    } catch (e) {
-      setError(e);
-    } finally {
+        setRisManagement({
+          ...respondForRiskManagement.risk_management,
+          dates: formattedDates,
+        });
+      } catch (e) {
+        setError(e);
+      } finally {
+        setIsLoading(false);
+        setOpenFilterModal(false);
+      }
+    } else {
+      setError("not enough data to show");
       setIsLoading(false);
-      setOpenFilterModal(false);
     }
   };
 
@@ -124,9 +142,15 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
     }
   }, [riskManagement]);
 
+  useEffect(() => {
+    if (error || openFilterModal || isPredictionModalOpen) {
+      ScrollToTopButton();
+    }
+  }, [error, openFilterModal, isPredictionModalOpen]);
+
   return (
     <div>
-      {error ? (
+      {error && !openFilterModal ? (
         <div className={style.alertModal}>
           <MessageModal type={"error"} description={error} />
         </div>
@@ -136,11 +160,17 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
 
       {response ? (
         <div>
-          <CustomButton
-            text={"Prediction"}
-            onClick={() => setIsPredictionModalOpen(true)}
-          />
-
+          <div className={`d-flex`}>
+            <CustomButton
+              text={"Prediction"}
+              onClick={() => setIsPredictionModalOpen(true)}
+            />
+            <div className="m-2" />
+            <CustomButton
+              text={"Test Accuracy"}
+              onClick={() => setOpenFilterModal(true)}
+            />
+          </div>
           <div className={`${[style2.wrapGrptbleChr].join(" ")} mt-4 mb-4`}>
             <h5 className={style2.graphTitle}>Risk Management</h5>
             <div className={style2.groupTblChrt}>
@@ -227,7 +257,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
 
       {openFilterModal ? (
         <CustomModal
-          title={"Filter"}
+          title={MODAL_TITLES.ACCURANCY_PREDICTION_MODAL}
           open={setOpenFilterModal}
           error={{ description: error }}
         >
@@ -361,7 +391,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                     <div className={style2.filterItemSection}>
                       <h6 className="mb-0">Commodity</h6>
                       <div className={style2.headersWrp}>
-                        {selectedCommodity.map((header) => (
+                        {selectedCommodity.map((header, index) => (
                           <button
                             className={style2.headerItem}
                             onClick={() =>
@@ -369,6 +399,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                                 pre.filter((item) => item !== header)
                               )
                             }
+                            key={index}
                           >
                             <p>{header}</p>
                             <CloseIcon size={12} color={"#496bf3"} />

@@ -10,6 +10,7 @@ const CustomButton = ({
   rightIcon = "",
   onClick,
   loading = false,
+  disabled = false,
 }) => {
   const getButtonClass = () => {
     switch (buttonClass) {
@@ -37,7 +38,7 @@ const CustomButton = ({
       className={getButtonClass()}
       type={type}
       onClick={(event) => onClick(event)}
-      disabled={loading}
+      disabled={loading || disabled}
     >
       {!icon && !rightIcon && loading ? (
         <div className={style.buttonLoading}>
