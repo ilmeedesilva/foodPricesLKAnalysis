@@ -332,10 +332,13 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
           <strong>
             <h3>Cross-Validation Score Distribution</h3>
           </strong>
-          {response.y_test && response.y_pred && (
+          
+          {response ? (
             <CrossValidationScoreDistributionBoxPlot
               cvScores={response.cv_scores}
             />
+          ) : (
+            ""
           )}
           <p>
             This box plot illustrates the distribution of model performance

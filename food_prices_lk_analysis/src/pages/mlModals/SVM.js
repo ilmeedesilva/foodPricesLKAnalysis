@@ -13,6 +13,7 @@ import MessageModal from "../../custom/message/MessageModal";
 import ConfusionMatrixHeatmap from "./SVMCrossValidationScoreDistribution";
 import CrossValidationScoreDistribution from "./SVMCrossValidationScoreDistribution";
 import GridSearchLinePlot from "./SVMGridSearchLinePlot";
+import CrossValidationScoreDistributionLineChart from "./SVMCrossValidationScoreDistributionLineChart";
 
 const selectedables = ["market", "category", "commodity"];
 
@@ -359,11 +360,21 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
           <strong>
             <h3>Cross-Validation Score Distribution</h3>
           </strong>
-          {response ? (
-            <CrossValidationScoreDistribution scores={response.cv_scores} />
-          ) : (
-            ""
-          )}
+          <div style={{ display: "flex", flexDirection: "row", gap: "16px" }}>
+            {response ? (
+              <CrossValidationScoreDistribution scores={response.cv_scores} />
+            ) : (
+              ""
+            )}
+            {response ? (
+              <CrossValidationScoreDistributionLineChart
+                scores={response.cv_scores}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+
           <p>
             This box plot illustrates the distribution of model performance
             scores (such as accuracy or R-squared) across multiple
