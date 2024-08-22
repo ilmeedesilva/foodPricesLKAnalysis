@@ -23,7 +23,7 @@ import LinearRegression from "../mlModals/LinearRegression";
 import RandomForest from "../mlModals/RandomForest";
 import Stepper from "../../components/Stepper/Stepper";
 import Modal from "../../components/Modal/Modal";
-import { MODAL_TYPES } from "../../enums";
+import { ERROR_MESSAGES, MODAL_TYPES } from "../../enums";
 import NoData from "../../components/NoData/NoData";
 import SVM from "../mlModals/SVM";
 import KMean from "../mlModals/KMean";
@@ -284,6 +284,11 @@ const DataExploration = () => {
         ...filteredAdmin1,
         ...filteredAdmin2,
       ]);
+
+      if (!filteredRows.length) {
+        setError(ERROR_MESSAGES.NO_ENOUGH_DATA);
+      }
+
       return {
         headers: filteredHeaders,
         rows: filteredRows,
@@ -310,7 +315,7 @@ const DataExploration = () => {
   const handleNextStep = () => {
     if (currentStep === 2) {
       if (!selectedModal) {
-        setError("Must select at least 1 modal to continue.");
+        setError(ERROR_MESSAGES.MUST_SELECT_A_MODAL);
         return;
       } else {
         setError("");
@@ -321,11 +326,23 @@ const DataExploration = () => {
 
   useEffect(() => {
     if (currentStep === 2 && selectedModal) {
-      if (error === "Must select at least 1 modal to continue.") {
+      if (error === ERROR_MESSAGES.MUST_SELECT_A_MODAL) {
         setError("");
       }
     }
   }, [selectedModal]);
+  useEffect(() => {
+    if (tableData?.rows?.length && error === ERROR_MESSAGES.NO_DATA_TO_SHOW) {
+      setError("");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (error === ERROR_MESSAGES.NO_ENOUGH_DATA && filterModalOpen) {
+      setError("");
+      getCsvData();
+    }
+  }, [error, filterModalOpen]);
 
   function getMinMaxDates(data) {
     if (data.length) {
@@ -340,6 +357,12 @@ const DataExploration = () => {
     }
     return "";
   }
+
+  useEffect(() => {
+    if (error || filterModalOpen) {
+      ScrollToTopButton();
+    }
+  }, [error, filterModalOpen]);
 
   return (
     <div className="content-wrap">
@@ -381,8 +404,12 @@ const DataExploration = () => {
             <h6>Available Columns</h6>
             <div className={style2.headerListWrp}>
               {filterHeader && filterHeader.length ? (
-                filterHeader.map((item) => {
-                  return <div className={style2.headerList}>{item}</div>;
+                filterHeader.map((item, index) => {
+                  return (
+                    <div className={style2.headerList} key={index}>
+                      {item}
+                    </div>
+                  );
                 })
               ) : isLoading ? (
                 <span className={style2.summeryValue}>Loading...</span>
@@ -418,7 +445,6 @@ const DataExploration = () => {
             "Finshed"
           )}
         </h1>
-
         <CustomButton
           text={"Next"}
           buttonClass={"NEXT_BUTTON"}
@@ -427,6 +453,7 @@ const DataExploration = () => {
             handleNextStep();
           }}
           loading={isLoading}
+          disabled={!tableData?.rows?.length}
         />
       </div>
 

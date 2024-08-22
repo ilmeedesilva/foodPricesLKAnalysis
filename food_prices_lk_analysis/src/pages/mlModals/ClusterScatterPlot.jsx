@@ -7,8 +7,6 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, ScatterController, Ti
 
 // Function to extract scatter plot data
 const extractScatterPlotData = (yValues) => {
-  console.log('Extracting scatter plot data:', yValues); // Debug log
-
   return yValues.map((y, index) => ({
     x: index, // x values are the indices of the points
     y: y
@@ -30,8 +28,6 @@ const ClusterScatterPlot = ({ clusters, scatterPlotData }) => {
     // Extract data for each cluster
     const yValues = scatterPlotData[clusterId]?.y || [];
     const clusterData = extractScatterPlotData(yValues);
-
-    console.log(`Cluster ${clusterId} data:`, clusterData); // Debug log
 
     return {
       label: `Cluster ${clusterId}`,

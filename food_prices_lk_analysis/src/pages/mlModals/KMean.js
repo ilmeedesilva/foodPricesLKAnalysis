@@ -26,7 +26,7 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
   const [selectedCommodity, setSelectedCommodity] = useState(
     headers.commodity ?? []
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isPredictionModalOpen, setIsPredictionModalOpen] = useState(false);
   const [error, setError] = useState("");
   const [forecasts, setForecasts] = useState({});
@@ -238,8 +238,6 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
     ));
   };
 
-
-
   // const renderCombinedTable = (clusters, scatterPlotData) => {
   //   const clusterEntries = Object.entries(clusters);
   //   const scatterEntries = Object.entries(scatterPlotData);
@@ -277,17 +275,15 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
   //                       "Commodity": scatterData?.x[idx] || "N/A",
   //                       "Median Price": scatterData?.y[idx] || "N/A",
   //                     })),
-                     
-                      
+
   //                   }}
-                   
+
   //                 />
-                 
-           
+
   //               </div>
   //             );
   //           })}
-             
+
   //         </div>
   //       ))}
   //     </div>
@@ -297,13 +293,13 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
   const renderCombinedTable = (clusters, scatterPlotData) => {
     const clusterEntries = Object.entries(clusters);
     const scatterEntries = Object.entries(scatterPlotData);
-  
+
     // Group tables into rows of 3
     const rows = [];
     for (let i = 0; i < clusterEntries.length; i += 3) {
       rows.push(clusterEntries.slice(i, i + 3));
     }
-  
+
     return (
       <div>
         {rows.map((row, rowIndex) => (
@@ -319,19 +315,15 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
               const scatterData = scatterEntries.find(
                 (_, idx) => idx === index + rowIndex * 3
               )?.[1];
-  
+
               const tableData = {
                 headers: ["Point Index", "Commodity", "Median Price"],
                 rows: points.map((point, idx) => ({
                   "Point Index": point,
-                  "Commodity": scatterData?.x[idx] || "N/A",
+                  Commodity: scatterData?.x[idx] || "N/A",
                   "Median Price": scatterData?.y[idx] || "N/A",
                 })),
               };
-  
-              // Log the table data here
-              console.log(`Data for Cluster ${clusterId}:`, tableData);
-  
               return (
                 <div key={clusterId} style={{ flex: "1", marginRight: "10px" }}>
                   <h4>Cluster {clusterId}</h4>
@@ -344,7 +336,6 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
       </div>
     );
   };
-  
 
   return (
     <div>
@@ -361,7 +352,8 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
             )}
             <h3>Market and Commodity Insights</h3>
             {/* {console.log("BEFORE KMEAN INSIGHTS", kmeanInsights)} */}
-            {Object.values(kmeanInsights).length > 0 &&
+            {kmeanInsights &&
+              Object.values(kmeanInsights).length > 0 &&
               Object.values(kmeanInsights).map((insight, index) => (
                 <div key={index}>
                   <h5>Cluster {index}</h5>
@@ -386,7 +378,7 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
                 clusters={kMeanEvaluateResponse.clusters}
               />
             )} */}
-            {kMeanEvaluateResponse && (
+            {kMeanEvaluateResponse && !isLoading && (
               <ClusterEvaluation
                 clusterSizes={
                   kMeanEvaluateResponse.interpretation.cluster_sizes || {}
@@ -475,15 +467,9 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
         )}
         {isPredictionModalOpen && (
           <CustomModal
-            onClose={() => setIsPredictionModalOpen(false)}
+            open={setIsPredictionModalOpen}
             title={"Prediction Results"}
           >
-            <button
-              className={style.closeBtn}
-              onClick={() => setIsPredictionModalOpen(false)}
-            >
-              <CloseIcon />
-            </button>
             {kmeanForeCasting && (
               <div className={style.tableWrapper}>
                 {renderForecastTable(forecasts)}
