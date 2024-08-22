@@ -16,15 +16,25 @@ import RegressionBarChart from "./RegressionBarChart";
 import CustomTable from "../../custom/table/CustomTable";
 import MessageModal from "../../custom/message/MessageModal";
 import { MODAL_TITLES } from "../../enums";
+import CheckedIcon from "../../img/svg/Checked.icon";
+import LinearRegressionChart from "../../custom/charts/LinearRegressionChart/LinearRegressionChart";
+import { LineChart } from "recharts";
+import SimpleLineChart from "../../custom/charts/LineChart/LineChart";
+import ComparisonChart from "../../custom/charts/ComparisonChart/ComparisonChart";
+import BarChartComponent from "../../custom/charts/BarChart/BarChart";
 
 const numarics = ["price", "usdprice", "USD RATE"];
+const predictableOptions = ["Category", "Commodity"];
 const LinearRegression = ({ dataset, variables, headers, setStep }) => {
   const [linearXaxis, setLinearXaxis] = useState([]);
   const [linearYaxis, setLinearYaxis] = useState(variables ? variables[0] : []);
   const [openFilterModal, setOpenFilterModal] = useState(true);
   const [response, setResponse] = useState(null);
-  const [linearPredictionResponse, setLinearPredictionResponse] =
-    useState(null);
+  const [linearPredictionResponse, setLinearPredictionResponse] = useState({
+    Category: [],
+    Commodity: [],
+    Market: [],
+  });
   const [riskManagement, setRisManagement] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -36,6 +46,8 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
   const [selectedCommodity, setSelectedCommodity] = useState(
     headers.commoditiy ?? []
   );
+
+  const [selectedPredictionType, setSelectedPredictionType] = useState("");
 
   const ScrollToTopButton = () => {
     window.scrollTo({
@@ -110,13 +122,29 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
   const handleRFPredictions = async () => {
     setIsLoading(true);
     try {
-      const responfFromRF = await CareBearFoods.linearPredictionResponse({
+      const responseFromRF = await CareBearFoods.linearPredictionResponse({
         dataset,
-        market: selectedMarkets,
-        category: selectedCategory,
-        commodity: selectedCommodity,
+        market: selectedPredictionType === "Market" ? selectedMarkets : [],
+        category: selectedPredictionType === "Category" ? selectedCategory : [],
+        commodity:
+          selectedPredictionType === "Commodity" ? selectedCommodity : [],
       });
-      setLinearPredictionResponse(responfFromRF);
+
+      if (typeof responseFromRF !== "string") {
+        setLinearPredictionResponse((prev) => {
+          const updatedState = { ...prev };
+          if (selectedPredictionType === "Commodity") {
+            updatedState.Commodity = responseFromRF;
+          } else if (selectedPredictionType === "Category") {
+            updatedState.Category = responseFromRF;
+          } else if (selectedPredictionType === "Market") {
+            updatedState.Market = responseFromRF;
+          }
+
+          return updatedState;
+        });
+      }
+
       handleRFPredictionsCancel();
     } catch (e) {
       setError(e);
@@ -124,6 +152,8 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
       setIsLoading(false);
     }
   };
+
+  console.log("linearPredictionResponse - ", linearPredictionResponse);
 
   const [actulePredictedForFullSet, setActulePredictedForFullSet] =
     useState(null);
@@ -148,6 +178,12 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
     }
   }, [error, openFilterModal, isPredictionModalOpen]);
 
+  useEffect(() => {
+    if (!isPredictionModalOpen) {
+      setSelectedPredictionType("");
+    }
+  }, [isPredictionModalOpen]);
+
   return (
     <div>
       {error && !openFilterModal ? (
@@ -171,6 +207,106 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
               onClick={() => setOpenFilterModal(true)}
             />
           </div>
+
+          {linearPredictionResponse &&
+            linearPredictionResponse.Category &&
+            Object.keys(linearPredictionResponse.Category).length > 0 && (
+              <div className={style2.wrpPredictedResultsWthTbWrp}>
+                <div className={style2.chartWrp}>
+                  <h5 className="text-md">
+                    Prediction Price for Categories for Next 6 Months
+                  </h5>
+                  {Object.keys(linearPredictionResponse.Category).map(
+                    (category) => (
+                      <div key={category} className={style2.chartArea}>
+                        <h6>{category}</h6>
+                        <LinearRegressionChart
+                          data={linearPredictionResponse.Category[category]}
+                        />
+                      </div>
+                    )
+                  )}
+                </div>
+                <div className={style2.tableWrp}>
+                  {Object.keys(linearPredictionResponse.Category).map(
+                    (category) => (
+                      <div key={category} className={style2.tableArea}>
+                        <h6>{category}</h6>
+                        <CustomTable
+                          Data={{
+                            headers: ["date", "predicted_price"],
+                            rows: linearPredictionResponse.Category[category],
+                          }}
+                          isSelectedable={false}
+                          rowsPerView={9}
+                        />
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          {linearPredictionResponse &&
+            linearPredictionResponse.Commodity &&
+            Object.keys(linearPredictionResponse.Commodity).length > 0 && (
+              <div className={style2.wrpPredictedResultsWthTbWrp}>
+                <div className={style2.chartWrp}>
+                  <h5 className="text-md">
+                    Prediction Price for Commodities for Next 6 Months
+                  </h5>
+                  {Object.keys(linearPredictionResponse.Commodity).map(
+                    (commodity) => (
+                      <div key={commodity} className={style2.chartArea}>
+                        <h6>{commodity}</h6>
+                        <LinearRegressionChart
+                          data={linearPredictionResponse.Commodity[commodity]}
+                        />
+                      </div>
+                    )
+                  )}
+                </div>
+                <div className={style2.tableWrp}>
+                  {Object.keys(linearPredictionResponse.Commodity).map(
+                    (commodity) => (
+                      <div key={commodity} className={style2.tableArea}>
+                        <h6>{commodity}</h6>
+                        <CustomTable
+                          Data={{
+                            headers: ["date", "predicted_price"],
+                            rows: linearPredictionResponse.Commodity[commodity],
+                          }}
+                          isSelectedable={false}
+                          rowsPerView={9}
+                        />
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          {linearPredictionResponse &&
+            linearPredictionResponse?.Market &&
+            Object.keys(linearPredictionResponse.Market).length > 0 && (
+              <div className={style2.wrpPredictedResultsWthTbWrp}>
+                <div className={style2.chartWrp}>
+                  <h5>Prediction Price for Markets for Next 6 Months</h5>
+                  <LinearRegressionChart
+                    data={linearPredictionResponse.Market}
+                  />
+                </div>
+                <div className={style2.tableWrp}>
+                  <CustomTable
+                    Data={{
+                      headers: ["date", "predicted_price"],
+                      rows: linearPredictionResponse.Market,
+                    }}
+                    isSelectedable={false}
+                    rowsPerView={9}
+                  />
+                </div>
+              </div>
+            )}
+
           <div className={`${[style2.wrapGrptbleChr].join(" ")} mt-4 mb-4`}>
             <h5 className={style2.graphTitle}>Risk Management</h5>
             <div className={style2.groupTblChrt}>
@@ -180,7 +316,8 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                     " "
                   )} mr-4`}
                 >
-                  <RiskManagementChart data={riskManagement} />{" "}
+                  {console.log("riskManagement - ", riskManagement)}
+                  <SimpleLineChart data={riskManagement} />{" "}
                 </div>
               )}
               {riskManagement && (
@@ -203,7 +340,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
               <h5 className={style2.graphTitle}>
                 Linear Regression Analysis for {linearYaxis}
               </h5>
-              <RegressionChart
+              <ComparisonChart
                 actuals={response.actuals}
                 predictions={response.predictions}
               />
@@ -213,7 +350,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                 <h5 className={style2.graphTitle}>
                   Linear Regression Analysis for {linearYaxis} (BarCharts)
                 </h5>
-                <RegressionBarChart
+                <BarChartComponent
                   actuals={response.actuals}
                   predictions={response.predictions}
                   labelX={linearXaxis}
@@ -335,11 +472,47 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
           >
             <div className={style2.filterWrp}>
               <div className={style2.filterItemSection}>
-                <h6 className="mb-2 mt-0 text-sm">
-                  Filter out the unwanted variables
-                </h6>
+                <div className={style2.predictionHeaderWrp}>
+                  <h5>Price Predictions</h5>
+                  <div className={style2.predictionItemsWrp}>
+                    {predictableOptions.map((header, index) => (
+                      <button
+                        className={
+                          header === selectedPredictionType
+                            ? [
+                                style2.selectionItem,
+                                style2.selectionItemAct,
+                              ].join(" ")
+                            : style2.selectionItem
+                        }
+                        onClick={() => setSelectedPredictionType(header)}
+                        key={index}
+                      >
+                        <p>{header}</p>
+                        <CheckedIcon
+                          size={15}
+                          color={
+                            header === selectedPredictionType
+                              ? "#496bf3"
+                              : "#3e4654"
+                          }
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {selectedPredictionType ? (
+                  <h6 className="mb-2 mt-0 text-sm">
+                    Filter out the unwanted variables
+                  </h6>
+                ) : (
+                  ""
+                )}
+
                 <div className={style2.headersWrp}>
-                  {selectedMarkets.length ? (
+                  {selectedPredictionType === "Market" &&
+                  selectedMarkets.length ? (
                     <div className={style2.filterItemSection}>
                       <h6 className="mb-2 mt-2">Market</h6>
                       <div className={style2.headersWrp}>
@@ -363,7 +536,8 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                     ""
                   )}
 
-                  {selectedCategory.length ? (
+                  {selectedPredictionType === "Category" &&
+                  selectedCategory.length ? (
                     <div className={style2.filterItemSection}>
                       <h6 className="mb-0">Category</h6>
                       <div className={style2.headersWrp}>
@@ -387,7 +561,8 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                     ""
                   )}
 
-                  {selectedCommodity.length ? (
+                  {selectedPredictionType === "Commodity" &&
+                  selectedCommodity.length ? (
                     <div className={style2.filterItemSection}>
                       <h6 className="mb-0">Commodity</h6>
                       <div className={style2.headersWrp}>
