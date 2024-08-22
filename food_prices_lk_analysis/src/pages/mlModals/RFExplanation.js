@@ -241,7 +241,11 @@ const RFExplanation = ({
           <strong className="special-header">Cross-Validation Scores:</strong>
         </p>
         <p className="text-sm">
-          <strong>{cvScores.length ? cvScores.join(", ") : "N/A"}</strong>
+          {Array.isArray(cvScores) && cvScores.length ? (
+            <strong>{cvScores.join(", ")}</strong>
+          ) : (
+            <strong> <i>{cvScores}</i></strong>
+          )}
         </p>
         <i className="text-sm">
           These scores are obtained by evaluating the model on different subsets

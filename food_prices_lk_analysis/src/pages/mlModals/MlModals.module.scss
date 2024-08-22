@@ -310,3 +310,20 @@
     margin-right: 0;
 }
 
+.plotGallery {
+    margin-top: 20px;
+  }
+  
+  .plotImagesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px; // Adjust spacing between images
+  }
+  
+  .plotImage {
+    width: 100%; // Adjust width as needed
+    max-width: 500px; // Adjust max-width as needed
+    height: auto;
+  }
+  
+  

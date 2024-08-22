@@ -174,6 +174,17 @@ const CareBearFoods = {
       console.log("error in handling K-Mean Forecast data : ", e);
     }
   },
+
+  getRFVisualizations: async (data) => {
+    try {
+      return await apiUtils.get(
+        "modals/rf/plots",
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in getting RF plots : ", e);
+    }
+  },
 };
 
 export default CareBearFoods;

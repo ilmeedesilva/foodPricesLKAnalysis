@@ -30,6 +30,7 @@ const PredictionDescription = () => (
 const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const [response, setResponse] = useState(null);
   const [responseForPredict, setResponseForPredict] = useState(null);
+  const [responseFromRFPlots, setResponseFromRFPlots] = useState(null);
   const [selectedMarkets, setSelectedMarkets] = useState(headers.markets ?? []);
   const [selectedCategory, setSelectedCategory] = useState(
     headers.category ?? []
@@ -41,6 +42,7 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
   const [isPredictionModalOpen, setIsPredictionModalOpen] = useState(false);
   const [error, setError] = useState("");
   const [forecasts, setForecasts] = useState({});
+  const [plotData, setPlotData] = useState({});
 
   const ScrollToTopButton = () => {
     window.scrollTo({
@@ -54,6 +56,15 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
     endDate: "",
   });
 
+  const plotImages = [
+    "actual_vs_predicted.png",
+    "cv_score_distribution.png",
+    "outliers_plot.png",
+    "residual_histogram.png",
+    "residuals_vs_predicted.png",
+    "top_feature_importances.png",
+  ];
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -66,6 +77,20 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
     try {
       const responseFromRF = await CareBearFoods.handleRFEvaluate(dataset);
       setResponse(responseFromRF);
+      setError("");
+    } catch (e) {
+      setError(e.message || "An unexpected error occurred.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRFPlots = async () => {
+    setIsLoading(true);
+    try {
+      const responsePlots = await CareBearFoods.getRFVisualizations();
+      console.log("Fetched plot data:", responsePlots);
+      setPlotData(responsePlots); // Store plot data in state
       setError("");
     } catch (e) {
       setError(e.message || "An unexpected error occurred.");
@@ -107,8 +132,9 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
   useEffect(() => {
     if (dataset && dataset.length) {
       handleRandomForest();
+      // handleRFPlots();
     }
-  }, []);
+  }, [dataset]);
 
   const handleCancel = () => {
     setSelectedMarkets(headers.markets ?? []);
@@ -245,6 +271,20 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
             meanSquaredError={response.mean_squared_error}
             r2Score={response.r2_score}
           />
+          <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+          <div className={style.plotGallery}>
+            <strong><h3>Graphs and Charts</h3></strong>
+            <div className={style.plotImagesContainer}>
+              {plotImages.map((image, index) => (
+                <img
+                  key={index}
+                  src={`/${image}`}
+                  alt={`Plot ${index}`}
+                  className={style.plotImage}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       ) : isLoading ? (
         <>
