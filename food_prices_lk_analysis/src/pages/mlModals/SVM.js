@@ -191,6 +191,8 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
       chunkedCommodities.push(commodities.slice(i, i + 3));
     }
 
+    
+
     return (
       <div className={style.forecastTable}>
         {error ? (
@@ -245,6 +247,16 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     ScrollToTopButton();
     setIsPredictionModalOpen(true);
   };
+
+  const plotImages = [
+    "Confusion Matrix Heatmap.png",
+    "Cross-Validation Score Distribution.png",
+    "Feature Distribution.png",
+    "Feature Importance.png",
+    "Grid Search Results.png",
+    "Outliers Visualization.png",
+    "Pairplot of Top Correlated Features.png",
+  ];
 
   return (
     <div>
@@ -342,6 +354,20 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
           ) : (
             ""
           )}
+          <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
+          <div className={style.plotGallery}>
+            <strong><h3>Graphs and Charts</h3></strong>
+            <div className={style.plotImagesContainer}>
+              {plotImages.map((image, index) => (
+                <img
+                  key={index}
+                  src={`/${image}`}
+                  alt={`Plot ${index}`}
+                  className={style.plotImage}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       ) : isLoading ? (
         <>
