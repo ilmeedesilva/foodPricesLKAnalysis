@@ -27,6 +27,9 @@ import { ERROR_MESSAGES, MODAL_TYPES } from "../../enums";
 import NoData from "../../components/NoData/NoData";
 import SVM from "../mlModals/SVM";
 import KMean from "../mlModals/KMean";
+import PriceChangeChart from "./PriceChangeChart";
+import CommodityFrequencyChart from "./CategoryCommoditiesChart";
+import MarketCategoryCommodityCharts from "./MarketCategoryCommodityList";
 
 const sampleData = {
   headers: ["Name", "Age", "Gender", "Country"],
@@ -525,30 +528,33 @@ const DataExploration = () => {
           </div>
 
           <div>
-            <div className={[style.wrpRow, style.tripleChart].join(" ")}>
-              <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
-                <CustomChart
+            {/* <div className={[style.wrpRow, style.tripleChart].join(" ")}> */}
+            <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
+              {/* <CustomChart
                   chartType={"line"}
                   chartData={chartData}
                   options={chartOptions}
-                />
-              </div>
-              <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
-                <CustomChart
+                /> */}
+              <CommodityFrequencyChart data={tableData.rows} />
+            </div>
+            <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
+              {/* <CustomChart
                   chartType={"doughnut"}
                   chartData={chartData}
                   options={chartOptions}
-                />
-              </div>
-              <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
-                <CustomChart
+                /> */}
+              <PriceChangeChart data={tableData.rows} />
+            </div>
+            <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
+              {/* <CustomChart
                   chartType={"bar"}
                   chartData={chartData}
                   options={chartOptions}
-                />
-              </div>
+                /> */}
+              <MarketCategoryCommodityCharts data={tableData.rows} />
             </div>
           </div>
+          {/* </div> */}
           {filterModalOpen ? (
             <CustomModal title={"Filter"} open={setFilterModalOpen}>
               <div
