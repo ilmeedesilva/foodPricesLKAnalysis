@@ -354,28 +354,20 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
           <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
           <strong>
-            <h2>Graphs and Charts</h2>
+            <h2 className="text-md">Graphs and Charts</h2>
           </strong>
 
           <strong>
-            <h3>Cross-Validation Score Distribution</h3>
+            <h3 className="text-md">Cross-Validation Score Distribution</h3>
           </strong>
-          <div style={{ display: "flex", flexDirection: "row", gap: "16px" }}>
-            {response ? (
+          {response ? (
+            <div className={style.mainChart}>
               <CrossValidationScoreDistribution scores={response.cv_scores} />
-            ) : (
-              ""
-            )}
-            {response ? (
-              <CrossValidationScoreDistributionLineChart
-                scores={response.cv_scores}
-              />
-            ) : (
-              ""
-            )}
-          </div>
-
-          <p>
+            </div>
+          ) : (
+            ""
+          )}
+          <p className="text-sm">
             This box plot illustrates the distribution of model performance
             scores (such as accuracy or R-squared) across multiple
             cross-validation folds. The box represents the interquartile range
@@ -388,18 +380,20 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
           <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
           <strong>
-            <h3>Grid Search Results</h3>
+            <h3 className="text-md">Grid Search Results</h3>
           </strong>
           {response ? (
-            <GridSearchLinePlot
-              param1Values={cValue}
-              param2Values={gamma}
-              scores={response.grid_search_results}
-            />
+            <div className={style.mainChart}>
+              <GridSearchLinePlot
+                param1Values={cValue}
+                param2Values={gamma}
+                scores={response.grid_search_results}
+              />
+            </div>
           ) : (
             ""
           )}
-          <p>
+          <p className="text-sm">
             This visualization shows the outcomes of a grid search process used
             to tune the hyperparameters of a machine learning model. Grid search
             systematically explores a predefined set of hyperparameters to find
@@ -417,18 +411,20 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
           <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
           <div className={style.plotGallery}>
             <strong>
-              <h3>Other Visualizations</h3>
+              <h3 className="text-md">Other Visualizations</h3>
             </strong>
             <div className={style.plotImagesContainer}>
-              {plotImages.map((image, index) => (
-                <img
-                  key={index}
-                  src={`/${image}`}
-                  alt={`Plot ${index}`}
-                  className={style.plotImage}
-                />
-              ))}
-              <p>
+              <div className={style.mainChart}>
+                {plotImages.map((image, index) => (
+                  <img
+                    key={index}
+                    src={`/${image}`}
+                    alt={`Plot ${index}`}
+                    className={style.plotImage}
+                  />
+                ))}
+              </div>
+              <p className="text-sm">
                 <strong>Outliers Visualization:</strong> This plot identifies
                 and highlights data points that are considered outliers in the
                 dataset—points that deviate significantly from the rest of the
@@ -437,7 +433,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
                 helps in understanding which points could be influencing the
                 model’s predictions in unexpected ways.
               </p>
-              <p>
+              <p className="text-sm">
                 <strong> Top Feature Importances:</strong> This bar chart ranks
                 the features used in the model according to their importance in
                 making predictions. The importance is often determined by how
