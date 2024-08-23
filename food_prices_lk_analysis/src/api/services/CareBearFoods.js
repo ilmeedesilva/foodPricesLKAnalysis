@@ -53,6 +53,18 @@ const CareBearFoods = {
     }
   },
 
+  handleLinearRegressionTrends: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/predictions/linear_regression/get-trend",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling Linear forest data : ", e);
+    }
+  },
+
   handleRFEvaluate: async (data) => {
     try {
       return await apiUtils.post(
@@ -127,6 +139,18 @@ const CareBearFoods = {
         "error in handling svm high low predictions for next month : ",
         e
       );
+    }
+  },
+
+  handleKMMarketBaseOnPrice: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/clustering/markets/price_levels",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling K-Mean price levels data : ", e);
     }
   },
 

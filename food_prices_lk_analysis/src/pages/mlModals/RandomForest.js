@@ -272,19 +272,21 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
           <hr style={{ border: "1px solid #bdc3c7", margin: "20px 0" }} />
 
           <strong>
-            <h2>Graphs and Charts</h2>
+            <h2 className="text-md">Graphs and Charts</h2>
           </strong>
 
           <strong>
             <h3>Actual Prices Vs Predicted Prices</h3>
           </strong>
           {response.y_test && response.y_pred && (
-            <ActualVsPredictedScatterPlot
-              yTest={response.y_test}
-              yPred={response.y_pred}
-            />
+            <div className={style.mainChart}>
+              <ActualVsPredictedScatterPlot
+                yTest={response.y_test}
+                yPred={response.y_pred}
+              />
+            </div>
           )}
-          <p>
+          <p className="text-sm">
             This scatter plot compares the actual prices observed in the dataset
             to the prices predicted by the model. Each point on the graph
             represents a specific data point, with the actual price on one axis
@@ -297,12 +299,14 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
             <h3>Residuals Vs Predicted Prices</h3>
           </strong>
           {response.y_test && response.y_pred && (
-            <ResidualsVsPredictedScatterPlot
-              yTest={response.y_test}
-              yPred={response.y_pred}
-            />
+            <div className={style.mainChart}>
+              <ResidualsVsPredictedScatterPlot
+                yTest={response.y_test}
+                yPred={response.y_pred}
+              />{" "}
+            </div>
           )}
-          <p>
+          <p className="text-sm">
             This scatter plot displays the residuals (the differences between
             the actual and predicted prices) against the predicted prices. This
             plot helps in assessing whether the model’s predictions are unbiased
@@ -315,12 +319,14 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
             <h3>Residuals Distribution</h3>
           </strong>
           {response.y_test && response.y_pred && (
-            <ResidualsDistributionHistogram
-              yTest={response.y_test}
-              yPred={response.y_pred}
-            />
+            <div className={style.mainChart}>
+              <ResidualsDistributionHistogram
+                yTest={response.y_test}
+                yPred={response.y_pred}
+              />
+            </div>
           )}
-          <p>
+          <p className="text-sm">
             This histogram visualizes the distribution of residuals (errors) in
             the model’s predictions. It shows how often residuals of different
             sizes occur, giving insight into the accuracy of the model. A
@@ -333,11 +339,13 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
             <h3>Cross-Validation Score Distribution</h3>
           </strong>
           {response.y_test && response.y_pred && (
-            <CrossValidationScoreDistributionBoxPlot
-              cvScores={response.cv_scores}
-            />
+            <div className={style.mainChart}>
+              <CrossValidationScoreDistributionBoxPlot
+                cvScores={response.cv_scores}
+              />
+            </div>
           )}
-          <p>
+          <p className="text-sm">
             This box plot illustrates the distribution of model performance
             scores (such as accuracy or R-squared) across multiple
             cross-validation folds. The box represents the interquartile range
@@ -361,18 +369,18 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
                   className={style.plotImage}
                 />
               ))}
-              <p>
-                <strong>Outliers Visualization:</strong> This plot
-                identifies and highlights data points that are considered
-                outliers in the dataset—points that deviate significantly from
-                the rest of the data. Outliers can have a large impact on the
-                model's performance and may need special attention. This
-                visualization helps in understanding which points could be
-                influencing the model’s predictions in unexpected ways.
+              <p className="text-sm">
+                <strong>Outliers Visualization:</strong> This plot identifies
+                and highlights data points that are considered outliers in the
+                dataset—points that deviate significantly from the rest of the
+                data. Outliers can have a large impact on the model's
+                performance and may need special attention. This visualization
+                helps in understanding which points could be influencing the
+                model’s predictions in unexpected ways.
               </p>
-              <p>
-              <strong> Top Feature Importances:</strong> This bar chart ranks the
-                features used in the model according to their importance in
+              <p className="text-sm">
+                <strong> Top Feature Importances:</strong> This bar chart ranks
+                the features used in the model according to their importance in
                 making predictions. The importance is often determined by how
                 much each feature contributes to reducing uncertainty in the
                 model. Features with higher importance scores have a greater
