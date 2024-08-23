@@ -9,7 +9,6 @@ import CustomTable from "../../custom/table/CustomTable";
 import CustomButton from "../../custom/CustomButton";
 import ExportIcon from "../../img/svg/Export.icon";
 import FilterIcon from "../../img/svg/Filter.icon";
-import CustomChart from "../../custom/charts/CustomChart";
 import CareBearFoods from "../../api/services/CareBearFoods";
 import ContentLoader from "react-content-loader";
 import CustomModal from "../../custom/modal/CustomModal";
@@ -528,14 +527,28 @@ const DataExploration = () => {
           </div>
 
           <div>
-            {/* <div className={[style.wrpRow, style.tripleChart].join(" ")}> */}
-            <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
-              {/* <CustomChart
-                  chartType={"line"}
+            <div className="d-flex mb-4 mt-4">
+              <div
+                className={`chrtwrp ${[
+                  style.rowTripleChrtFiftyFity,
+                  style.wid70,
+                ].join(" ")}`}
+              >
+                <CommodityFrequencyChart data={tableData.rows} />
+              </div>
+              <div
+                className={`chrtwrp ${[
+                  style.rowTripleChrtFiftyFity,
+                  style.wid30,
+                ].join(" ")}`}
+              >
+                {/* <CustomChart
+                  chartType={"bar"}
                   chartData={chartData}
                   options={chartOptions}
                 /> */}
-              <CommodityFrequencyChart data={tableData.rows} />
+                <MarketCategoryCommodityCharts data={tableData.rows} />
+              </div>
             </div>
             <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
               {/* <CustomChart
@@ -544,14 +557,6 @@ const DataExploration = () => {
                   options={chartOptions}
                 /> */}
               <PriceChangeChart data={tableData.rows} />
-            </div>
-            <div className={`chrtwrp ${style.rowTripleChrtFiftyFity}`}>
-              {/* <CustomChart
-                  chartType={"bar"}
-                  chartData={chartData}
-                  options={chartOptions}
-                /> */}
-              <MarketCategoryCommodityCharts data={tableData.rows} />
             </div>
           </div>
           {/* </div> */}

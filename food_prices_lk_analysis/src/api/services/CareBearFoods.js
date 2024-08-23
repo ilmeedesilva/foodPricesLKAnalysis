@@ -154,6 +154,18 @@ const CareBearFoods = {
     }
   },
 
+  handleKMClusterMarket: async (data) => {
+    try {
+      return await apiUtils.post(
+        "modals/k-means/cluster-markets",
+        data,
+        SERVICETYPE.CARE_BEAR_SERVICE
+      );
+    } catch (e) {
+      console.log("error in handling K-Mean price levels data : ", e);
+    }
+  },
+
   handleKmeanEvaluate: async (data) => {
     try {
       return await apiUtils.post(

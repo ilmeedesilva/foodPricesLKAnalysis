@@ -5,14 +5,12 @@ import style from "./MlModals.module.scss";
 import NoData from "../../components/NoData/NoData";
 import CustomButton from "../../custom/CustomButton";
 import CustomModal from "../../custom/modal/CustomModal";
-import CloseIcon from "../../img/svg/Close.icon";
 import ForecastedClusters from "./KMeansForecastedClusters";
 import ClusterEvaluation from "./KMeansClusterEvaluation";
 import MarketCommodityInsights from "./KMeansMarketCommodityInsights";
 import MessageModal from "../../custom/message/MessageModal";
 import CustomTable from "../../custom/table/CustomTable";
 import ClusterScatterPlot from "./ClusterScatterPlot";
-import ClusterPieChart from "../../custom/charts/ClusterPieChart/ClusterPieChart";
 import ClusterBarChart from "../../custom/charts/ClusterBarChart/ClusterBarChart";
 
 const KMean = ({ dataset, headers, variables, setStep }) => {
@@ -37,6 +35,7 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
     endDate: "",
   });
   const [marketBaseOnPrice, setMarketBaseOnPrice] = useState();
+  const [clusterMarket, setClusterMarket] = useState();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -70,6 +69,22 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
         dataset,
       });
       setMarketBaseOnPrice(response);
+      setError("");
+    } catch (e) {
+      setError(e.message || "An error occurred");
+    } finally {
+      setIsLoading(false);
+      handleClusterMarket();
+    }
+  };
+
+  const handleClusterMarket = async () => {
+    setIsLoading(true);
+    try {
+      const response = await CareBearFoods.handleKMClusterMarket({
+        dataset,
+      });
+      setClusterMarket(response);
       setError("");
     } catch (e) {
       setError(e.message || "An error occurred");
@@ -132,18 +147,6 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
     setIsLoading(true);
     try {
       const response = await CareBearFoods.handleKmeaninsights({ dataset });
-      // console.log("response: ", response);
-
-      // const insights = response.map((insight) => ({
-      //   commodities: insight.commodities || [],
-      //   markets: {
-      //     data: insight.markets || [],
-      //     mean_price: insight.markets?.mean_price || 0,
-      //     median_price: insight.markets?.median_price || 0,
-      //   },
-      //   price_range: insight.price_range || [0, 0],
-      // }));
-      // console.log("INSIGHTS: ", insights);
       setKmeanInsights(response);
 
       setError("");
@@ -260,58 +263,6 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
     ));
   };
 
-  // const renderCombinedTable = (clusters, scatterPlotData) => {
-  //   const clusterEntries = Object.entries(clusters);
-  //   const scatterEntries = Object.entries(scatterPlotData);
-
-  //   // Group tables into rows of 3
-  //   const rows = [];
-  //   for (let i = 0; i < clusterEntries.length; i += 3) {
-  //     rows.push(clusterEntries.slice(i, i + 3));
-  //   }
-
-  //   return (
-  //     <div>
-  //       {rows.map((row, rowIndex) => (
-  //         <div
-  //           key={rowIndex}
-  //           style={{
-  //             display: "flex",
-  //             justifyContent: "space-between",
-  //             marginBottom: "20px",
-  //           }}
-  //         >
-  //           {row.map(([clusterId, points], index) => {
-  //             const scatterData = scatterEntries.find(
-  //               (_, idx) => idx === index + rowIndex * 3
-  //             )?.[1];
-
-  //             return (
-  //               <div key={clusterId} style={{ flex: "1", marginRight: "10px" }}>
-  //                 <h4>Cluster {clusterId}</h4>
-  //                 <CustomTable
-  //                   Data={{
-  //                     headers: ["Point Index", "Commodity", "Median Price"],
-  //                     rows: points.map((point, idx) => ({
-  //                       "Point Index": point,
-  //                       "Commodity": scatterData?.x[idx] || "N/A",
-  //                       "Median Price": scatterData?.y[idx] || "N/A",
-  //                     })),
-
-  //                   }}
-
-  //                 />
-
-  //               </div>
-  //             );
-  //           })}
-
-  //         </div>
-  //       ))}
-  //     </div>
-  //   );
-  // };
-
   const renderCombinedTable = (clusters, scatterPlotData) => {
     const clusterEntries = Object.entries(clusters);
     const scatterEntries = Object.entries(scatterPlotData);
@@ -363,29 +314,42 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
     <div>
       {kMeanEvaluateResponse && (
         <div>
-          <CustomButton
+          {/* <CustomButton
             text={"Prediction"}
             onClick={() => setIsPredictionModalOpen(true)}
-          />
+          /> */}
 
           {marketBaseOnPrice ? (
-            <>
-              <h5 className="text-md mt-3">
-                Market Distribution by Price Cluster
-              </h5>
-              <p className="text-sm">
-                This bar chart represents the distribution of markets across
-                different price clusters. Each bar corresponds to a price
-                cluster, and the length of the bar indicates the number of
-                markets in that cluster. Hover over the bars to see the markets
-                included in each cluster.
-              </p>
-              <ClusterBarChart clusters={marketBaseOnPrice.clusters} />
-            </>
+            <div className={style.wrpPredictedResultsWthTbWrp}>
+              <div className={style.centerChartWrp}>
+                <h5 className="text-md mt-3">
+                  Market Distribution by Price Cluster
+                </h5>
+                <ClusterBarChart clusters={marketBaseOnPrice.clusters} />
+                <p className="text-sm">
+                  This bar chart represents the distribution of markets across
+                  different price clusters. Each bar corresponds to a price
+                  cluster, and the length of the bar indicates the number of
+                  markets in that cluster. Hover over the bars to see the
+                  markets included in each cluster.
+                </p>
+              </div>
+            </div>
           ) : (
             ""
           )}
-          {responseForKMVisulization && (
+
+          {/* {!isLoading &&
+          clusterMarket &&
+          clusterMarket.clusters?.length &&
+          clusterMarket.centroids?.length ? (
+            <ClusterScatterPlot
+              clusters={clusterMarket.clusters}
+              centroids={clusterMarket.centroids}
+            />
+          ) : null} */}
+
+          {/* {responseForKMVisulization && (
             <div className={style.selectedFilters}>
               <h3 className="text-md mt-3">Predictions Results</h3>
               <div className={style.predictedItemSummery}>
@@ -424,7 +388,7 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
               </div>
               {renderForecastTable(forecasts)}
             </div>
-          )}
+          )} */}
         </div>
       )}
 
@@ -441,21 +405,22 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
             )}
             <h3>Market and Commodity Insights</h3>
             {/* {console.log("BEFORE KMEAN INSIGHTS", kmeanInsights)} */}
-            {kmeanInsights &&
-              Object.values(kmeanInsights).length > 0 &&
-              Object.values(kmeanInsights).map((insight, index) => (
-                <div key={index}>
-                  <h5>Cluster {index}</h5>
-                  <MarketCommodityInsights
-                    markets={insight.markets || []}
-                    commodities={insight.commodities || []}
-                    mean={insight.mean_price || 0}
-                    median={insight.median_price || 0}
-                    priceStats={insight.price_range || [0, 0]}
-                  />
-                </div>
-              ))}
-
+            <div className={style.clusterCards}>
+              {kmeanInsights &&
+                Object.values(kmeanInsights).length > 0 &&
+                Object.values(kmeanInsights).map((insight, index) => (
+                  <div key={index} className={style.clusterCardItem}>
+                    <h5>Cluster {index}</h5>
+                    <MarketCommodityInsights
+                      markets={insight.markets || []}
+                      commodities={insight.commodities || []}
+                      mean={insight.mean_price || 0}
+                      median={insight.median_price || 0}
+                      priceStats={insight.price_range || [0, 0]}
+                    />
+                  </div>
+                ))}
+            </div>
             {/* {kMeanEvaluateResponse && (
               <ClusterEvaluation
                 clusterSizes={kMeanEvaluateResponse.cluster_sizes || {}}

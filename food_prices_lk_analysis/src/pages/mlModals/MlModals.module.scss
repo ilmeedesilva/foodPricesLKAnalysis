@@ -424,3 +424,29 @@
 .wd100 {
     width: 100%;
 }
+
+.centerChartWrp {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.clusterCards {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.clusterCardItem {
+    width: 100%;
+}
+
+.card {
+    width: 100%;
+
+    .width90 {
+        width: 90%;
+    }
+}
