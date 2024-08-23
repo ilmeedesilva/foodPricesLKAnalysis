@@ -12,6 +12,8 @@ import MarketCommodityInsights from "./KMeansMarketCommodityInsights";
 import MessageModal from "../../custom/message/MessageModal";
 import CustomTable from "../../custom/table/CustomTable";
 import ClusterScatterPlot from "./ClusterScatterPlot";
+import ClusterPieChart from "../../custom/charts/ClusterPieChart/ClusterPieChart";
+import ClusterBarChart from "../../custom/charts/ClusterBarChart/ClusterBarChart";
 
 const KMean = ({ dataset, headers, variables, setStep }) => {
   const [kMeanEvaluateResponse, setKmeanEvaluateResponse] = useState(null);
@@ -34,6 +36,7 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
     startDate: "",
     endDate: "",
   });
+  const [marketBaseOnPrice, setMarketBaseOnPrice] = useState();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -58,6 +61,21 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
       return maxDate.toISOString().split("T")[0];
     }
     return "";
+  };
+
+  const handleMarketBaseOnPrice = async () => {
+    setIsLoading(true);
+    try {
+      const response = await CareBearFoods.handleKMMarketBaseOnPrice({
+        dataset,
+      });
+      setMarketBaseOnPrice(response);
+      setError("");
+    } catch (e) {
+      setError(e.message || "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleClusteringEvaluate = async () => {
@@ -151,6 +169,10 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
     setSelectedCommodity(headers.commodity ?? []);
     setIsPredictionModalOpen(false);
   };
+
+  useEffect(() => {
+    handleMarketBaseOnPrice();
+  }, [dataset]);
 
   const renderForecastTable = (forecasts) => {
     const commodities = Object.keys(forecasts);
@@ -339,6 +361,73 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
 
   return (
     <div>
+      {kMeanEvaluateResponse && (
+        <div>
+          <CustomButton
+            text={"Prediction"}
+            onClick={() => setIsPredictionModalOpen(true)}
+          />
+
+          {marketBaseOnPrice ? (
+            <>
+              <h5 className="text-md mt-3">
+                Market Distribution by Price Cluster
+              </h5>
+              <p className="text-sm">
+                This bar chart represents the distribution of markets across
+                different price clusters. Each bar corresponds to a price
+                cluster, and the length of the bar indicates the number of
+                markets in that cluster. Hover over the bars to see the markets
+                included in each cluster.
+              </p>
+              <ClusterBarChart clusters={marketBaseOnPrice.clusters} />
+            </>
+          ) : (
+            ""
+          )}
+          {responseForKMVisulization && (
+            <div className={style.selectedFilters}>
+              <h3 className="text-md mt-3">Predictions Results</h3>
+              <div className={style.predictedItemSummery}>
+                <strong>Selected Markets:</strong>
+                <div className={style.predictedItemWrp}>
+                  {selectedMarkets.map((item, index) => (
+                    <p key={index}>{item}</p>
+                  ))}
+                </div>
+              </div>
+              <div className={style.predictedItemSummery}>
+                <strong>Selected Categories:</strong>
+                <div
+                  className={[
+                    style.predictedItemWrp,
+                    style.predictedItemWrpScn,
+                  ].join(" ")}
+                >
+                  {selectedCategory.map((item, index) => (
+                    <p key={index}>{item}</p>
+                  ))}
+                </div>
+              </div>
+              <div className={style.predictedItemSummery}>
+                <strong>Selected Commodities:</strong>
+                <div
+                  className={[
+                    style.predictedItemWrp,
+                    style.predictedItemWrpScn,
+                  ].join(" ")}
+                >
+                  {selectedCommodity.map((item, index) => (
+                    <p key={index}>{item}</p>
+                  ))}
+                </div>
+              </div>
+              {renderForecastTable(forecasts)}
+            </div>
+          )}
+        </div>
+      )}
+
       <div>
         {isLoading && <ContentLoader />}
         {error && <MessageModal message={error} onClose={() => setError("")} />}
@@ -381,35 +470,35 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
             {kMeanEvaluateResponse && !isLoading && (
               <ClusterEvaluation
                 clusterSizes={
-                  kMeanEvaluateResponse.interpretation.cluster_sizes || {}
+                  kMeanEvaluateResponse?.interpretation?.cluster_sizes || {}
                 }
                 silhouetteScore={
-                  kMeanEvaluateResponse.interpretation.silhouette_score || 0
+                  kMeanEvaluateResponse?.interpretation?.silhouette_score || 0
                 }
                 interpretations={{
                   silhouetteScoreInterpretation:
                     kMeanEvaluateResponse.interpretation
-                      .silhouette_score_interpretation || "",
+                      ?.silhouette_score_interpretation || "",
                 }}
               />
             )}
-            {kMeanEvaluateResponse.interpretation.clusters &&
-              kMeanEvaluateResponse.scatter_plot_data && (
+            {kMeanEvaluateResponse?.interpretation?.clusters &&
+              kMeanEvaluateResponse?.scatter_plot_data && (
                 <div>
                   <h3>Cluster Points with Scatter Plot Data</h3>
                   {renderCombinedTable(
-                    kMeanEvaluateResponse.interpretation.clusters,
-                    kMeanEvaluateResponse.scatter_plot_data
+                    kMeanEvaluateResponse?.interpretation?.clusters,
+                    kMeanEvaluateResponse?.scatter_plot_data
                   )}
                 </div>
               )}
-            {kMeanEvaluateResponse.interpretation.clusters &&
-              kMeanEvaluateResponse.scatter_plot_data && (
+            {kMeanEvaluateResponse.interpretation?.clusters &&
+              kMeanEvaluateResponse?.scatter_plot_data && (
                 <div>
                   {/* <h3>Cluster Points with Scatter Plot Data</h3> */}
                   <ClusterScatterPlot
-                    clusters={kMeanEvaluateResponse.interpretation.clusters}
-                    scatterPlotData={kMeanEvaluateResponse.scatter_plot_data}
+                    clusters={kMeanEvaluateResponse?.interpretation?.clusters}
+                    scatterPlotData={kMeanEvaluateResponse?.scatter_plot_data}
                   />
                 </div>
               )}
@@ -417,54 +506,7 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
         ) : (
           <NoData />
         )}
-        {kMeanEvaluateResponse && (
-          <div>
-            <CustomButton
-              text={"Prediction"}
-              onClick={() => setIsPredictionModalOpen(true)}
-            />
-            {responseForKMVisulization && (
-              <div className={style.selectedFilters}>
-                <h3 className="text-md mt-3">Predictions Results</h3>
-                <div className={style.predictedItemSummery}>
-                  <strong>Selected Markets:</strong>
-                  <div className={style.predictedItemWrp}>
-                    {selectedMarkets.map((item, index) => (
-                      <p key={index}>{item}</p>
-                    ))}
-                  </div>
-                </div>
-                <div className={style.predictedItemSummery}>
-                  <strong>Selected Categories:</strong>
-                  <div
-                    className={[
-                      style.predictedItemWrp,
-                      style.predictedItemWrpScn,
-                    ].join(" ")}
-                  >
-                    {selectedCategory.map((item, index) => (
-                      <p key={index}>{item}</p>
-                    ))}
-                  </div>
-                </div>
-                <div className={style.predictedItemSummery}>
-                  <strong>Selected Commodities:</strong>
-                  <div
-                    className={[
-                      style.predictedItemWrp,
-                      style.predictedItemWrpScn,
-                    ].join(" ")}
-                  >
-                    {selectedCommodity.map((item, index) => (
-                      <p key={index}>{item}</p>
-                    ))}
-                  </div>
-                </div>
-                {renderForecastTable(forecasts)}
-              </div>
-            )}
-          </div>
-        )}
+
         {isPredictionModalOpen && (
           <CustomModal
             open={setIsPredictionModalOpen}

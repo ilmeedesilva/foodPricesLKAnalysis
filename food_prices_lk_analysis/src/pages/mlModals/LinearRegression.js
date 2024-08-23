@@ -22,6 +22,7 @@ import { LineChart } from "recharts";
 import SimpleLineChart from "../../custom/charts/LineChart/LineChart";
 import ComparisonChart from "../../custom/charts/ComparisonChart/ComparisonChart";
 import BarChartComponent from "../../custom/charts/BarChart/BarChart";
+import TrendChart from "../../custom/charts/TrendChart/TrendChart";
 
 const numarics = ["price", "usdprice", "USD RATE"];
 const predictableOptions = ["Category", "Commodity"];
@@ -48,6 +49,7 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
   );
 
   const [selectedPredictionType, setSelectedPredictionType] = useState("");
+  const [trends, setTrends] = useState([]);
 
   const ScrollToTopButton = () => {
     window.scrollTo({
@@ -70,9 +72,6 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
     setIsLoading(true);
     if (dataset.length) {
       try {
-        console.log("linearYaxis ", linearYaxis);
-        console.log("linearXaxis ", linearXaxis);
-
         const respond = await CareBearFoods.handleLinearRegression({
           dataset,
           linearYaxis,
@@ -104,6 +103,22 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
     } else {
       setError("not enough data to show");
       setIsLoading(false);
+    }
+  };
+
+  const getTrends = async () => {
+    setIsLoading(true);
+    if (dataset.length) {
+      try {
+        const respond = await CareBearFoods.handleLinearRegressionTrends(
+          dataset
+        );
+        setTrends(respond);
+      } catch (e) {
+        setError(e);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -153,8 +168,6 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
     }
   };
 
-  console.log("linearPredictionResponse - ", linearPredictionResponse);
-
   const [actulePredictedForFullSet, setActulePredictedForFullSet] =
     useState(null);
   useEffect(() => {
@@ -183,6 +196,10 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
       setSelectedPredictionType("");
     }
   }, [isPredictionModalOpen]);
+
+  useEffect(() => {
+    getTrends();
+  }, []);
 
   return (
     <div>
@@ -307,6 +324,39 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
               </div>
             )}
 
+          {trends && trends?.length ? (
+            <div className={`mt-4 mb-4 ${style2.wd100}`}>
+              <h5 className="text-md">Commodity Price Trends Over Time</h5>
+              <div className={style2.wrpPredictedResultsWthTbWrp}>
+                <div className={style2.chartWrp}>
+                  <TrendChart dataset={trends} />
+                  <p className="text-sm">
+                    This chart illustrates the average price trends of various
+                    commodities over time, aggregated on a monthly basis. The
+                    data reflects the overall market behavior, allowing you to
+                    observe how prices have fluctuated across different periods.
+                    Each point on the chart represents the average price for a
+                    specific month and year, offering a clear visual
+                    representation of the market's movements and helping
+                    identify potential trends or anomalies in commodity pricing.
+                  </p>
+                </div>
+                <div className={style2.tableWrp}>
+                  <CustomTable
+                    Data={{
+                      headers: ["year_month", "price"],
+                      rows: trends,
+                    }}
+                    isSelectedable={false}
+                    rowsPerView={9}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+
           <div className={`${[style2.wrapGrptbleChr].join(" ")} mt-4 mb-4`}>
             <h5 className={style2.graphTitle}>Risk Management</h5>
             <div className={style2.groupTblChrt}>
@@ -316,7 +366,6 @@ const LinearRegression = ({ dataset, variables, headers, setStep }) => {
                     " "
                   )} mr-4`}
                 >
-                  {console.log("riskManagement - ", riskManagement)}
                   <SimpleLineChart data={riskManagement} />{" "}
                 </div>
               )}
