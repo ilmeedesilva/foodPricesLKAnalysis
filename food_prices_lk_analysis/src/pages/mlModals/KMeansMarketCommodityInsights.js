@@ -1,5 +1,6 @@
 import React from "react";
 import style from "./MlModals.module.scss";
+import CustomTable from "../../custom/table/CustomTable";
 
 const MarketCommodityInsights = ({
   markets = [],
@@ -8,60 +9,40 @@ const MarketCommodityInsights = ({
   median = 0,
   priceStats = [],
 }) => {
+  const combinedData = markets.map((market, index) => ({
+    market,
+    commodity: commodities[index] || "",
+  }));
 
   return (
     <div className={style.card}>
-      
-      <div>
-        <p>
-          <strong>Markets:</strong>
-        </p>
-        {markets.length > 0 ? (
-          <ul>
-            {markets.map((market, index) => (
-              <li key={index}>{market}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>No markets available</p>
-        )}
+      <div className={style.width90}>
+        <CustomTable
+          Data={{
+            headers: ["market", "commodity"],
+            rows: combinedData,
+          }}
+          isSelectedable={false}
+          rowsPerView={8}
+        />
       </div>
+
       <div>
-        <p>
-          <strong>Commodities:</strong>
-        </p>
-        {commodities.length > 0 ? (
-          <ul>
-            {commodities.map((commodity, index) => (
-              <li key={index}>{commodity}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>No commodities available</p>
-        )}
-      </div>
-      <div>
-        <p>
-          <strong>Mean Price:</strong>
-        </p>
-        {mean || "No details available"}
-      </div>
-      <div>
-        <p>
+        <p className="text-md mt-2 mb-0">
           <strong>Median Price:</strong>
         </p>
         {median || "No details available"}
       </div>
       <div>
-        <p>
+        <p className="text-md mt-0 mb-0">
           <strong>Price Range:</strong>
         </p>
         {priceStats.length > 0 ? (
-          <ul>
+          <p className="text-sm mt-0">
             {priceStats.map((priceRange, index) => (
-              <li key={index}>{priceRange}</li>
+              <lspan key={index}>{priceRange}</lspan>
             ))}
-          </ul>
+          </p>
         ) : (
           <p>No Price Ranges available</p>
         )}

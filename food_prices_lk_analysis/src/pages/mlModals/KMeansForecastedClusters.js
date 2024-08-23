@@ -2,15 +2,14 @@ import React from "react";
 import style from "./MlModals.module.scss";
 
 const ForecastedClusters = ({ clusters = [], interpretation = {} }) => (
-  
   <div className={style.card}>
-    <h3>Forecasted Clusters</h3>
-    <p>
+    <h3 className="text-md">Forecasted Clusters</h3>
+    <p className="text-sm">
       <strong>Summary:</strong>{" "}
       {interpretation.summary || "No summary available"}
     </p>
 
-    <p>
+    <p className="text-sm">
       <strong>Details:</strong>{" "}
       {interpretation.details || "No details available"}
     </p>

@@ -32,7 +32,7 @@ const ClusterBarChart = ({ clusters }) => {
       width={1000}
       height={500}
       data={clusterData}
-      margin={{ top: 50, right: 30, bottom: 30, left: 40 }} // Increased top margin
+      margin={{ top: 50, right: 30, bottom: 30, left: 40 }}
     >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="cluster_label" />
