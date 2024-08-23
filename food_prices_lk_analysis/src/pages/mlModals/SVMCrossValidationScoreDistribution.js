@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 
 const CrossValidationScoreDistribution = ({ scores }) => {
     return (
-        <div style={{ width: '80%', height: '500px', marginBottom: '24px' }}>
+        <div style={{ width: '100%', height: '500px', marginBottom: '24px' }}>
             <Plot
                 data={[
                     {

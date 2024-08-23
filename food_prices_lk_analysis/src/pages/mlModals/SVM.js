@@ -13,6 +13,7 @@ import MessageModal from "../../custom/message/MessageModal";
 import ConfusionMatrixHeatmap from "./SVMCrossValidationScoreDistribution";
 import CrossValidationScoreDistribution from "./SVMCrossValidationScoreDistribution";
 import GridSearchLinePlot from "./SVMGridSearchLinePlot";
+import CrossValidationScoreDistributionLineChart from "./SVMCrossValidationScoreDistributionLineChart";
 
 const selectedables = ["market", "category", "commodity"];
 
