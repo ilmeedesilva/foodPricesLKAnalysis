@@ -99,7 +99,9 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
     try {
       const responfFromRF = await CareBearFoods.handleSVMEvaluate(dataset);
       setResponse(responfFromRF);
+
       setError("");
+      handleSVMHighLow();
     } catch (e) {
       setError(e);
     } finally {
@@ -158,7 +160,6 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
           price: entry.forecasted_price,
         }));
       }
-
       setForecasts(formattedForecasts);
       setIsPredictionModalOpen(false);
       setIsLoading(false);
@@ -173,10 +174,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
 
   useEffect(() => {
     if (dataset && dataset.length) {
-      console.log("dataset length: ", dataset.length);
-
       handleSVM();
-      handleSVMHighLow();
     }
   }, [dataset]);
 
@@ -414,7 +412,7 @@ const SVM = ({ dataset, headers, variables, setStep }) => {
               <h3 className="text-md">Other Visualizations</h3>
             </strong>
             <div className={style.plotImagesContainer}>
-              <div className={style.mainChart}>
+              <div className={[style.spcbetImgs].join(" ")}>
                 {plotImages.map((image, index) => (
                   <img
                     key={index}

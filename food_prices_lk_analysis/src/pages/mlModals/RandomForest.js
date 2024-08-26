@@ -361,7 +361,11 @@ const RandomForest = ({ dataset, headers, variables, setStep }) => {
             <strong>
               <h3>Other Visualizations</h3>
             </strong>
-            <div className={style.plotImagesContainer}>
+            <div
+              className={[style.plotImagesContainer, style.spcbetImgs].join(
+                " "
+              )}
+            >
               {plotImages.map((image, index) => (
                 <img
                   key={index}

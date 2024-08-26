@@ -435,7 +435,7 @@ const DataExploration = () => {
           {currentStep === 1 ? (
             "Data Filtering"
           ) : currentStep === 2 ? (
-            "Modal Selection"
+            "Model Selection"
           ) : currentStep === 3 ? (
             <>
               Data Analysis
@@ -521,7 +521,11 @@ const DataExploration = () => {
               <NoData />
             ) : (
               <div className={style2.tableWrp}>
-                <CustomTable Data={tableData} tableWidth={tableHeadersWidth} />
+                <CustomTable
+                  Data={tableData}
+                  tableWidth={tableHeadersWidth}
+                  rowsPerView={8}
+                />
               </div>
             )}
           </div>

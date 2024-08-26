@@ -17,5 +17,5 @@ export const ERROR_MESSAGES = {
 
 export const MODAL_TITLES = {
   FILTER_MODAL: "Filter",
-  ACCURANCY_PREDICTION_MODAL: "Test Modal Accurancy",
+  ACCURANCY_PREDICTION_MODAL: "Test Model Accurancy",
 };
