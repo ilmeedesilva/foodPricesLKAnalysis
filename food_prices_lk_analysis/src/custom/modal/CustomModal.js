@@ -21,7 +21,7 @@ const CustomModal = ({ children, title, open, width, height, error }) => {
           ""
         )}
         <div className={styles.modalTitle}>
-          <h3>{title ?? "modal"}</h3>
+          <h3>{title ?? "model"}</h3>
           <CustomButton
             buttonClass={"CLOSE"}
             icon={<CloseIcon size={15} color={"#7b7a7a"} />}
