@@ -12,6 +12,7 @@ import MessageModal from "../../custom/message/MessageModal";
 import CustomTable from "../../custom/table/CustomTable";
 import ClusterScatterPlot from "./ClusterScatterPlot";
 import ClusterBarChart from "../../custom/charts/ClusterBarChart/ClusterBarChart";
+import ClusterScatterPlotting from "../../custom/charts/ClusterScatterPlots/ClustersScatterPlotting";
 
 const KMean = ({ dataset, headers, variables, setStep }) => {
   const [kMeanEvaluateResponse, setKmeanEvaluateResponse] = useState(null);
@@ -461,7 +462,7 @@ const KMean = ({ dataset, headers, variables, setStep }) => {
               kMeanEvaluateResponse?.scatter_plot_data && (
                 <div>
                   {/* <h3>Cluster Points with Scatter Plot Data</h3> */}
-                  <ClusterScatterPlot
+                  <ClusterScatterPlotting
                     clusters={kMeanEvaluateResponse?.interpretation?.clusters}
                     scatterPlotData={kMeanEvaluateResponse?.scatter_plot_data}
                   />
